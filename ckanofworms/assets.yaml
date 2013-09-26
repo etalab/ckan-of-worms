@@ -1,0 +1,55 @@
+#modernizr:
+#    filters: uglifyjs
+#    output: js/modernizr.min.js
+#    contents:
+#        - bower/modernizr/modernizr.js
+#        - bower/respond/respond.src.js
+
+site-ie-js:
+    filters: uglifyjs
+    output: js/site-ie-less-9.min.js
+    contents:
+        - bower/html5shiv/src/html5shiv.js
+        - bower/respond/respond.src.js
+
+site-js:
+    filters: uglifyjs
+    output: js/site.min.js
+    contents:
+        - bower/jquery/jquery.js
+        - bower/bootstrap/dist/js/bootstrap.js
+        - js/site.js
+
+#site-legacy-js:
+#    filters: uglifyjs
+#    output: js/vendor-legacy.min.js
+#    contents:
+#        - bower/jquery-legacy/index.js
+#        - site-common
+
+site-css:
+    filters: less,cssrewrite,cssmin
+    output: css/site.min.css
+#    contents: less/site.less
+    contents: bower/bootstrap/less/bootstrap.less
+    depends:
+        - bower/bootstrap/less/bootstrap.less
+        - less/*.less
+
+#home-css:
+#    filters: less,cssrewrite,cssmin
+#    output: css/home.min.css
+#    contents: less/home.less
+#    depends: less/*.less
+
+#dataset-css:
+#    filters: less,cssrewrite,cssmin
+#    output: css/dataset.min.css
+#    contents: less/dataset.less
+#    depends: less/*.less
+
+#home-js:
+#    filters: uglifyjs
+#    output: js/home.min.js
+#    contents:
+#        - js/home.js

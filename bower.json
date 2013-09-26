@@ -1,0 +1,30 @@
+{
+  "name": "CKAN-of-Worms",
+  "version": "0.1.0",
+  "authors": [
+    "Emmanuel Raviart <emmanuel@raviart.com>"
+  ],
+  "description": "A logger for errors found in CKAN datasets",
+  "keywords": [
+    "ckan",
+    "dataset",
+    "error",
+    "logger"
+  ],
+  "license": "AGPL",
+  "homepage": "http://github.com/etalab/ckan-of-worms",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0.0",
+    "html5shiv": "~3.6.2",
+    "jquery": "1.10",
+    "respond": "~1.3.0"
+  }
+}

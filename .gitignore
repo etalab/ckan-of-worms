@@ -1,0 +1,14 @@
+build/
+cache/
+ckanofworms/static/.webassets-cache/
+ckanofworms/static/bower/
+ckanofworms/static/css/
+development-*.ini
+dist/
+projects-*.ini
+*.egg-info
+*.mo
+*.pyc
+*.pyo
+*~
+
