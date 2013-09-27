@@ -40,6 +40,12 @@ class BuildAssets(setuptools.Command):
     description = "Precompile WebAssets environment."
     user_options = []
 
+    def finalize_options(self):
+        pass
+
+    def initialize_options(self):
+        pass
+
     def run(self):
         assets = environment.configure_assets(
             debug = False,
