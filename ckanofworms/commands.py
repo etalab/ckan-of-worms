@@ -38,6 +38,7 @@ from . import environment
 class BuildAssets(setuptools.Command):
     """Build assets for production deployment."""
     description = "Precompile WebAssets environment."
+    user_options = []
 
     def run(self):
         assets = environment.configure_assets(
