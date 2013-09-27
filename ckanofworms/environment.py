@@ -46,6 +46,21 @@ app_dir = os.path.dirname(os.path.abspath(__file__))
 hostname = socket.gethostname().split('.')[0]
 
 
+def configure_assets(debug = False, static_dir = None):
+    """Configure WebAssets."""
+    assets = webassets.Environment(static_dir, '/')
+    assets.auto_build = debug
+    assets.debug = debug
+
+    # Load bundle from yaml file.
+    assets_loader = webassets.loaders.YAMLLoader(pkg_resources.resource_stream(__name__, 'assets.yaml'))
+    bundles = assets_loader.load_bundles()
+    for name, bundle in bundles.items():
+        assets.register(name, bundle)
+
+    return assets
+
+
 def load_environment(global_conf, app_conf):
     """Configure the application environment."""
     conf = ckanofworms.conf  # Empty dictionary
@@ -142,14 +157,7 @@ def load_environment(global_conf, app_conf):
     templates.dirs = [os.path.join(app_dir, 'templates')]
 
     # Configure WebAssets.
-    conf['assets'] = assets = webassets.Environment(conf['static_files_dir'], '/')
-    assets.auto_build = conf['debug']
-    assets.debug = conf['debug']
-    # Load bundle from yaml file.
-    assets_loader = webassets.loaders.YAMLLoader(pkg_resources.resource_stream(__name__, 'assets.yaml'))
-    bundles = assets_loader.load_bundles()
-    for name, bundle in bundles.items():
-        assets.register(name, bundle)
+    conf['assets'] = configure_assets(debug = conf['debug'], static_dir = conf['static_files_dir'])
 
 
 def setup_environment():

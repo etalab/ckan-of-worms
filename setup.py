@@ -67,6 +67,7 @@ setup(
         ('share/locale/fr/LC_MESSAGES', ['ckanofworms/i18n/fr/LC_MESSAGES/ckan-of-worms.mo']),
         ],
     entry_points = {
+        'distutils.commands': 'build_assets = ckanofworms.commands:BuildAssets',
         'paste.app_factory': 'main = ckanofworms.application:make_app',
         },
     include_package_data = True,
