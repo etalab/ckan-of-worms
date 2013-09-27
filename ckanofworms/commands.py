@@ -49,7 +49,7 @@ class BuildAssets(setuptools.Command):
     def run(self):
         assets = environment.configure_assets(
             debug = False,
-            static_files_dir = os.path.join(os.path.dirname(__file__), 'static'),
+            static_dir = os.path.join(os.path.dirname(__file__), 'static'),
             )
 
         log = logging.getLogger('webassets')
