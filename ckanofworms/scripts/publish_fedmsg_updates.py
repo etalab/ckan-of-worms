@@ -54,7 +54,7 @@ def main():
     parser.add_argument('-o', '--organization', action = 'store_true', default = False, help = "publish organizations")
     parser.add_argument('-s', '--section', default = 'main',
         help = "Name of configuration section in configuration file")
-    parser.add_argument('-u', '--user', action = 'store_true', default = False, help = "publish users")
+    parser.add_argument('-u', '--user', action = 'store_true', default = False, help = "publish accounts")
     parser.add_argument('-v', '--verbose', action = 'store_true', default = False, help = "increase output verbosity")
     args = parser.parse_args()
     logging.basicConfig(level = logging.DEBUG if args.verbose else logging.WARNING, stream = sys.stdout)
@@ -62,6 +62,22 @@ def main():
     environment.load_environment(site_conf.global_conf, site_conf.local_conf)
 
     ctx = contexts.null_ctx
+
+    if args.all or args.user:
+        index = 0
+        while True:
+            try:
+                for index, account in enumerate(model.Account.find().skip(index), index):
+                    log.info(u'Publishing account update: {} - {}'.format(index,
+                        account.fullname or account.name or account.email))
+                    bson = account.to_bson() or {}
+                    account.after_upsert(ctx, bson, bson)
+                    time.sleep(1.0)
+            except pymongo.errors.OperationFailure, exception:
+                if invalid_cursor_re.match(str(exception)) is None:
+                    raise
+            else:
+                break
 
     if args.all or args.dataset:
         index = 0
@@ -101,22 +117,6 @@ def main():
                     log.info(u'Publishing organization update: {} - {}'.format(index, organization.name))
                     bson = organization.to_bson() or {}
                     organization.after_upsert(ctx, bson, bson)
-                    time.sleep(1.0)
-            except pymongo.errors.OperationFailure, exception:
-                if invalid_cursor_re.match(str(exception)) is None:
-                    raise
-            else:
-                break
-
-    if args.all or args.user:
-        index = 0
-        while True:
-            try:
-                for index, user in enumerate(model.User.find().skip(index), index):
-                    log.info(u'Publishing user update: {} - {}'.format(index,
-                        related_link.title or related_link.url or related_link.image_url))
-                    bson = related_link.to_bson() or {}
-                    related_link.after_upsert(ctx, bson, bson)
                     time.sleep(1.0)
             except pymongo.errors.OperationFailure, exception:
                 if invalid_cursor_re.match(str(exception)) is None:

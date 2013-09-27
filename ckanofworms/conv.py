@@ -166,4 +166,3 @@ def namify_char(unicode_char):
             split_chars.append(char)
         chars = ''.join(split_chars)
     return chars
-
