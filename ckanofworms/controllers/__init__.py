@@ -57,8 +57,7 @@ def make_router():
         (None, '^/api/1/datasets(?=/|$)', datasets.route_api1_class),
         (None, '^/api/1/groups(?=/|$)', groups.route_api1_class),
         (None, '^/api/1/organizations(?=/|$)', organizations.route_api1_class),
-        ('GET', '^/login/?$', accounts.login),
-        ('GET', '^/login_done/?$', accounts.login_done),
-        ('GET', '^/logout/?$', accounts.logout),
+        ('POST', '^/login/?$', accounts.login),
+        ('POST', '^/logout/?$', accounts.logout),
         )
     return router

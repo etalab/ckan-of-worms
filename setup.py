@@ -77,6 +77,7 @@ setup(
         'Mako >= 0.8',
         'PyYAML',
         'pymongo >= 2.2',
+        'requests >= 1.2',
         'webassets >= 0.8',
         'WebError >= 0.10',
         'WebOb >= 1.1',

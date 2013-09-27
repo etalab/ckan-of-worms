@@ -323,122 +323,75 @@ def login(req):
     """Authorization request"""
     ctx = contexts.Ctx(req)
 
-    assert req.method == 'GET'
-    params = req.GET
+    assert req.method == 'POST'
+    params = req.POST
     inputs = dict(
-        callback = params.get('callback'),
-        popup = params.get('popup'),
+        assertion = params.get('assertion'),
         )
     data, errors = conv.struct(
         dict(
-            callback = conv.pipe(
-                conv.input_to_url_path_and_query,
-                conv.function(lambda callback: None if callback.startswith(('/login', '/logout')) else callback),
-                ),
-            popup = conv.pipe(
-                conv.guess_bool,
-                conv.default(False),
+            assertion = conv.pipe(
+                conv.cleanup_line,
+                conv.not_none,
                 ),
             ),
         )(inputs, state = ctx)
     if errors is not None:
         return wsgihelpers.bad_request(ctx, explanation = ctx._(u'Login Error: {0}').format(errors))
 
-    request_object = dict(
-        api_key = conf['weasku.api_key'],
-        callback_url = urls.get_full_url(ctx, 'login_done', token = '{token}'),
-        form = u'/auth/verified_email',
-        operation = 'login',
-        stash = data,
-        )
-    response_text = requests.post(urlparse.urljoin(conf['weasku.url'], '/api/1/forms/start'),
-        data = json.dumps(request_object, encoding = 'utf-8', ensure_ascii = False, indent = 2, sort_keys = True),
-        headers = {
-            'Content-Type': 'application/json; charset=utf-8',
-            },
-        ).text
-    response_json = json.loads(response_text)
-    if 'error' in response_json:
-        return wsgihelpers.internal_error(ctx,
-            dump = response_text,
-            explanation = ctx._(u'Error while generating authorize URL'),
-            )
-    return wsgihelpers.redirect(ctx, location = response_json['next_url'])
-
-
-@wsgihelpers.wsgify
-def login_done(req):
-    """Authorization response"""
-    ctx = contexts.Ctx(req)
-
-    assert req.method == 'GET'
-    params = req.GET
-
-    response_text = requests.post(
-        urlparse.urljoin(conf['weasku.url'], '/api/1/forms/stop'),
+    response = requests.post('https://verifier.login.persona.org/verify',
         data = dict(
-            api_key = conf['weasku.api_key'],
-            form = u'/auth/verified_email',
-            operation = 'login',
-            token = params.get('token'),
+            audience = urls.get_full_url(ctx),
+            assertion = data['assertion'],
             ),
-        ).text
-    response_json = json.loads(response_text)
-    if 'error' in response_json:
+        verify = True,
+        )
+    if not response.ok:
         return wsgihelpers.internal_error(ctx,
             dump = response_text,
-            explanation = ctx._(u'Error while retrieving user infos'),
+            explanation = ctx._(u'Error while verifying authentication assertion'),
+            )
+    verification_data = json.loads(response.content)
+    # Check if the assertion was valid.
+    if verification_data['status'] != 'okay':
+        return wsgihelpers.internal_error(ctx,
+            dump = response_text,
+            explanation = ctx._(u'Error while verifying authentication assertion'),
             )
 
-    if not response_json['cancel']:
-        user = model.Account.find_one(
-            dict(
-                email = response_json['value'],
-                ),
-            as_class = collections.OrderedDict,
-            )
-        if user is None:
-            user = model.Account()
-            user._id = unicode(uuid.uuid4())
-            user.api_key = unicode(uuid.uuid4())
-            user.email = response_json['value']
-            user.save(ctx, safe = True)
-        ctx.user = user
+    user = model.Account.find_one(
+        dict(
+            email = verification_data['email'],
+            ),
+        as_class = collections.OrderedDict,
+        )
+    if user is None:
+        user = model.Account()
+        user._id = unicode(uuid.uuid4())
+        user.api_key = unicode(uuid.uuid4())
+        user.email = verification_data['email']
+        user.save(ctx, safe = True)
+    ctx.user = user
 
-        session = ctx.session
-        if session is None:
-            ctx.session = session = model.Session()
-            session.token = unicode(uuid.uuid4())
-        session.expiration = datetime.datetime.utcnow() + datetime.timedelta(hours = 1)
-        session.user_id = user._id
-        session.save(ctx, safe = True)
+    session = ctx.session
+    if session is None:
+        ctx.session = session = model.Session()
+        session.token = unicode(uuid.uuid4())
+    session.expiration = datetime.datetime.utcnow() + datetime.timedelta(hours = 1)
+    session.user_id = user._id
+    session.save(ctx, safe = True)
 
-        if req.cookies.get(conf['cookie']) != session.token:
-            req.response.set_cookie(conf['cookie'], session.token, httponly = True, secure = req.scheme == 'https')
-    return templates.render(ctx, '/close-popup.mako', url = response_json['stash']['callback'] or urls.get_url(ctx))
+    if req.cookies.get(conf['cookie']) != session.token:
+        req.response.set_cookie(conf['cookie'], session.token, httponly = True, secure = req.scheme == 'https')
+    return 'Login succeeded.'
 
 
 @wsgihelpers.wsgify
 def logout(req):
     ctx = contexts.Ctx(req)
 
-    assert req.method == 'GET'
-    params = req.GET
-    inputs = dict(
-        callback = params.get('callback'),
-        )
-    data, errors = conv.struct(
-        dict(
-            callback = conv.pipe(
-                conv.input_to_url_path_and_query,
-                conv.function(lambda callback: None if callback.startswith(('/login', '/logout')) else callback),
-                ),
-            ),
-        )(inputs, state = ctx)
-    if errors is not None:
-        return wsgihelpers.bad_request(ctx, explanation = ctx._(u'Logout Error: {0}').format(errors))
+    assert req.method == 'POST'
 
-    response = wsgihelpers.redirect(ctx, location = data['callback'] or urls.get_url(ctx))
     session = ctx.session
     if session is not None:
         session.expiration = datetime.datetime.utcnow() + datetime.timedelta(hours = 1)
@@ -446,17 +399,16 @@ def logout(req):
             del session.user_id
         session.save(ctx, safe = True)
         if req.cookies.get(conf['cookie']) != session.token:
-            response.set_cookie(conf['cookie'], session.token, httponly = True, secure = req.scheme == 'https')
-    return response
+            req.response.set_cookie(conf['cookie'], session.token, httponly = True, secure = req.scheme == 'https')
+    return 'Logout succeeded.'
 
-#    response = wsgihelpers.redirect(ctx, location = data['callback'] or urls.get_url(ctx))
 #    session = ctx.session
 #    if session is not None:
 #        session.delete(ctx, safe = True)
 #        ctx.session = None
 #        if req.cookies.get(conf['cookie']) is not None:
-#            response.delete_cookie(conf['cookie'])
-#    return response
+#            req.req.response.delete_cookie(conf['cookie'])
+#    return 'Logout succeeded.'
 
 
 def route_admin(environ, start_response):

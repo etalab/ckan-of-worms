@@ -133,6 +133,8 @@ ${conf['realm']}
 <%def name="metas()" filter="trim">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    ## Make sure Internet Explorer can't use Compatibility Mode, as this will break Persona.
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
 </%def>
 
 
@@ -140,17 +142,59 @@ ${conf['realm']}
     % for url in conf['assets']['site-js'].urls():
     <script src="${url}"></script>
     % endfor
+    ## You must include this on every page which uses navigator.id functions. Because Persona is still in development,
+    ## you should not self-host the include.js file.
+    <script src="https://login.persona.org/include.js"></script>
     <script>
-function poptastic(url) {
-    var newWindow = window.open(url, '_blank');
-    if (window.focus) {
-        newWindow.focus();
+<%
+    user = model.get_user(ctx)
+%>\
+var currentUser = ${user.email if user is not None else None | n, js};
+
+
+navigator.id.watch({
+    loggedInUser: currentUser,
+    onlogin: function (assertion) {
+        $.ajax({
+            type: 'POST',
+            url: '/login',
+            data: {
+                assertion: assertion
+            },
+            success: function(res, status, xhr) {
+                window.location.reload();
+            },
+            error: function(xhr, status, err) {
+                navigator.id.logout();
+                alert(${_(u"Login failure: ") | n, js} + err);
+            }
+        });
+    },
+    onlogout: function () {
+        $.ajax({
+            type: 'POST',
+            url: '/logout',
+            success: function(res, status, xhr) {
+                window.location.reload();
+            },
+            error: function(xhr, status, err) {
+                alert(${_(u"Logout failure: ") | n, js} + err);
+            }
+        });
     }
-}
+});
 
 
 $(function () {
     $('.dropdown-toggle').dropdown();
+
+    $('#sign-in').click(function() {
+        navigator.id.request();
+    });
+
+    $('#sign-out').click(function() {
+        navigator.id.logout();
+    });
 });
     </script>
 </%def>
@@ -210,12 +254,12 @@ $(function () {
     user = model.get_user(ctx)
 %>\
     % if user is None:
-                <li><a href="javascript:poptastic(${urls.get_url(ctx, 'login', callback = req.path_qs, popup = 1
-                        ) | n, js, h})">${_(u'Sign In')}</a></li>
+                <li><a href="#" id="sign-in" title="${_(u'Sign in with Persona')}">${_(u'Sign in')}</a></li>
     % else:
-##                <li class="active"><a href="${user.get_url(ctx)}"><span class="glyphicon glyphicon-user"></span> ${user.email}</a></li>
+##                <li class="active"><a href="${user.get_url(ctx)}"><span class="glyphicon glyphicon-user"></span> ${
+##                        user.email}</a></li>
                 <li class="active"><a href=""><span class="glyphicon glyphicon-user"></span> ${user.get_title(ctx)}</a></li>
-                <li><a href="${urls.get_url(ctx, 'logout', callback = req.path_qs)}">${_('Sign Out')}</a></li>
+                <li><a href="#" id="sign-out" title="${_(u'Sign out from Persona')}">${_(u'Sign out')}</a></li>
     % endif
             </ul>
 </%def>
