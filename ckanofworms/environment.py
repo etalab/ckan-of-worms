@@ -116,15 +116,6 @@ def load_environment(global_conf, app_conf):
             # Whether this application serves its own static files.
             'static_files': conv.pipe(conv.guess_bool, conv.default(True)),
             'static_files_dir': conv.default(os.path.join(app_dir, 'static')),
-            'weasku.api_key': conv.pipe(
-                conv.empty_to_none,
-                conv.not_none,
-                ),
-            'weasku.url': conv.pipe(
-                conv.make_input_to_url(error_if_fragment = True, error_if_path = True, error_if_query = True,
-                    full = True),
-                conv.not_none,
-                ),
             },
         default = 'drop',
         ))(conf))
