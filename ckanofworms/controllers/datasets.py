@@ -162,6 +162,16 @@ def admin_index(req):
 
 
 @wsgihelpers.wsgify
+def admin_stats(req):
+    ctx = contexts.Ctx(req)
+    dataset = ctx.node
+
+    model.is_admin(ctx, check = True)
+
+    return templates.render(ctx, '/datasets/admin-stats.mako', dataset = dataset)
+
+
+@wsgihelpers.wsgify
 def admin_view(req):
     ctx = contexts.Ctx(req)
     dataset = ctx.node
@@ -540,6 +550,7 @@ def route_admin(environ, start_response):
         ('GET', '^/?$', admin_view),
         (('GET', 'POST'), '^/delete/?$', admin_delete),
         (('GET', 'POST'), '^/edit/?$', admin_edit),
+        ('GET', '^/stats/?$', admin_stats),
         )
     return router(environ, start_response)
 

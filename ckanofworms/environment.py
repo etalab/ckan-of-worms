@@ -75,6 +75,11 @@ def load_environment(global_conf, app_conf):
                 conv.test(os.path.exists),
                 ),
             'cache_dir': conv.default(os.path.join(os.path.dirname(app_dir), 'cache')),
+            'ckan_url': conv.pipe(
+                conv.make_input_to_url(full = True, error_if_fragment = True, error_if_path = True,
+                    error_if_query = True),
+                conv.not_none,
+                ),
             'cookie': conv.default('ckan-of-worms'),
             'database': conv.default('ckan_of_worms'),
             'debug': conv.pipe(conv.guess_bool, conv.default(False)),
@@ -112,10 +117,18 @@ def load_environment(global_conf, app_conf):
                 conv.function(lambda log_level: getattr(logging, log_level.upper())),
                 ),
             'package_name': conv.default('ckan-of-worms'),
+            'piwik.site_id': conv.input_to_int,
+            'piwik.url': conv.make_input_to_url(full = True, error_if_fragment = True, error_if_path = True,
+                error_if_query = True),
             'realm': conv.default(u'CKAN-of-Worms'),
             # Whether this application serves its own static files.
             'static_files': conv.pipe(conv.guess_bool, conv.default(True)),
             'static_files_dir': conv.default(os.path.join(app_dir, 'static')),
+            'weckan_url': conv.pipe(
+                conv.make_input_to_url(full = True, error_if_fragment = True, error_if_path = True,
+                    error_if_query = True),
+                conv.not_none,
+                ),
             },
         default = 'drop',
         ))(conf))
