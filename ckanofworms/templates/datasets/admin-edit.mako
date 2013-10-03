@@ -57,7 +57,7 @@ from ckanofworms import conf, model, urls
 <%
     error = errors.get('email') if errors is not None else None
 %>\
-                <div class="form-group${' error' if error else ''}">
+                <div class="form-group${' has-error' if error else ''}">
                     <label for="email">${_("Email")}</label>
                     <input class="form-control" id="email" name="email" required type="email" value="${inputs['email'] or ''}">
     % if error:
@@ -67,7 +67,7 @@ from ckanofworms import conf, model, urls
 <%
     error = errors.get('admin') if errors is not None else None
 %>\
-                <div class="checkbox${' error' if error else ''}">
+                <div class="checkbox${' has-error' if error else ''}">
                     <label>
                         <input${' checked' if inputs['admin'] else ''} id="admin" name="admin" type="checkbox" value="1">
                         ${_(u'Administrator')}

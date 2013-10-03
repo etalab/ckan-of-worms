@@ -96,7 +96,7 @@ from ckanofworms import model, urls
 %>\
                         <a href="${organization.get_admin_class_url(ctx)}">${organization.title or ''}</a>
             % elif len(organizations) > 1:
-                        <ul>
+                        <ul class="list-unstyled">
                 % for organization in organizations:
                             <li><a href="${organization.get_admin_class_url(ctx)}">${organization.title or ''}</a></li>
                 % endfor
@@ -152,7 +152,7 @@ from ckanofworms import model, urls
 <%
     error = errors.get('term') if errors is not None else None
 %>\
-            <div class="form-group${' error' if error else ''}">
+            <div class="form-group${' has-error' if error else ''}">
                 <label for="term">${_("Term")}</label>
                 <input class="form-control" id="term" name="term" type="text" value="${inputs['term'] or ''}">
     % if error:

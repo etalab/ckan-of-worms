@@ -20,3 +20,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+
+$(function() {
+    $('.typeahead#group').typeahead({
+        name: 'group',
+        remote: '/api/1/groups/typeahead?q=%QUERY'
+    });
+    $('.typeahead#organization').typeahead({
+        name: 'organization',
+        remote: '/api/1/organizations/typeahead?q=%QUERY'
+    });
+    $('.typeahead#supplier').typeahead({
+        name: 'supplier',
+        remote: '/api/1/organizations/typeahead?q=%QUERY'
+    });
+    $('.typeahead#tag').typeahead({
+        name: 'tag',
+        remote: '/api/1/tags/typeahead?q=%QUERY'
+    });
+});
+

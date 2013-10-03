@@ -305,6 +305,37 @@ def api1_set_ckan(req):
         )
 
 
+@wsgihelpers.wsgify
+def api1_typeahead(req):
+    ctx = contexts.Ctx(req)
+    headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
+
+    assert req.method == 'GET'
+    params = req.GET
+    inputs = dict(
+        q = params.get('q'),
+        )
+    data, errors = conv.struct(
+        dict(
+            q = conv.cleanup_line,
+            ),
+        )(inputs, state = ctx)
+    if errors is not None:
+        return wsgihelpers.not_found(ctx, explanation = ctx._('Group search error: {}').format(errors))
+
+    criteria = {}
+    if data['q'] is not None:
+        criteria['title'] = re.compile(re.escape(data['q']))
+    cursor = model.Group.get_collection().find(criteria, ['title'])
+    return wsgihelpers.respond_json(ctx,
+        [
+            group_attributes['title']
+            for group_attributes in cursor.limit(10)
+            ],
+        headers = headers,
+        )
+
+
 def extract_group_inputs_from_params(ctx, params = None):
     if params is None:
         params = webob.multidict.MultiDict()
@@ -350,6 +381,7 @@ def route_api1_class(environ, start_response):
 #        ('GET', '^/?$', api1_index),
 #        ('POST', '^/?$', api1_set),
         ('POST', '^/ckan/?$', api1_set_ckan),
+        ('GET', '^/typeahead/?$', api1_typeahead),
 #        (None, '^/(?P<name>[^/]+)(?=/|$)', route_api1),
         )
     return router(environ, start_response)

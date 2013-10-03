@@ -97,7 +97,7 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
                 state = conv.default_state
             self = cls.find_one(value, as_class = collections.OrderedDict)
             if self is None:
-                return value, state._("No account with ID {0}").format(value)
+                return value, state._(u"No account with ID {0}").format(value)
             return self, None
         return id_to_instance
 
@@ -116,9 +116,27 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     errors = None
 
     # CKAN attributes
+    author = None
+    author_email = None
+    extras = None
+    groups = None  # TODO: Replace with groups_id
+    license_id = None
+    maintainer = None
+    maintainer_email = None
     metadata_created = None
-    revision_timestamp = None
+    metadata_modified = None
     name = None
+    notes = None
+    owner_org = None
+    resources = None
+    revision_id = None
+    revision_timestamp = None
+    supplier_id = None
+    tags = None
+    temporal_coverage_from = None
+    temporal_coverage_to = None
+    territorial_coverage = None
+    territorial_coverage_granularity = None
     title = None
 
     def after_delete(self, ctx, old_bson):
@@ -166,7 +184,7 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
                 state = conv.default_state
             self = cls.find_one(value, as_class = collections.OrderedDict)
             if self is None:
-                return value, state._("No dataset with ID {0}").format(value)
+                return value, state._(u"No dataset with ID {0}").format(value)
             return self, None
         return id_to_instance
 
@@ -234,9 +252,27 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
                 state = conv.default_state
             self = cls.find_one(value, as_class = collections.OrderedDict)
             if self is None:
-                return value, state._("No group with ID {0}").format(value)
+                return value, state._(u"No group with ID {0}").format(value)
             return self, None
         return id_to_instance
+
+    @classmethod
+    def make_title_to_instance(cls):
+        def title_to_instance(value, state = None):
+            if value is None:
+                return value, None
+            if state is None:
+                state = conv.default_state
+            self = cls.find_one(
+                dict(
+                    title = value,
+                    ),
+                as_class = collections.OrderedDict,
+                )
+            if self is None:
+                return value, state._(u"No group with title {0}").format(value)
+            return self, None
+        return title_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
@@ -302,9 +338,27 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
                 state = conv.default_state
             self = cls.find_one(value, as_class = collections.OrderedDict)
             if self is None:
-                return value, state._("No organization with ID {0}").format(value)
+                return value, state._(u"No organization with ID {0}").format(value)
             return self, None
         return id_to_instance
+
+    @classmethod
+    def make_title_to_instance(cls):
+        def title_to_instance(value, state = None):
+            if value is None:
+                return value, None
+            if state is None:
+                state = conv.default_state
+            self = cls.find_one(
+                dict(
+                    title = value,
+                    ),
+                as_class = collections.OrderedDict,
+                )
+            if self is None:
+                return value, state._(u"No organization with title {0}").format(value)
+            return self, None
+        return title_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
@@ -351,7 +405,7 @@ class Session(objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper)
 
             self = cls.find_one(dict(token = value), as_class = collections.OrderedDict)
             if self is None:
-                return value, state._("No session with token {0}").format(value)
+                return value, state._(u"No session with token {0}").format(value)
             return self, None
         return token_to_instance
 
@@ -406,7 +460,7 @@ def is_admin(ctx, check = False):
             # Whem there is no admin, every logged user is an admin.
             return True
         if check:
-            raise wsgihelpers.forbidden(ctx, message = ctx._("You must be an administrator to access this page."))
+            raise wsgihelpers.forbidden(ctx, message = ctx._(u"You must be an administrator to access this page."))
         return False
     return True
 

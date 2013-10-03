@@ -137,7 +137,7 @@ from ckanofworms import model, urls
 <%
     error = errors.get('term') if errors is not None else None
 %>\
-            <div class="form-group${' error' if error else ''}">
+            <div class="form-group${' has-error' if error else ''}">
                 <label for="term">${_("Term")}</label>
                 <input class="form-control" id="term" name="term" type="text" value="${inputs['term'] or ''}">
     % if error:
@@ -145,12 +145,67 @@ from ckanofworms import model, urls
     % endif
             </div>
 <%
+    error = errors.get('tag') if errors is not None else None
+%>\
+            <div class="form-group${' has-error' if error else ''}">
+                <label for="tag">${_("Tag")}</label>
+                <input class="form-control typeahead" id="tag" name="tag" type="text" value="${inputs['tag'] or ''}">
+    % if error:
+                <span class="help-block">${error}</span>
+    % endif
+            </div>
+<%
+    error = errors.get('group') if errors is not None else None
+%>\
+            <div class="form-group${' has-error' if error else ''}">
+                <label for="group">${_("Group")}</label>
+                <input class="form-control typeahead" id="group" name="group" type="text" value="${
+                        inputs['group'] or ''}">
+    % if error:
+                <span class="help-block">${error}</span>
+    % endif
+            </div>
+<%
+    error = errors.get('organization') if errors is not None else None
+%>\
+            <div class="form-group${' has-error' if error else ''}">
+                <label for="organization">${_("Organization")}</label>
+                <input class="form-control typeahead" id="organization" name="organization" type="text" value="${
+                        inputs['organization'] or ''}">
+    % if error:
+                <span class="help-block">${error}</span>
+    % endif
+            </div>
+<%
+    error = errors.get('supplier') if errors is not None else None
+%>\
+            <div class="form-group${' has-error' if error else ''}">
+                <label for="supplier">${_("Supplier")}</label>
+                <input class="form-control typeahead" id="supplier" name="supplier" type="text" value="${
+                        inputs['supplier'] or ''}">
+    % if error:
+                <span class="help-block">${error}</span>
+    % endif
+            </div>
+<%
     error = errors.get('related') if errors is not None else None
 %>\
-            <div class="checkbox${' error' if error else ''}">
+            <div class="checkbox${' has-error' if error else ''}">
                 <label>
                     <input${' checked' if inputs['related'] else ''} id="related" name="related" type="checkbox" value="1">
                     ${_(u'Related only')}
+                </label>
+    % if error:
+                <span class="help-block">${error}</span>
+    % endif
+            </div>
+<%
+    error = errors.get('bad') if errors is not None else None
+%>\
+            <div class="checkbox${' has-error' if error else ''}">
+                <label>
+                    <input${' checked' if inputs['bad'] else ''} id="bad" name="bad" type="checkbox" value="1">
+                    ${_(u'Errors only')}
                 </label>
     % if error:
                 <span class="help-block">${error}</span>

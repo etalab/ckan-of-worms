@@ -377,7 +377,7 @@ def login(req):
     if session is None:
         ctx.session = session = model.Session()
         session.token = unicode(uuid.uuid4())
-    session.expiration = datetime.datetime.utcnow() + datetime.timedelta(hours = 1)
+    session.expiration = datetime.datetime.utcnow() + datetime.timedelta(hours = 4)
     session.user_id = user._id
     session.save(ctx, safe = True)
 
@@ -394,7 +394,7 @@ def logout(req):
 
     session = ctx.session
     if session is not None:
-        session.expiration = datetime.datetime.utcnow() + datetime.timedelta(hours = 1)
+        session.expiration = datetime.datetime.utcnow() + datetime.timedelta(hours = 4)
         if session.user_id is not None:
             del session.user_id
         session.save(ctx, safe = True)

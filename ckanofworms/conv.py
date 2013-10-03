@@ -129,6 +129,24 @@ json_to_related_link_attributes = pipe(
     )
 
 
+def json_to_errors(value, state = None):
+    if value is None:
+        return value, None
+    if state is None:
+        state = default_state
+    if isinstance(value, dict):
+        return uniform_mapping(
+            pipe(
+                test_isinstance(basestring),
+                not_none,
+                ),
+            json_to_errors,
+            )(value, state = state)
+    if isinstance(value, list):
+        return value, state._(u"Errors can't contain a list")
+    return value, None
+
+
 def method(method_name, *args, **kwargs):
     def method_converter(value, state = None):
         if value is None:
