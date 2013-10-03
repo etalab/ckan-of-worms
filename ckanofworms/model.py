@@ -129,6 +129,7 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     name = None
     notes = None
     owner_org = None
+    related = None
     resources = None
     revision_id = None
     revision_timestamp = None
