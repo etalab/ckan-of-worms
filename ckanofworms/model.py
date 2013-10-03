@@ -87,7 +87,7 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return Organization.find({'users.id': self._id})
 
     def get_title(self, ctx):
-        return self.email or self._id
+        return self.fullname or self.name or self.email or self._id
 
     @classmethod
     def make_id_to_instance(cls):
