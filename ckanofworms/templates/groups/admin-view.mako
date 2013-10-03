@@ -45,8 +45,11 @@ from ckanofworms import conv, model, urls
         <h2>${group.get_title(ctx)}</h2>
         <%self:view_fields/>
         <div class="btn-toolbar">
-            <a class="btn btn-default" href="${group.get_admin_url(ctx, 'edit')}">${_(u'Edit')}</a>
-            <a class="btn btn-danger"  href="${group.get_admin_url(ctx, 'delete')}"><span class="glyphicon glyphicon-trash"></span> ${_('Delete')}</a>
+            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, group = group.title)}">${_(u'Datasets')}</a>
+##            <a class="btn btn-default" href="${group.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
+            <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'groups', group._id)}">${_(u'JSON')}</a>
+##            <a class="btn btn-default" href="${group.get_admin_url(ctx, 'edit')}">${_(u'Edit')}</a>
+##            <a class="btn btn-danger"  href="${group.get_admin_url(ctx, 'delete')}"><span class="glyphicon glyphicon-trash"></span> ${_('Delete')}</a>
         </div>
 </%def>
 

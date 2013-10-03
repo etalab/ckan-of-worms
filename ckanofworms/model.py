@@ -40,6 +40,7 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     api_key = None
     collection_name = 'accounts'
     email = None
+    errors = None
 
     # CKAN attributes
     created = None
