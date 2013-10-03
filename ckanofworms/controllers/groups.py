@@ -27,6 +27,7 @@
 
 
 import collections
+import datetime
 import logging
 import re
 
@@ -551,7 +552,7 @@ def api1_set_errors(req):
             )
 
     group = ctx.node
-    if  group.draft_id != data['draft_id']:
+    if group.draft_id != data['draft_id']:
         # The modified group is not based on the latest version of the group.
         return wsgihelpers.respond_json(ctx,
             collections.OrderedDict(sorted(dict(

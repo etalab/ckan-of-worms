@@ -31,7 +31,6 @@ import datetime
 import json
 import logging
 import re
-import urlparse
 import uuid
 
 import pymongo
@@ -555,7 +554,7 @@ def api1_set_errors(req):
             )
 
     account = ctx.node
-    if  account.draft_id != data['draft_id']:
+    if account.draft_id != data['draft_id']:
         # The modified account is not based on the latest version of the account.
         return wsgihelpers.respond_json(ctx,
             collections.OrderedDict(sorted(dict(
@@ -638,14 +637,14 @@ def login(req):
         )
     if not response.ok:
         return wsgihelpers.internal_error(ctx,
-            dump = response_text,
+            dump = response.text,
             explanation = ctx._(u'Error while verifying authentication assertion'),
             )
     verification_data = json.loads(response.content)
     # Check if the assertion was valid.
     if verification_data['status'] != 'okay':
         return wsgihelpers.internal_error(ctx,
-            dump = response_text,
+            dump = response.text,
             explanation = ctx._(u'Error while verifying authentication assertion'),
             )
 

@@ -27,6 +27,7 @@
 
 
 import collections
+import datetime
 import logging
 import re
 
@@ -552,7 +553,7 @@ def api1_set_errors(req):
             )
 
     organization = ctx.node
-    if  organization.draft_id != data['draft_id']:
+    if organization.draft_id != data['draft_id']:
         # The modified organization is not based on the latest version of the organization.
         return wsgihelpers.respond_json(ctx,
             collections.OrderedDict(sorted(dict(

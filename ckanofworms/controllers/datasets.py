@@ -797,7 +797,7 @@ def api1_set_errors(req):
             )
 
     dataset = ctx.node
-    if  dataset.draft_id != data['draft_id']:
+    if dataset.draft_id != data['draft_id']:
         # The modified dataset is not based on the latest version of the dataset.
         return wsgihelpers.respond_json(ctx,
             collections.OrderedDict(sorted(dict(
