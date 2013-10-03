@@ -29,7 +29,7 @@
 import logging
 
 from .. import contexts, templates, urls, wsgihelpers
-from . import accounts, datasets, groups, organizations, sessions
+from . import accounts, datasets, groups, organizations, sessions, tags
 
 
 log = logging.getLogger(__name__)
@@ -57,6 +57,7 @@ def make_router():
         (None, '^/api/1/datasets(?=/|$)', datasets.route_api1_class),
         (None, '^/api/1/groups(?=/|$)', groups.route_api1_class),
         (None, '^/api/1/organizations(?=/|$)', organizations.route_api1_class),
+        (None, '^/api/1/tags(?=/|$)', tags.route_api1_class),
         ('POST', '^/login/?$', accounts.login),
         ('POST', '^/logout/?$', accounts.logout),
         )
