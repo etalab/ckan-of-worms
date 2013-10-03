@@ -58,8 +58,6 @@ from ckanofworms import model, urls
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th>${_(u"ID")}</th>
-                    <th>${_(u"Name")}</th>
             % if data['sort'] == 'name':
                     <th>${_(u"Title")} <span class="glyphicon glyphicon-sort-by-attributes"></span></th>
             % else:
@@ -83,9 +81,7 @@ from ckanofworms import model, urls
             <tbody>
         % for dataset in datasets:
                 <tr>
-                    <td><a href="${dataset.get_admin_url(ctx)}">${dataset._id}</a></td>
-                    <td>${dataset.name or ''}</td>
-                    <td>${dataset.title or ''}</td>
+                    <td><a href="${dataset.get_admin_url(ctx)}">${dataset.title}</a></td>
                     <td>${dataset.revision_timestamp or ''}</td>
                     <td>${dataset.metadata_created or ''}</td>
                 </tr>
