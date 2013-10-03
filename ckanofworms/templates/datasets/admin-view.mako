@@ -552,5 +552,121 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         </div>
         <%self:field_error errors="${extract_item_errors(dataset_errors, key)}"/>
     % endfor
+        <h3>${u"Community Resources"}</h3>
+<%
+    related_links_errors = extract_item_errors(dataset_errors, 'related')
+%>\
+    % if dataset.related or related_links_errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Related"))}</b></div>
+            <ul class="col-sm-10 list-group">
+        % for related_link_index, related_link in enumerate(dataset.related or []):
+<%
+            related_link_errors = extract_item_errors(related_links_errors, related_link_index)
+%>\
+            <li class="list-group-item">
+<%
+            errors = extract_item_errors(related_link_errors, 'title')
+            value = related_link.get('title')
+%>\
+            % if value is not None or errors:
+                <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Title"))}</b></div>
+                    <div class="col-sm-10">${value}</div>
+                </div>
+                <%self:field_error errors="${errors}"/>
+            % endif
+<%
+            errors = extract_item_errors(related_link_errors, 'description')
+            value = related_link.get('description')
+%>\
+            % if value is not None or errors:
+                <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Description"))}</b></div>
+                    <pre class="break-word col-sm-10">${value}</pre>
+                </div>
+                <%self:field_error errors="${errors}"/>
+            % endif
+<%
+            errors = extract_item_errors(related_link_errors, 'url')
+            value = related_link.get('url')
+%>\
+            % if value is not None or errors:
+                <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("URL"))}</b></div>
+                    <div class="break-word col-sm-10"><a href="${value}">${value}</a></div>
+                </div>
+                <%self:field_error errors="${errors}"/>
+            % endif
+<%
+            errors = extract_item_errors(related_link_errors, 'image_url')
+            value = related_link.get('image_url')
+%>\
+            % if value is not None or errors:
+                <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Image"))}</b></div>
+                    <div class="break-word col-sm-10"><img src="${value}"></div>
+                </div>
+                <%self:field_error errors="${errors}"/>
+            % endif
+<%
+            errors = extract_item_errors(related_link_errors, 'type')
+            value = related_link.get('type')
+%>\
+            % if value is not None or errors:
+                <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Type"))}</b></div>
+                    <div class="col-sm-10">${value}</div>
+                </div>
+                <%self:field_error errors="${errors}"/>
+            % endif
+<%
+            errors = extract_item_errors(related_link_errors, 'owner_id')
+            value = related_link.get('owner_id')
+            account = model.Account.find_one(value) if value is not None else None
+%>\
+            % if value is not None or errors:
+                <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Owner"))}</b></div>
+                    <div class="col-sm-10">
+                    % if account is None:
+                        ${value}
+                    % else:
+                        <a href="${account.get_admin_url(ctx)}">${account.get_title(ctx)}</a>
+                    % endif
+                    </div>
+                </div>
+                <%self:field_error errors="${errors}"/>
+            % endif
+<%
+            errors = extract_item_errors(related_link_errors, 'created')
+            value = related_link.get('created')
+%>\
+            % if value is not None or errors:
+                <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Created"))}</b></div>
+                    <div class="col-sm-10">${value}</div>
+                </div>
+                <%self:field_error errors="${errors}"/>
+            % endif
+<%
+            remaining_keys = set()
+            for author, author_errors in related_link_errors.iteritems():
+                remaining_keys.update(author_errors['error'].iterkeys())
+%>\
+            % for key in sorted(remaining_keys):
+               <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(key)}</b></div>
+                    <pre class="col-sm-10">${json.dumps(related_link.get(key),
+                            encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
+                </div>
+                <%self:field_error errors="${extract_item_errors(related_link_errors, key)}"/>
+            % endfor
+            </li>
+        % endfor
+            </ul>
+        </div>
+        <%self:field_error errors="${related_links_errors}"/>
+    % endif
 </%def>
 
