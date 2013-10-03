@@ -110,12 +110,12 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         </div>
         <%self:field_error errors="${errors}"/>
         % endif
-       <div class="row">
-            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Resources"))}</b></div>
 <%
     resources_errors = extract_item_errors(dataset_errors, 'resources')
 %>\
     % if dataset.resources or resources_errors:
+       <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Resources"))}</b></div>
             <ul class="col-sm-10 list-group">
         % for resource_index, resource in enumerate(dataset.resources or []):
 <%
