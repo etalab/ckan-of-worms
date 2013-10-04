@@ -576,7 +576,7 @@ def api1_set_errors(req):
     else:
         errors[data['author']] = dict(
             error = data['value'],
-            timestamp = datetime.datetime.utcnow().isoformat(),
+            timestamp = datetime.datetime.utcnow().isoformat(' '),
             )
     if errors:
         organization.errors = errors

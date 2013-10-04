@@ -501,6 +501,17 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         <%self:field_error errors="${errors}"/>
         % endif
 <%
+        errors = self.attr.extract_item_errors(dataset_errors, 'timestamp')
+        value = dataset.timestamp
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Timestamp"))}</b></div>
+            <div class="col-sm-10">${value}</div>
+        </div>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
         errors = self.attr.extract_item_errors(dataset_errors, 'revision_id')
         value = dataset.revision_id
 %>\

@@ -74,7 +74,7 @@ from ckanofworms import model, urls
             % else:
                     <td>${user.get_title(ctx)}</td>
             % endif
-                    <td>${session.expiration.isoformat() if session.expiration is not None else ''}</td>
+                    <td>${session.expiration.isoformat(' ') if session.expiration is not None else ''}</td>
                 </tr>
         % endfor
             </tbody>

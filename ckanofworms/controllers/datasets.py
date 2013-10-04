@@ -105,6 +105,11 @@ def admin_edit(req):
                 errors = dict(email = ctx._('A dataset with the same email already exists.'))
         if errors is None:
             dataset.set_attributes(**data)
+#            timestamp = dataset.revision_timestamp
+#            for resource in (dataset.resources or []):
+#                if resource['revision_timestamp'] > timestamp:
+#                    timestamp = resource['revision_timestamp']
+#            dataset.timestamp = timestamp
             dataset.save(ctx, safe = True)
 
             # View dataset.
@@ -150,7 +155,7 @@ def admin_index(req):
                 related = conv.guess_bool,
                 sort = conv.pipe(
                     conv.cleanup_line,
-                    conv.test_in(['metadata_created', 'name', 'revision_timestamp']),
+                    conv.test_in(['metadata_created', 'name', 'timestamp']),
                     ),
                 supplier = conv.pipe(
                     conv.cleanup_line,
@@ -184,7 +189,7 @@ def admin_index(req):
     pager = paginations.Pager(item_count = cursor.count(), page_number = data['page_number'])
     if data['sort'] == 'name':
         cursor.sort([('name', pymongo.ASCENDING)])
-    elif data['sort'] in ('metadata_created', 'revision_timestamp'):
+    elif data['sort'] in ('metadata_created', 'timestamp'):
         cursor.sort([(data['sort'], pymongo.DESCENDING), ('name', pymongo.ASCENDING)])
     datasets = cursor.skip(pager.first_item_index or 0).limit(pager.page_size)
     return templates.render(ctx, '/datasets/admin-index.mako', data = data, datasets = datasets, errors = errors,
@@ -536,6 +541,11 @@ def api1_related(req):
 #            headers = headers,
 #            )
 #    dataset = model.Dataset(**dataset_attributes)
+#    timestamp = dataset.revision_timestamp
+#    for resource in (dataset.resources or []):
+#        if resource['revision_timestamp'] > timestamp:
+#            timestamp = resource['revision_timestamp']
+#    dataset.timestamp = timestamp
 #    dataset.save(ctx, safe = True)
 
 #    return wsgihelpers.respond_json(ctx,
@@ -668,11 +678,11 @@ def api1_set_ckan(req):
 
     dataset_attributes = data['value']
     dataset = model.Dataset(**dataset_attributes)
-#    dataset = model.Dataset.find_one(dataset_attributes['_id'], as_class = collections.OrderedDict)
-#    if dataset is None:
-#        dataset = model.Dataset(**dataset_attributes)
-#    else:
-#        dataset = model.Dataset(_id = dataset._id, **dataset_attributes)
+    timestamp = dataset.revision_timestamp
+    for resource in (dataset.resources or []):
+        if resource['revision_timestamp'] > timestamp:
+            timestamp = resource['revision_timestamp']
+    dataset.timestamp = timestamp
     dataset.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -833,7 +843,7 @@ def api1_set_errors(req):
     else:
         errors[data['author']] = dict(
             error = data['value'],
-            timestamp = datetime.datetime.utcnow().isoformat(),
+            timestamp = datetime.datetime.utcnow().isoformat(' '),
             )
     if errors:
         dataset.errors = errors

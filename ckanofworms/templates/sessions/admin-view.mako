@@ -74,7 +74,7 @@ ${session.get_title(ctx)} - ${parent.title_content()}
     % endif
         <div class="field">
             <b class="field-label">${_('{0}:').format(_("Expiration Date"))}</b>
-            <span class="field-value">${session.expiration.isoformat()}</span>
+            <span class="field-value">${session.expiration.isoformat(' ')}</span>
         </div>
 </%def>
 

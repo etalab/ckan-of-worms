@@ -64,11 +64,11 @@ from ckanofworms import model, urls
                     <th><a href="${model.Dataset.get_admin_class_url(ctx, **urls.relative_query(inputs, page = None,
                             sort = 'name'))}">${_(u"Title")}</a></th>
             % endif
-            % if data['sort'] == 'revision_timestamp':
+            % if data['sort'] == 'timestamp':
                     <th>${_(u"Last Modification")} <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></th>
             % else:
                     <th><a href="${model.Dataset.get_admin_class_url(ctx, **urls.relative_query(inputs, page = None,
-                            sort = 'revision_timestamp'))}">${_(u"Last Modification")}</a></th>
+                            sort = 'timestamp'))}">${_(u"Last Modification")}</a></th>
             % endif
             % if data['sort'] == 'metadata_created':
                     <th>${_(u"Creation")} <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></th>
@@ -82,7 +82,7 @@ from ckanofworms import model, urls
         % for dataset in datasets:
                 <tr>
                     <td><a href="${dataset.get_admin_url(ctx)}">${dataset.title}</a></td>
-                    <td>${dataset.revision_timestamp or ''}</td>
+                    <td>${dataset.timestamp or ''}</td>
                     <td>${dataset.metadata_created or ''}</td>
                 </tr>
         % endfor

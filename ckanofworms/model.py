@@ -119,6 +119,7 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
 class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
     collection_name = u'datasets'
     errors = None
+    timestamp = None
 
     # CKAN attributes
     author = None
@@ -522,6 +523,7 @@ def setup():
     Account.ensure_index('email', sparse = True, unique = True)
 
     Dataset.ensure_index('name', unique = True)
+    Dataset.ensure_index('timestamp')
 
     Group.ensure_index('users.id')
 
