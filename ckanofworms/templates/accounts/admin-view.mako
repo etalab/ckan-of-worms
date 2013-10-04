@@ -24,13 +24,14 @@
 
 
 <%!
+import copy
 import json
 
 from ckanofworms import conv, model, urls
 %>
 
 
-<%inherit file="/site.mako"/>
+<%inherit file="/object-admin-view.mako"/>
 
 
 <%def name="breadcrumb_content()" filter="trim">
@@ -59,33 +60,125 @@ ${account.get_title(ctx)} - ${parent.title_content()}
 
 
 <%def name="view_fields()" filter="trim">
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("ID"))}</b>
-            <span class="field-value">${account._id}</span>
+<%
+    account_errors = copy.deepcopy(account.errors) if account.errors is not None else {}
+%>\
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'fullname')
+        value = account.fullname
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Fullname"))}</b></div>
+            <div class="col-sm-10">${value}</div>
         </div>
-    % if account.email:
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("Email"))}</b>
-            <span class="field-value">${account.email}</span>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'name')
+        value = account.name
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
+            <div class="col-sm-10">${value}</div>
         </div>
-    % endif
-    % if account.admin:
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("Profile"))}</b>
-            <span class="field-value">${_(u'Administrator')}</span>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'email')
+        value = account.email
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Email"))}</b></div>
+            <div class="col-sm-10">${value}</div>
         </div>
-    % endif
-    % if account.api_key:
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("API Key"))}</b>
-            <span class="field-value">${account.api_key}</span>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'email_hash')
+        value = account.email_hash
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Email Hash"))}</b></div>
+            <div class="col-sm-10">${value}</div>
         </div>
-    % endif
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("JSON"))}</b>
-            <pre class="break-word field-value offset1">${json.dumps(
-                conv.check(conv.method('turn_to_json'))(account, state = ctx),
-                encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'about')
+        value = account.about
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("About"))}</b></div>
+            <pre class="break-word col-sm-10">${value}</pre>
         </div>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'admin')
+        value = account.admin
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Admin"))}</b></div>
+            <div class="col-sm-10">${value}</div>
+        </div>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'sysadmin')
+        value = account.sysadmin
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Sysadmin"))}</b></div>
+            <div class="col-sm-10">${value}</div>
+        </div>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'api_key')
+        value = account.api_key
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("API Key"))}</b></div>
+            <div class="col-sm-10">${value}</div>
+        </div>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(account_errors, 'created')
+        value = account.created
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Created"))}</b></div>
+            <div class="col-sm-10">${value}</div>
+        </div>
+        <%self:field_error errors="${errors}"/>
+        % endif
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("ID"))}</b></div>
+            <div class="col-sm-10">${account._id}</div>
+        </div>
+        <%self:field_error errors="${self.attr.extract_item_errors(account_errors, 'id')}"/>
+<%
+    remaining_keys = set()
+    for author, author_errors in account_errors.iteritems():
+        remaining_keys.update(author_errors['error'].iterkeys())
+%>\
+    % for key in sorted(remaining_keys):
+       <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(key)}</b></div>
+            <pre class="col-sm-10">${json.dumps(getattr(account, key, None),
+                    encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
+        </div>
+        <%self:field_error errors="${self.attr.extract_item_errors(account_errors, key)}"/>
+    % endfor
 </%def>
 

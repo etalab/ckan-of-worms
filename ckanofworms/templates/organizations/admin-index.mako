@@ -58,8 +58,6 @@ from ckanofworms import model, urls
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th>${_(u"ID")}</th>
-                    <th>${_(u"Name")}</th>
         % if data['sort'] == 'name':
                     <th>${_(u"Title")} <span class="glyphicon glyphicon-sort-by-attributes"></span></th>
         % else:
@@ -77,9 +75,7 @@ from ckanofworms import model, urls
             <tbody>
         % for organization in organizations:
                 <tr>
-                    <td><a href="${organization.get_admin_url(ctx)}">${organization._id}</a></td>
-                    <td>${organization.name or ''}</td>
-                    <td>${organization.title or ''}</td>
+                    <td><a href="${organization.get_admin_url(ctx)}">${organization.title or ''}</a></td>
                     <td>${organization.created or ''}</td>
                 </tr>
         % endfor

@@ -24,13 +24,14 @@
 
 
 <%!
+import copy
 import json
 
 from ckanofworms import conv, model, urls
 %>
 
 
-<%inherit file="/site.mako"/>
+<%inherit file="/object-admin-view.mako"/>
 
 
 <%def name="breadcrumb_content()" filter="trim">
@@ -60,34 +61,80 @@ ${group.get_title(ctx)} - ${parent.title_content()}
 
 
 <%def name="view_fields()" filter="trim">
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("ID"))}</b>
-            <span class="field-value">${group._id}</span>
+<%
+    group_errors = copy.deepcopy(group.errors) if group.errors is not None else {}
+%>\
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
+            <div class="col-sm-10">${group.name}</div>
         </div>
-    % if group.name:
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("Name"))}</b>
-            <span class="field-value">${group.name}</span>
+        <%self:field_error errors="${self.attr.extract_item_errors(group_errors, 'name')}"/>
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Title"))}</b></div>
+            <div class="col-sm-10">${group.title}</div>
         </div>
-    % endif
-    % if group.title:
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("Title"))}</b>
-            <span class="field-value">${group.title}</span>
+        <%self:field_error errors="${self.attr.extract_item_errors(group_errors, 'title')}"/>
+<%
+        errors = self.attr.extract_item_errors(group_errors, 'description')
+        value = group.description
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Description"))}</b></div>
+            <pre class="break-word col-sm-10">${value}</pre>
         </div>
-    % endif
-    % if group.errors:
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("Errors"))}</b>
-            <pre class="break-word field-value offset1">${json.dumps(group.errors,
-                encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(group_errors, 'image_url')
+        value = group.image_url
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Image"))}</b></div>
+            <div class="break-word col-sm-10"><img src="${value}"></div>
         </div>
-    % endif
-        <div class="field">
-            <b class="field-label">${_('{0}:').format(_("JSON"))}</b>
-            <pre class="break-word field-value offset1">${json.dumps(
-                conv.check(conv.method('turn_to_json'))(group, state = ctx),
-                encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(group_errors, 'created')
+        value = group.created
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Created"))}</b></div>
+            <div class="col-sm-10">${value}</div>
         </div>
+        <%self:field_error errors="${errors}"/>
+        % endif
+<%
+        errors = self.attr.extract_item_errors(group_errors, 'revision_id')
+        value = group.revision_id
+%>\
+        % if value is not None or errors:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Revision ID"))}</b></div>
+            <div class="col-sm-10">${value}</div>
+        </div>
+        <%self:field_error errors="${errors}"/>
+        % endif
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("ID"))}</b></div>
+            <div class="col-sm-10">${group._id}</div>
+        </div>
+        <%self:field_error errors="${self.attr.extract_item_errors(group_errors, 'id')}"/>
+<%
+    remaining_keys = set()
+    for author, author_errors in group_errors.iteritems():
+        remaining_keys.update(author_errors['error'].iterkeys())
+%>\
+    % for key in sorted(remaining_keys):
+       <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(key)}</b></div>
+            <pre class="col-sm-10">${json.dumps(getattr(group, key, None),
+                    encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
+        </div>
+        <%self:field_error errors="${self.attr.extract_item_errors(group_errors, key)}"/>
+    % endfor
 </%def>
 

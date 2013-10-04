@@ -43,9 +43,12 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     errors = None
 
     # CKAN attributes
+    about = None
     created = None
+    email_hash = None
     fullname = None
     name = None
+    sysadmin = None
 
     def after_delete(self, ctx, old_bson):
         fedmsg.publish(
@@ -206,7 +209,10 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
 
     # CKAN attributes
     created = None
+    description = None
+    image_url = None
     name = None
+    revision_id = None
     title = None
 
     def after_delete(self, ctx, old_bson):
@@ -292,7 +298,10 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
 
     # CKAN attributes
     created = None
+    description = None
+    image_url = None
     name = None
+    revision_id = None
     title = None
 
     def after_delete(self, ctx, old_bson):

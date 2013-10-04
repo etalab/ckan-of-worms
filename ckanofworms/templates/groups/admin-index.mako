@@ -58,8 +58,6 @@ from ckanofworms import model, urls
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
-                    <th>${_(u"ID")}</th>
-                    <th>${_(u"Name")}</th>
             % if data['sort'] == 'name':
                     <th>${_(u"Title")} <span class="glyphicon glyphicon-sort-by-attributes"></span></th>
             % else:
@@ -77,9 +75,7 @@ from ckanofworms import model, urls
             <tbody>
         % for group in groups:
                 <tr>
-                    <td><a href="${group.get_admin_url(ctx)}">${group._id}</a></td>
-                    <td>${group.name or ''}</td>
-                    <td>${group.title or ''}</td>
+                    <td><a href="${group.get_admin_url(ctx)}">${group.title or ''}</a></td>
                     <td>${group.created or ''}</td>
                 </tr>
         % endfor
