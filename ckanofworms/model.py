@@ -29,6 +29,7 @@
 import collections
 import conv
 import datetime
+import urlparse
 
 import fedmsg
 
@@ -176,6 +177,16 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         if self._id is None:
             return None
         return self.get_admin_class_url(ctx, self._id, *path, **query)
+
+    def get_back_url(self, ctx, *path, **query):
+        if self.name is None:
+            return None
+        return urlparse.urljoin(conf['ckan_url'], u'dataset/{}'.format(self.name))
+
+    def get_front_url(self, ctx, *path, **query):
+        if self.name is None:
+            return None
+        return urlparse.urljoin(conf['weckan_url'], u'dataset/{}'.format(self.name))
 
     def get_title(self, ctx):
         return self.title or self.name or self._id
