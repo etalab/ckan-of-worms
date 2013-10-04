@@ -192,6 +192,19 @@ def admin_index(req):
 
 
 @wsgihelpers.wsgify
+def admin_publish(req):
+    ctx = contexts.Ctx(req)
+    dataset = ctx.node
+
+    model.is_admin(ctx, check = True)
+
+    bson = dataset.to_bson()
+    dataset.after_upsert(ctx, bson, bson)
+
+    return wsgihelpers.redirect(ctx, location = dataset.get_admin_url(ctx))
+
+
+@wsgihelpers.wsgify
 def admin_stats(req):
     ctx = contexts.Ctx(req)
     dataset = ctx.node
@@ -869,6 +882,7 @@ def route_admin(environ, start_response):
         ('GET', '^/?$', admin_view),
 #        (('GET', 'POST'), '^/delete/?$', admin_delete),
 #        (('GET', 'POST'), '^/edit/?$', admin_edit),
+        ('GET', '^/publish/?$', admin_publish),
         ('GET', '^/stats/?$', admin_stats),
         )
     return router(environ, start_response)
