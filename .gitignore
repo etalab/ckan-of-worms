@@ -2,7 +2,8 @@ build/
 cache/
 ckanofworms/static/.webassets-cache/
 ckanofworms/static/bower/
-ckanofworms/static/css/
+ckanofworms/static/css/site-less.css
+ckanofworms/static/css/site.min.css
 development-*.ini
 dist/
 projects-*.ini
