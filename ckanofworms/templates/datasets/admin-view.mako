@@ -540,11 +540,11 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         </div>
         <%self:field_error errors="${self.attr.extract_item_errors(dataset_errors, key)}"/>
     % endfor
-        <h3>${u"Community Resources"}</h3>
 <%
     related_links_errors = self.attr.extract_item_errors(dataset_errors, 'related')
 %>\
     % if dataset.related or related_links_errors:
+        <h3>${u"Community Resources"}</h3>
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Related"))}</b></div>
             <ul class="col-sm-10 list-group">
