@@ -104,6 +104,8 @@ def admin_edit(req):
                     ).count() > 0:
                 errors = dict(email = ctx._('An organization with the same email already exists.'))
         if errors is None:
+            if organization.errors:
+                del organization.errors
             organization.set_attributes(**data)
             organization.save(ctx, safe = True)
 
@@ -167,6 +169,123 @@ def admin_view(req):
     model.is_admin(ctx, check = True)
 
     return templates.render(ctx, '/organizations/admin-view.mako', organization = organization)
+
+
+@wsgihelpers.wsgify
+def api1_delete(req):
+    ctx = contexts.Ctx(req)
+    headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
+
+    assert req.method == 'DELETE', req.method
+
+    content_type = req.content_type
+    if content_type is not None:
+        content_type = content_type.split(';', 1)[0].strip()
+    if content_type == 'application/json':
+        inputs, error = conv.pipe(
+            conv.make_input_to_json(),
+            conv.test_isinstance(dict),
+            )(req.body, state = ctx)
+        if error is not None:
+            return wsgihelpers.respond_json(ctx,
+                collections.OrderedDict(sorted(dict(
+                    apiVersion = '1.0',
+                    error = collections.OrderedDict(sorted(dict(
+                        code = 400,  # Bad Request
+                        errors = [error],
+                        message = ctx._(u'Invalid JSON in request DELETE body'),
+                        ).iteritems())),
+                    method = req.script_name,
+                    params = req.body,
+                    url = req.url.decode('utf-8'),
+                    ).iteritems())),
+                headers = headers,
+                )
+    else:
+        # URL-encoded POST.
+        inputs = dict(req.POST)
+
+    data, errors = conv.struct(
+        dict(
+            # Shared secret between client and server
+            api_key = conv.pipe(
+                conv.test_isinstance(basestring),
+                conv.input_to_token,
+                conv.not_none,
+                ),
+            # For asynchronous calls
+            context = conv.test_isinstance(basestring),
+            ),
+        )(inputs, state = ctx)
+    if errors is not None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = inputs.get('context'),
+                error = collections.OrderedDict(sorted(dict(
+                    code = 400,  # Bad Request
+                    errors = [errors],
+                    message = ctx._(u'Bad parameters in request'),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    api_key = data['api_key']
+    account = model.Account.find_one(
+        dict(
+            api_key = api_key,
+            ),
+        as_class = collections.OrderedDict,
+        )
+    if account is None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 401,  # Unauthorized
+                    message = ctx._('Unknown API Key: {}').format(api_key),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+    if not account.admin:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 403,  # Forbidden
+                    message = ctx._('Non-admin API Key: {}').format(api_key),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    deleted_value = conv.check(conv.method('turn_to_json'))(ctx.node, state = ctx)
+    ctx.node.delete(ctx, safe = True)
+
+    return wsgihelpers.respond_json(ctx,
+        collections.OrderedDict(sorted(dict(
+            apiVersion = '1.0',
+            context = data['context'],
+            method = req.script_name,
+            params = inputs,
+            url = req.url.decode('utf-8'),
+            value = deleted_value,
+            ).iteritems())),
+        headers = headers,
+        )
 
 
 @wsgihelpers.wsgify
@@ -309,7 +428,6 @@ def api1_set_ckan(req):
             ),
         # For asynchronous calls
         context = conv.test_isinstance(basestring),
-        # URL path of the form to fill out
         # "value" is handled below.
         )
 
@@ -400,7 +518,7 @@ def api1_set_ckan(req):
                 context = data['context'],
                 error = collections.OrderedDict(sorted(dict(
                     code = 403,  # Forbidden
-                    message = ctx._('Unknown API Key: {}').format(api_key),
+                    message = ctx._('Non-admin API Key: {}').format(api_key),
                     ).iteritems())),
                 method = req.script_name,
                 params = inputs,
@@ -411,11 +529,6 @@ def api1_set_ckan(req):
 
     organization_attributes = data['value']
     organization = model.Organization(**organization_attributes)
-#    organization = model.Organization.find_one(organization_attributes['_id'], as_class = collections.OrderedDict)
-#    if organization is None:
-#        organization = model.Organization(**organization_attributes)
-#    else:
-#        organization = model.Organization(_id = organization._id, **organization_attributes)
     organization.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -543,7 +656,7 @@ def api1_set_errors(req):
                 context = data['context'],
                 error = collections.OrderedDict(sorted(dict(
                     code = 403,  # Forbidden
-                    message = ctx._('Unknown API Key: {}').format(api_key),
+                    message = ctx._('Non-admin API Key: {}').format(api_key),
                     ).iteritems())),
                 method = req.script_name,
                 params = inputs,
@@ -695,6 +808,7 @@ def route_api1(environ, start_response):
     ctx.node = organization
 
     router = urls.make_router(
+        ('DELETE', '^/?$', api1_delete),
         ('GET', '^/?$', api1_get),
         ('POST', '^/errors/?$', api1_set_errors),
         )

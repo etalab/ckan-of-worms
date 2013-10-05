@@ -33,6 +33,7 @@ import json
 import logging
 import os
 import sys
+import urllib
 import urllib2
 import urlparse
 
@@ -60,6 +61,15 @@ def main():
         conv.test_isinstance(dict),
         conv.struct(
             {
+                'ckan.api_key': conv.pipe(
+                    conv.cleanup_line,
+                    conv.not_none,
+                    ),
+                'ckan.site_url': conv.pipe(
+                    conv.make_input_to_url(error_if_fragment = True, error_if_path = True, error_if_query = True,
+                        full = True),
+                    conv.not_none,
+                    ),
                 'ckan_of_worms.api_key': conv.pipe(
                     conv.cleanup_line,
                     conv.not_none,
@@ -102,10 +112,15 @@ def main():
         default = 'drop',
         ))(dict(config_parser.items('fedmsg')))
 
-    headers = {
+    source_headers = {
+        'Authorization': conf['ckan.api_key'],  # API key is required to get full user profile.
         'User-Agent': conf['user_agent'],
         }
+    source_site_url = conf['ckan.site_url']
     target_api_key = conf['ckan_of_worms.api_key']
+    target_headers = {
+        'User-Agent': conf['user_agent'],
+        }
     target_site_url = conf['ckan_of_worms.site_url']
 
     # Read in the config from /etc/fedmsg.d/.
@@ -132,7 +147,7 @@ def main():
                 group = message['msg']
 
                 log.info(u'Upserting group: {}'.format(group['name']))
-                request_headers = headers.copy()
+                request_headers = target_headers.copy()
                 request_headers['Content-Type'] = 'application/json'
                 request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/groups/ckan'),
                     headers = request_headers)
@@ -157,6 +172,35 @@ def main():
                     response_dict = json.loads(response.read())
 #                    group = response_dict['value']
 #                    print group
+            elif action == 'delete':
+                group = message['msg']
+
+                log.info(u'Deleting group: {}'.format(group['id']))
+                request_headers = target_headers.copy()
+                request_headers['Content-Type'] = 'application/json'
+                request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/groups/{}'.format(group['id'])),
+                    headers = request_headers)
+                request.get_method = lambda: 'DELETE'
+                try:
+                    response = urllib2.urlopen(request, json.dumps(dict(
+                        api_key = target_api_key,
+                        )))
+                except urllib2.HTTPError as response:
+                    log.error(u'An error occured while deleting group: {}'.format(group))
+                    response_text = response.read()
+                    try:
+                        response_dict = json.loads(response_text)
+                    except ValueError:
+                        log.error(response_text)
+                        raise
+                    for key, value in response_dict.iteritems():
+                        print '{} = {}'.format(key, value)
+                    raise
+                else:
+                    assert response.code == 200
+                    response_dict = json.loads(response.read())
+#                    group = response_dict['value']
+#                    print group
             else:
                 log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
         elif kind == 'organization':
@@ -164,7 +208,7 @@ def main():
                 organization = message['msg']
 
                 log.info(u'Upserting organization: {}'.format(organization['name']))
-                request_headers = headers.copy()
+                request_headers = target_headers.copy()
                 request_headers['Content-Type'] = 'application/json'
                 request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/organizations/ckan'),
                     headers = request_headers)
@@ -189,6 +233,35 @@ def main():
                     response_dict = json.loads(response.read())
 #                    organization = response_dict['value']
 #                    print organization
+            elif action == 'delete':
+                organization = message['msg']
+
+                log.info(u'Deleting organization: {}'.format(organization['id']))
+                request_headers = target_headers.copy()
+                request_headers['Content-Type'] = 'application/json'
+                request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/organizations/{}'.format(
+                    organization['id'])), headers = request_headers)
+                request.get_method = lambda: 'DELETE'
+                try:
+                    response = urllib2.urlopen(request, json.dumps(dict(
+                        api_key = target_api_key,
+                        )))
+                except urllib2.HTTPError as response:
+                    log.error(u'An error occured while deleting organization: {}'.format(organization))
+                    response_text = response.read()
+                    try:
+                        response_dict = json.loads(response_text)
+                    except ValueError:
+                        log.error(response_text)
+                        raise
+                    for key, value in response_dict.iteritems():
+                        print '{} = {}'.format(key, value)
+                    raise
+                else:
+                    assert response.code == 200
+                    response_dict = json.loads(response.read())
+#                    organization = response_dict['value']
+#                    print organization
             else:
                 log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
         elif kind == 'package':
@@ -196,7 +269,7 @@ def main():
                 package = message['msg']
 
                 log.info(u'Upserting package: {}'.format(package['name']))
-                request_headers = headers.copy()
+                request_headers = target_headers.copy()
                 request_headers['Content-Type'] = 'application/json'
                 request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/datasets/ckan'),
                     headers = request_headers)
@@ -221,41 +294,181 @@ def main():
                     response_dict = json.loads(response.read())
 #                    dataset = response_dict['value']
 #                    print dataset
+            elif action == 'delete':
+                package = message['msg']
+
+                log.info(u'Deleting package: {}'.format(package['id']))
+                request_headers = target_headers.copy()
+                request_headers['Content-Type'] = 'application/json'
+                request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/datasets/{}'.format(package['id'])),
+                    headers = request_headers)
+                request.get_method = lambda: 'DELETE'
+                try:
+                    response = urllib2.urlopen(request, json.dumps(dict(
+                        api_key = target_api_key,
+                        )))
+                except urllib2.HTTPError as response:
+                    log.error(u'An error occured while deleting package: {}'.format(package))
+                    response_text = response.read()
+                    try:
+                        response_dict = json.loads(response_text)
+                    except ValueError:
+                        log.error(response_text)
+                        raise
+                    for key, value in response_dict.iteritems():
+                        print '{} = {}'.format(key, value)
+                    raise
+                else:
+                    assert response.code == 200
+                    response_dict = json.loads(response.read())
+#                    dataset = response_dict['value']
+#                    print dataset
             else:
                 log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
-#        elif kind == 'related':
-#            if action in ('create', 'update'):
-#                related = message['msg']
+        elif kind == 'related':
+            if action in ('create', 'update'):
+                related = message['msg']
 
-#                log.info(u'Upserting related: {} '.format(
-#                    related.get('title') or related.get('url') or related.get('image_url')))
-#                request_headers = headers.copy()
-#                request_headers['Content-Type'] = 'application/json'
-#                request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/related_links/ckan'),
-#                    headers = request_headers)
-#                try:
-#                    response = urllib2.urlopen(request, json.dumps(dict(
-#                        api_key = target_api_key,
-#                        value = related,
-#                        )))
-#                except urllib2.HTTPError as response:
-#                    log.error(u'An error occured while upserting related: {}'.format(related))
-#                    response_text = response.read()
-#                    try:
-#                        response_dict = json.loads(response_text)
-#                    except ValueError:
-#                        log.error(response_text)
-#                        raise
-#                    for key, value in response_dict.iteritems():
-#                        print '{} = {}'.format(key, value)
-#                    raise
-#                else:
-#                    assert response.code == 200
-#                    response_dict = json.loads(response.read())
-##                    related = response_dict['value']
-##                    print related
-#            else:
-#                log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
+                log.info(u'Upserting related: {}'.format(related['title']))
+                request_headers = target_headers.copy()
+                request_headers['Content-Type'] = 'application/json'
+                request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/datasets/ckan/related'),
+                    headers = request_headers)
+                try:
+                    response = urllib2.urlopen(request, json.dumps(dict(
+                        api_key = target_api_key,
+                        value = related,
+                        )))
+                except urllib2.HTTPError as response:
+                    log.error(u'An error occured while upserting related: {}'.format(related))
+                    response_text = response.read()
+                    try:
+                        response_dict = json.loads(response_text)
+                    except ValueError:
+                        log.error(response_text)
+                        raise
+                    for key, value in response_dict.iteritems():
+                        print '{} = {}'.format(key, value)
+                    raise
+                else:
+                    assert response.code == 200
+                    response_dict = json.loads(response.read())
+#                    related = response_dict['value']
+#                    print related
+            elif action == 'delete':
+                related = message['msg']
+
+                log.info(u'Deleting related: {}'.format(related['id']))
+                request_headers = target_headers.copy()
+                request_headers['Content-Type'] = 'application/json'
+                request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/datasets/related/{}'.format(
+                    related['id'])), headers = request_headers)
+                request.get_method = lambda: 'DELETE'
+                try:
+                    response = urllib2.urlopen(request, json.dumps(dict(
+                        api_key = target_api_key,
+                        )))
+                except urllib2.HTTPError as response:
+                    log.error(u'An error occured while deleting related: {}'.format(related))
+                    response_text = response.read()
+                    try:
+                        response_dict = json.loads(response_text)
+                    except ValueError:
+                        log.error(response_text)
+                        raise
+                    for key, value in response_dict.iteritems():
+                        print '{} = {}'.format(key, value)
+                    raise
+                else:
+                    assert response.code == 200
+                    response_dict = json.loads(response.read())
+#                    related = response_dict['value']
+#                    print related
+            else:
+                log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
+        elif kind == 'user':
+            if action in ('create', 'update'):
+                user = message['msg']
+
+                # Retrieve full user profile (with email, etc).
+                request = urllib2.Request(urlparse.urljoin(source_site_url, 'api/3/action/user_show'),
+                    headers = source_headers)
+                try:
+                    response = urllib2.urlopen(request, urllib.quote(json.dumps(dict(
+                        id = user['id'],
+                        ))))  # CKAN < 2.0 requires a POST.
+                except urllib2.HTTPError as response:
+                    if response.code == 403:
+                        # Private user => Keep incomplete user profile.
+                        pass
+                    else:
+                        raise
+                else:
+                    response_text = response.read()
+                    try:
+                        response_dict = json.loads(response_text)
+                    except ValueError:
+                        log.error(response_text)
+                        raise
+                    user = response_dict['result']
+
+                log.info(u'Upserting user: {}'.format(user['name']))
+                request_headers = target_headers.copy()
+                request_headers['Content-Type'] = 'application/json'
+                request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/accounts/ckan'),
+                    headers = request_headers)
+                try:
+                    response = urllib2.urlopen(request, json.dumps(dict(
+                        api_key = target_api_key,
+                        value = user,
+                        )))
+                except urllib2.HTTPError as response:
+                    log.error(u'An error occured while upserting user: {}'.format(user))
+                    response_text = response.read()
+                    try:
+                        response_dict = json.loads(response_text)
+                    except ValueError:
+                        log.error(response_text)
+                        raise
+                    for key, value in response_dict.iteritems():
+                        print '{} = {}'.format(key, value)
+                    raise
+                else:
+                    assert response.code == 200
+                    response_dict = json.loads(response.read())
+#                    account = response_dict['value']
+#                    print account
+            elif action == 'delete':
+                user = message['msg']
+
+                log.info(u'Deleting user: {}'.format(user['id']))
+                request_headers = target_headers.copy()
+                request_headers['Content-Type'] = 'application/json'
+                request = urllib2.Request(urlparse.urljoin(target_site_url, 'api/1/accounts/{}'.format(user['id'])),
+                    headers = request_headers)
+                request.get_method = lambda: 'DELETE'
+                try:
+                    response = urllib2.urlopen(request, json.dumps(dict(
+                        api_key = target_api_key,
+                        )))
+                except urllib2.HTTPError as response:
+                    log.error(u'An error occured while deleting user: {}'.format(user))
+                    response_text = response.read()
+                    try:
+                        response_dict = json.loads(response_text)
+                    except ValueError:
+                        log.error(response_text)
+                        raise
+                    for key, value in response_dict.iteritems():
+                        print '{} = {}'.format(key, value)
+                    raise
+                else:
+                    assert response.code == 200
+                    response_dict = json.loads(response.read())
+#                    account = response_dict['value']
+#                    print account
+            else:
+                log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
         else:
             log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
 

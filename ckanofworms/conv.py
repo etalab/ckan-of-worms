@@ -37,13 +37,13 @@ from ckantoolbox.ckanconv import *
 
 
 ckan_group_to_attributes = pipe(
-    make_ckan_json_to_group(drop_none_values = True),
+    make_ckan_json_to_group(),  # Don't drop non values, to ensure that existing attributes will be erased.
     rename_item('id', '_id'),
     )
 
 
 ckan_organization_to_attributes = pipe(
-    make_ckan_json_to_organization(drop_none_values = True),
+    make_ckan_json_to_organization(),  # Don't drop non values, to ensure that existing attributes will be erased.
     rename_item('id', '_id'),
     )
 
@@ -59,35 +59,32 @@ def ckan_package_to_dataset_attributes(value, state = None):
         return value, error
 
     package = value.copy()
-    related = package.pop('related', None)
+    related = package.pop('related', UnboundLocalError)
     dataset_attributes, errors = pipe(
-        make_ckan_json_to_package(drop_none_values = True),
+        make_ckan_json_to_package(),  # Don't drop non values, to ensure that existing attributes will be erased.
         rename_item('id', '_id'),
         )(package, state = state)
 
-    related, error = pipe(
-        test_isinstance(list),
-        uniform_sequence(
-            ckan_related_to_related_link_attributes,
-            drop_none_items = True,
-            ),
-        empty_to_none,
-        )(related, state = state)
-    if error is not None:
-        if errors is None:
-            errors = {}
-        errors['related'] = error
-    if related is not None:
+    if related is not UnboundLocalError:
+        related, error = pipe(
+            test_isinstance(list),
+            uniform_sequence(
+                make_ckan_json_to_related(drop_none_values = True),
+                drop_none_items = True,
+                ),
+            empty_to_none,
+            )(related, state = state)
+        if error is not None:
+            if errors is None:
+                errors = {}
+            errors['related'] = error
         dataset_attributes['related'] = related
 
     return dataset_attributes, errors
 
 
-ckan_related_to_related_link_attributes = make_ckan_json_to_related(drop_none_values = True)
-
-
 ckan_user_to_account_attributes = pipe(
-    make_ckan_json_to_user(drop_none_values = True),
+    make_ckan_json_to_user(),  # Don't drop non values, to ensure that existing attributes will be erased.
     rename_item('id', '_id'),
     )
 

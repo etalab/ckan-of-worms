@@ -170,6 +170,17 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             value['id'] = unicode(id)
         return value, None
 
+    def compute_timestamp(self):
+        timestamp = self.revision_timestamp
+        # Related links have no revision_timestamp => Use created.
+        for related_link in (self.related or []):
+            if related_link['created'] > timestamp:
+                timestamp = related_link['created']
+        for resource in (self.resources or []):
+            if resource['revision_timestamp'] > timestamp:
+                timestamp = resource['revision_timestamp']
+        self.timestamp = timestamp
+
     @classmethod
     def get_admin_class_url(cls, ctx, *path, **query):
         return urls.get_url(ctx, 'admin', 'datasets', *path, **query)
@@ -523,6 +534,7 @@ def setup():
     Account.ensure_index('email', sparse = True, unique = True)
 
     Dataset.ensure_index('name', unique = True)
+    Dataset.ensure_index('related.id')
     Dataset.ensure_index('timestamp')
 
     Group.ensure_index('users.id')

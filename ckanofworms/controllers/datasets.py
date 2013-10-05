@@ -104,12 +104,10 @@ def admin_edit(req):
                     ).count() > 0:
                 errors = dict(email = ctx._('A dataset with the same email already exists.'))
         if errors is None:
+            if dataset.errors:
+                del dataset.errors
             dataset.set_attributes(**data)
-#            timestamp = dataset.revision_timestamp
-#            for resource in (dataset.resources or []):
-#                if resource['revision_timestamp'] > timestamp:
-#                    timestamp = resource['revision_timestamp']
-#            dataset.timestamp = timestamp
+            dataset.compute_timestamp()
             dataset.save(ctx, safe = True)
 
             # View dataset.
@@ -227,6 +225,276 @@ def admin_view(req):
     model.is_admin(ctx, check = True)
 
     return templates.render(ctx, '/datasets/admin-view.mako', dataset = dataset)
+
+
+@wsgihelpers.wsgify
+def api1_delete(req):
+    ctx = contexts.Ctx(req)
+    headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
+
+    assert req.method == 'DELETE', req.method
+
+    content_type = req.content_type
+    if content_type is not None:
+        content_type = content_type.split(';', 1)[0].strip()
+    if content_type == 'application/json':
+        inputs, error = conv.pipe(
+            conv.make_input_to_json(),
+            conv.test_isinstance(dict),
+            )(req.body, state = ctx)
+        if error is not None:
+            return wsgihelpers.respond_json(ctx,
+                collections.OrderedDict(sorted(dict(
+                    apiVersion = '1.0',
+                    error = collections.OrderedDict(sorted(dict(
+                        code = 400,  # Bad Request
+                        errors = [error],
+                        message = ctx._(u'Invalid JSON in request DELETE body'),
+                        ).iteritems())),
+                    method = req.script_name,
+                    params = req.body,
+                    url = req.url.decode('utf-8'),
+                    ).iteritems())),
+                headers = headers,
+                )
+    else:
+        # URL-encoded POST.
+        inputs = dict(req.POST)
+
+    data, errors = conv.struct(
+        dict(
+            # Shared secret between client and server
+            api_key = conv.pipe(
+                conv.test_isinstance(basestring),
+                conv.input_to_token,
+                conv.not_none,
+                ),
+            # For asynchronous calls
+            context = conv.test_isinstance(basestring),
+            ),
+        )(inputs, state = ctx)
+    if errors is not None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = inputs.get('context'),
+                error = collections.OrderedDict(sorted(dict(
+                    code = 400,  # Bad Request
+                    errors = [errors],
+                    message = ctx._(u'Bad parameters in request'),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    api_key = data['api_key']
+    account = model.Account.find_one(
+        dict(
+            api_key = api_key,
+            ),
+        as_class = collections.OrderedDict,
+        )
+    if account is None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 401,  # Unauthorized
+                    message = ctx._('Unknown API Key: {}').format(api_key),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+    if not account.admin:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 403,  # Forbidden
+                    message = ctx._('Non-admin API Key: {}').format(api_key),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    dataset = ctx.node
+    deleted_value = conv.check(conv.method('turn_to_json'))(dataset, state = ctx)
+    dataset.delete(ctx, safe = True)
+
+    return wsgihelpers.respond_json(ctx,
+        collections.OrderedDict(sorted(dict(
+            apiVersion = '1.0',
+            context = data['context'],
+            method = req.script_name,
+            params = inputs,
+            url = req.url.decode('utf-8'),
+            value = deleted_value,
+            ).iteritems())),
+        headers = headers,
+        )
+
+
+@wsgihelpers.wsgify
+def api1_delete_related(req):
+    ctx = contexts.Ctx(req)
+    headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
+
+    assert req.method == 'DELETE', req.method
+
+    content_type = req.content_type
+    if content_type is not None:
+        content_type = content_type.split(';', 1)[0].strip()
+    if content_type == 'application/json':
+        inputs, error = conv.pipe(
+            conv.make_input_to_json(),
+            conv.test_isinstance(dict),
+            )(req.body, state = ctx)
+        if error is not None:
+            return wsgihelpers.respond_json(ctx,
+                collections.OrderedDict(sorted(dict(
+                    apiVersion = '1.0',
+                    error = collections.OrderedDict(sorted(dict(
+                        code = 400,  # Bad Request
+                        errors = [error],
+                        message = ctx._(u'Invalid JSON in request DELETE body'),
+                        ).iteritems())),
+                    method = req.script_name,
+                    params = req.body,
+                    url = req.url.decode('utf-8'),
+                    ).iteritems())),
+                headers = headers,
+                )
+    else:
+        # URL-encoded POST.
+        inputs = dict(req.POST)
+
+    data, errors = conv.struct(
+        dict(
+            # Shared secret between client and server
+            api_key = conv.pipe(
+                conv.test_isinstance(basestring),
+                conv.input_to_token,
+                conv.not_none,
+                ),
+            # For asynchronous calls
+            context = conv.test_isinstance(basestring),
+            ),
+        )(inputs, state = ctx)
+    if errors is not None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = inputs.get('context'),
+                error = collections.OrderedDict(sorted(dict(
+                    code = 400,  # Bad Request
+                    errors = [errors],
+                    message = ctx._(u'Bad parameters in request'),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    api_key = data['api_key']
+    account = model.Account.find_one(
+        dict(
+            api_key = api_key,
+            ),
+        as_class = collections.OrderedDict,
+        )
+    if account is None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 401,  # Unauthorized
+                    message = ctx._('Unknown API Key: {}').format(api_key),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+    if not account.admin:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 403,  # Forbidden
+                    message = ctx._('Non-admin API Key: {}').format(api_key),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    related_id, error = conv.pipe(
+        conv.input_to_token,
+        conv.not_none,
+        )(req.urlvars.get('id'), state = ctx)
+    if error is None:
+        dataset = model.Dataset.find_one({'related.id': related_id}, as_class = collections.OrderedDict)
+        if dataset is None:
+            error = ctx._(u'No dataset containing a related link with ID {0}').format(related_id)
+        else:
+            for related_index, related_link in enumerate(dataset.related or []):
+                if related_id == related_link['id']:
+                    del dataset.related[related_index]
+                    if not dataset.related:
+                        del dataset.related
+                    break
+            else:
+                error = ctx._(u'No related link with ID {0}').format(related_id)
+    if error is not None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 404,  # Not Found
+                    message = ctx._('Related Error: {}').format(error),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    if dataset.errors:
+        del dataset.errors
+    dataset.compute_timestamp()
+    dataset.save(ctx, safe = True)
+
+    return wsgihelpers.respond_json(ctx,
+        collections.OrderedDict(sorted(dict(
+            apiVersion = '1.0',
+            context = data['context'],
+            method = req.script_name,
+            params = inputs,
+            url = req.url.decode('utf-8'),
+            value = related_link,
+            ).iteritems())),
+        headers = headers,
+        )
 
 
 @wsgihelpers.wsgify
@@ -355,6 +623,7 @@ def api1_index(req):
 
 @wsgihelpers.wsgify
 def api1_related(req):
+    """Controller created for Epita application"""
     ctx = contexts.Ctx(req)
     headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
 
@@ -541,11 +810,9 @@ def api1_related(req):
 #            headers = headers,
 #            )
 #    dataset = model.Dataset(**dataset_attributes)
-#    timestamp = dataset.revision_timestamp
-#    for resource in (dataset.resources or []):
-#        if resource['revision_timestamp'] > timestamp:
-#            timestamp = resource['revision_timestamp']
-#    dataset.timestamp = timestamp
+#    if dataset.errors:
+#        del dataset.errors
+#    dataset.compute_timestamp()
 #    dataset.save(ctx, safe = True)
 
 #    return wsgihelpers.respond_json(ctx,
@@ -667,7 +934,7 @@ def api1_set_ckan(req):
                 context = data['context'],
                 error = collections.OrderedDict(sorted(dict(
                     code = 403,  # Forbidden
-                    message = ctx._('Unknown API Key: {}').format(api_key),
+                    message = ctx._('Non-admin API Key: {}').format(api_key),
                     ).iteritems())),
                 method = req.script_name,
                 params = inputs,
@@ -677,12 +944,15 @@ def api1_set_ckan(req):
             )
 
     dataset_attributes = data['value']
-    dataset = model.Dataset(**dataset_attributes)
-    timestamp = dataset.revision_timestamp
-    for resource in (dataset.resources or []):
-        if resource['revision_timestamp'] > timestamp:
-            timestamp = resource['revision_timestamp']
-    dataset.timestamp = timestamp
+    # Retrieve existing dataset when it exists, to ensure that its related links are not lost.
+    dataset = model.Dataset.find_one(dataset_attributes['_id'], as_class = collections.OrderedDict)
+    if dataset is None:
+        dataset = model.Dataset(**dataset_attributes)
+    else:
+        if dataset.errors:
+            del dataset.errors
+        dataset.set_attributes(**dataset_attributes)
+    dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -693,6 +963,172 @@ def api1_set_ckan(req):
             params = inputs,
             url = req.url.decode('utf-8'),
             value = conv.check(conv.method('turn_to_json'))(dataset, state = ctx),
+            ).iteritems())),
+        headers = headers,
+        )
+
+
+@wsgihelpers.wsgify
+def api1_set_ckan_related(req):
+    ctx = contexts.Ctx(req)
+    headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
+
+    assert req.method == 'POST', req.method
+
+    inputs_converters = dict(
+        # Shared secret between client and server
+        api_key = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.input_to_token,
+            conv.not_none,
+            ),
+        # For asynchronous calls
+        context = conv.test_isinstance(basestring),
+        # "value" is handled below.
+        )
+
+    content_type = req.content_type
+    if content_type is not None:
+        content_type = content_type.split(';', 1)[0].strip()
+    if content_type == 'application/json':
+        inputs, error = conv.pipe(
+            conv.make_input_to_json(),
+            conv.test_isinstance(dict),
+            )(req.body, state = ctx)
+        if error is not None:
+            return wsgihelpers.respond_json(ctx,
+                collections.OrderedDict(sorted(dict(
+                    apiVersion = '1.0',
+                    error = collections.OrderedDict(sorted(dict(
+                        code = 400,  # Bad Request
+                        errors = [error],
+                        message = ctx._(u'Invalid JSON in request POST body'),
+                        ).iteritems())),
+                    method = req.script_name,
+                    params = req.body,
+                    url = req.url.decode('utf-8'),
+                    ).iteritems())),
+                headers = headers,
+                )
+        inputs_converters.update(dict(
+            value = conv.pipe(
+                conv.make_ckan_json_to_related(drop_none_values = True),
+                conv.not_none,
+                ),
+            ))
+    else:
+        # URL-encoded POST.
+        inputs = dict(req.POST)
+        inputs_converters.update(dict(
+            value = conv.pipe(
+                conv.make_input_to_json(),
+                conv.make_ckan_json_to_related(drop_none_values = True),
+                conv.not_none,
+                ),
+            ))
+
+    data, errors = conv.struct(inputs_converters)(inputs, state = ctx)
+    if errors is not None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = inputs.get('context'),
+                error = collections.OrderedDict(sorted(dict(
+                    code = 400,  # Bad Request
+                    errors = [errors],
+                    message = ctx._(u'Bad parameters in request'),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    api_key = data['api_key']
+    account = model.Account.find_one(
+        dict(
+            api_key = api_key,
+            ),
+        as_class = collections.OrderedDict,
+        )
+    if account is None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 401,  # Unauthorized
+                    message = ctx._('Unknown API Key: {}').format(api_key),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+    if not account.admin:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 403,  # Forbidden
+                    message = ctx._('Non-admin API Key: {}').format(api_key),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    related = data['value']
+    dataset, error = conv.pipe(
+        conv.input_to_token,
+        conv.not_none,
+        model.Dataset.make_id_to_instance(),
+        )(related.get('dataset_id'), state = ctx)
+    if error is not None:
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                error = collections.OrderedDict(sorted(dict(
+                    code = 404,  # Not Found
+                    message = ctx._('Dataset Error: {}').format(error),
+                    ).iteritems())),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ).iteritems())),
+            headers = headers,
+            )
+
+    related.pop('dataset_id')
+    if dataset.related is None:
+        dataset.related = []
+    for related_index, related_link in enumerate(dataset.related):
+        if related['id'] == related_link['id']:
+            dataset.related[related_index] = related
+            break
+    else:
+        dataset.related.append(related)
+
+    if dataset.errors:
+        del dataset.errors
+    dataset.compute_timestamp()
+    dataset.save(ctx, safe = True)
+
+    related['dataset_id'] = dataset._id
+    return wsgihelpers.respond_json(ctx,
+        collections.OrderedDict(sorted(dict(
+            apiVersion = '1.0',
+            context = data['context'],
+            method = req.script_name,
+            params = inputs,
+            url = req.url.decode('utf-8'),
+            value = related,
             ).iteritems())),
         headers = headers,
         )
@@ -810,7 +1246,7 @@ def api1_set_errors(req):
                 context = data['context'],
                 error = collections.OrderedDict(sorted(dict(
                     code = 403,  # Forbidden
-                    message = ctx._('Unknown API Key: {}').format(api_key),
+                    message = ctx._('Non-admin API Key: {}').format(api_key),
                     ).iteritems())),
                 method = req.script_name,
                 params = inputs,
@@ -933,6 +1369,7 @@ def route_api1(environ, start_response):
     ctx.node = dataset
 
     router = urls.make_router(
+        ('DELETE', '^/?$', api1_delete),
         ('GET', '^/?$', api1_get),
         ('POST', '^/errors/?$', api1_set_errors),
         )
@@ -944,7 +1381,9 @@ def route_api1_class(environ, start_response):
         ('GET', '^/?$', api1_index),
 #        ('POST', '^/?$', api1_set),
         ('POST', '^/ckan/?$', api1_set_ckan),
+        ('POST', '^/ckan/related/?$', api1_set_ckan_related),
         ('GET', '^/related/?$', api1_related),
+        ('DELETE', '^/related/(?P<id>[^/]+)/?$', api1_delete_related),
         (None, '^/(?P<id>[^/]+)(?=/|$)', route_api1),
         )
     return router(environ, start_response)
