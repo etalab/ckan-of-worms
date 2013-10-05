@@ -37,13 +37,13 @@ from ckantoolbox.ckanconv import *
 
 
 ckan_group_to_attributes = pipe(
-    make_ckan_json_to_group(),  # Don't drop non values, to ensure that existing attributes will be erased.
+    make_ckan_json_to_group(drop_none_values = 'missing'),
     rename_item('id', '_id'),
     )
 
 
 ckan_organization_to_attributes = pipe(
-    make_ckan_json_to_organization(),  # Don't drop non values, to ensure that existing attributes will be erased.
+    make_ckan_json_to_organization(drop_none_values = 'missing'),
     rename_item('id', '_id'),
     )
 
@@ -61,7 +61,7 @@ def ckan_package_to_dataset_attributes(value, state = None):
     package = value.copy()
     related = package.pop('related', UnboundLocalError)
     dataset_attributes, errors = pipe(
-        make_ckan_json_to_package(),  # Don't drop non values, to ensure that existing attributes will be erased.
+        make_ckan_json_to_package(drop_none_values = 'missing'),
         rename_item('id', '_id'),
         )(package, state = state)
 
@@ -69,7 +69,7 @@ def ckan_package_to_dataset_attributes(value, state = None):
         related, error = pipe(
             test_isinstance(list),
             uniform_sequence(
-                make_ckan_json_to_related(drop_none_values = True),
+                make_ckan_json_to_related(drop_none_values = 'missing'),
                 drop_none_items = True,
                 ),
             empty_to_none,
@@ -84,7 +84,7 @@ def ckan_package_to_dataset_attributes(value, state = None):
 
 
 ckan_user_to_account_attributes = pipe(
-    make_ckan_json_to_user(),  # Don't drop non values, to ensure that existing attributes will be erased.
+    make_ckan_json_to_user(drop_none_values = 'missing'),
     rename_item('id', '_id'),
     )
 
