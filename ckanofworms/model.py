@@ -531,7 +531,7 @@ def setup():
 
     Account.ensure_index('admin', sparse = True)
     Account.ensure_index('api_key', sparse = True, unique = True)
-    Account.ensure_index('email', sparse = True, unique = True)
+    Account.ensure_index('email')
 
     Dataset.ensure_index('name', unique = True)
     Dataset.ensure_index('related.id')
