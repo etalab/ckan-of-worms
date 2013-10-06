@@ -129,6 +129,9 @@ from ckanofworms import model, urls
 
 <%def name="search_form()" filter="trim">
         <form action="${model.Dataset.get_admin_class_url(ctx)}" method="get" role="form">
+    % if data['advanced_search']:
+            <input name="advanced_search" type="hidden" value="1">
+    % endif
             <input name="sort" type="hidden" value="${inputs['sort'] or ''}">
 <%
     error = errors.get('term') if errors is not None else None
@@ -142,72 +145,96 @@ from ckanofworms import model, urls
             </div>
 <%
     error = errors.get('tag') if errors is not None else None
+    input_value = inputs['tag']
 %>\
+    % if data['advanced_search'] or error or input_value:
             <div class="form-group${' has-error' if error else ''}">
                 <label for="tag">${_("Tag")}</label>
-                <input class="form-control typeahead" id="tag" name="tag" type="text" value="${inputs['tag'] or ''}">
-    % if error:
+                <input class="form-control typeahead" id="tag" name="tag" type="text" value="${input_value or ''}">
+        % if error:
                 <span class="help-block">${error}</span>
-    % endif
+        % endif
             </div>
+    % endif
 <%
     error = errors.get('group') if errors is not None else None
+    input_value = inputs['group']
 %>\
+    % if data['advanced_search'] or error or input_value:
             <div class="form-group${' has-error' if error else ''}">
                 <label for="group">${_("Group")}</label>
-                <input class="form-control typeahead" id="group" name="group" type="text" value="${
-                        inputs['group'] or ''}">
-    % if error:
+                <input class="form-control typeahead" id="group" name="group" type="text" value="${input_value or ''}">
+        % if error:
                 <span class="help-block">${error}</span>
-    % endif
+        % endif
             </div>
+    % endif
 <%
     error = errors.get('organization') if errors is not None else None
+    input_value = inputs['organization']
 %>\
+    % if data['advanced_search'] or error or input_value:
             <div class="form-group${' has-error' if error else ''}">
                 <label for="organization">${_("Organization")}</label>
                 <input class="form-control typeahead" id="organization" name="organization" type="text" value="${
-                        inputs['organization'] or ''}">
-    % if error:
+                        input_value or ''}">
+        % if error:
                 <span class="help-block">${error}</span>
-    % endif
+        % endif
             </div>
+    % endif
 <%
     error = errors.get('supplier') if errors is not None else None
+    input_value = inputs['supplier']
 %>\
+    % if data['advanced_search'] or error or input_value:
             <div class="form-group${' has-error' if error else ''}">
                 <label for="supplier">${_("Supplier")}</label>
                 <input class="form-control typeahead" id="supplier" name="supplier" type="text" value="${
-                        inputs['supplier'] or ''}">
-    % if error:
+                        input_value or ''}">
+        % if error:
                 <span class="help-block">${error}</span>
-    % endif
+        % endif
             </div>
+    % endif
 <%
     error = errors.get('related') if errors is not None else None
+    input_value = inputs['related']
 %>\
+    % if data['advanced_search'] or error or input_value:
             <div class="checkbox${' has-error' if error else ''}">
                 <label>
-                    <input${' checked' if inputs['related'] else ''} id="related" name="related" type="checkbox" value="1">
+                    <input${' checked' if input_value else ''} id="related" name="related" type="checkbox" value="1">
                     ${_(u'Related only')}
                 </label>
-    % if error:
+        % if error:
                 <span class="help-block">${error}</span>
-    % endif
+        % endif
             </div>
+    % endif
 <%
     error = errors.get('bad') if errors is not None else None
+    input_value = inputs['bad']
 %>\
+    % if data['advanced_search'] or error or input_value:
             <div class="checkbox${' has-error' if error else ''}">
                 <label>
-                    <input${' checked' if inputs['bad'] else ''} id="bad" name="bad" type="checkbox" value="1">
+                    <input${' checked' if input_value else ''} id="bad" name="bad" type="checkbox" value="1">
                     ${_(u'Errors only')}
                 </label>
-    % if error:
+        % if error:
                 <span class="help-block">${error}</span>
-    % endif
+        % endif
             </div>
+    % endif
             <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span> ${_('Search')}</button>
+    % if data['advanced_search']:
+            <a class="pull-right" href="${model.Dataset.get_admin_class_url(ctx, **urls.relative_query(inputs,
+                    advanced_search = None))}">${_('Simplified Search')}</a>
+    % else:
+            <a class="pull-right" href="${model.Dataset.get_admin_class_url(ctx, **urls.relative_query(inputs,
+                    advanced_search = 1))}">${_('Advanced Search')}</a>
+    % endif
         </form>
 </%def>
 

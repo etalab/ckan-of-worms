@@ -123,6 +123,7 @@ def admin_index(req):
     assert req.method == 'GET'
     params = req.GET
     inputs = dict(
+        advanced_search = params.get('advanced_search'),
         bad = params.get('bad'),
         group = params.get('group'),
         organization = params.get('organization'),
@@ -136,6 +137,7 @@ def admin_index(req):
     data, errors = conv.pipe(
         conv.struct(
             dict(
+                advanced_search = conv.guess_bool,
                 bad = conv.guess_bool,
                 group = conv.pipe(
                     conv.cleanup_line,
