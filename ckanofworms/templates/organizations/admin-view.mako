@@ -93,7 +93,7 @@ ${organization.get_title(ctx)} - ${parent.title_content()}
         % if value is not None or errors:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Image"))}</b></div>
-            <div class="break-word col-sm-10"><img src="${value}"></div>
+            <div class="break-word col-sm-10"><img class="img-responsive" src="${value}"></div>
         </div>
         <%self:field_error errors="${errors}"/>
         % endif

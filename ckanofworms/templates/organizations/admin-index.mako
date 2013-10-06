@@ -70,6 +70,7 @@ from ckanofworms import model, urls
                     <th><a href="${model.Organization.get_admin_class_url(ctx, **urls.relative_query(inputs,
                             page = None, sort = 'created'))}">${_(u"Creation")}</a></th>
         % endif
+                    <th>${_(u"Logo")}</th>
                 </tr>
             </thead>
             <tbody>
@@ -77,6 +78,11 @@ from ckanofworms import model, urls
                 <tr>
                     <td><a href="${organization.get_admin_url(ctx)}">${organization.title or ''}</a></td>
                     <td>${organization.created or ''}</td>
+                    <td>
+            % if organization.image_url is not None:
+                        <img class="img-responsive" style="max-width: 100px" src="${organization.image_url}">
+            % endif
+                    </td>
                 </tr>
         % endfor
             </tbody>
