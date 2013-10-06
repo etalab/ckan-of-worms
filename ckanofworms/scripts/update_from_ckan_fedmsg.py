@@ -186,16 +186,20 @@ def main():
                         api_key = target_api_key,
                         )))
                 except urllib2.HTTPError as response:
-                    log.error(u'An error occured while deleting group: {}'.format(group))
-                    response_text = response.read()
-                    try:
-                        response_dict = json.loads(response_text)
-                    except ValueError:
-                        log.error(response_text)
+                    if response.code == 404:
+                        log.warning(u"Deleted group doesn't exist: {}".format(group['id']))
+                        response_dict = json.loads(response.read())
+                    else:
+                        log.error(u'An error occured while deleting group: {}'.format(group))
+                        response_text = response.read()
+                        try:
+                            response_dict = json.loads(response_text)
+                        except ValueError:
+                            log.error(response_text)
+                            raise
+                        for key, value in response_dict.iteritems():
+                            print '{} = {}'.format(key, value)
                         raise
-                    for key, value in response_dict.iteritems():
-                        print '{} = {}'.format(key, value)
-                    raise
                 else:
                     assert response.code == 200
                     response_dict = json.loads(response.read())
@@ -247,16 +251,20 @@ def main():
                         api_key = target_api_key,
                         )))
                 except urllib2.HTTPError as response:
-                    log.error(u'An error occured while deleting organization: {}'.format(organization))
-                    response_text = response.read()
-                    try:
-                        response_dict = json.loads(response_text)
-                    except ValueError:
-                        log.error(response_text)
+                    if response.code == 404:
+                        log.warning(u"Deleted organization doesn't exist: {}".format(organization['id']))
+                        response_dict = json.loads(response.read())
+                    else:
+                        log.error(u'An error occured while deleting organization: {}'.format(organization))
+                        response_text = response.read()
+                        try:
+                            response_dict = json.loads(response_text)
+                        except ValueError:
+                            log.error(response_text)
+                            raise
+                        for key, value in response_dict.iteritems():
+                            print '{} = {}'.format(key, value)
                         raise
-                    for key, value in response_dict.iteritems():
-                        print '{} = {}'.format(key, value)
-                    raise
                 else:
                     assert response.code == 200
                     response_dict = json.loads(response.read())
@@ -308,16 +316,20 @@ def main():
                         api_key = target_api_key,
                         )))
                 except urllib2.HTTPError as response:
-                    log.error(u'An error occured while deleting package: {}'.format(package))
-                    response_text = response.read()
-                    try:
-                        response_dict = json.loads(response_text)
-                    except ValueError:
-                        log.error(response_text)
+                    if response.code == 404:
+                        log.warning(u"Deleted package doesn't exist: {}".format(package['id']))
+                        response_dict = json.loads(response.read())
+                    else:
+                        log.error(u'An error occured while deleting package: {}'.format(package))
+                        response_text = response.read()
+                        try:
+                            response_dict = json.loads(response_text)
+                        except ValueError:
+                            log.error(response_text)
+                            raise
+                        for key, value in response_dict.iteritems():
+                            print '{} = {}'.format(key, value)
                         raise
-                    for key, value in response_dict.iteritems():
-                        print '{} = {}'.format(key, value)
-                    raise
                 else:
                     assert response.code == 200
                     response_dict = json.loads(response.read())
@@ -369,16 +381,20 @@ def main():
                         api_key = target_api_key,
                         )))
                 except urllib2.HTTPError as response:
-                    log.error(u'An error occured while deleting related: {}'.format(related))
-                    response_text = response.read()
-                    try:
-                        response_dict = json.loads(response_text)
-                    except ValueError:
-                        log.error(response_text)
+                    if response.code == 404:
+                        log.warning(u"Deleted related doesn't exist: {}".format(related['id']))
+                        response_dict = json.loads(response.read())
+                    else:
+                        log.error(u'An error occured while deleting related: {}'.format(related))
+                        response_text = response.read()
+                        try:
+                            response_dict = json.loads(response_text)
+                        except ValueError:
+                            log.error(response_text)
+                            raise
+                        for key, value in response_dict.iteritems():
+                            print '{} = {}'.format(key, value)
                         raise
-                    for key, value in response_dict.iteritems():
-                        print '{} = {}'.format(key, value)
-                    raise
                 else:
                     assert response.code == 200
                     response_dict = json.loads(response.read())
@@ -452,16 +468,20 @@ def main():
                         api_key = target_api_key,
                         )))
                 except urllib2.HTTPError as response:
-                    log.error(u'An error occured while deleting user: {}'.format(user))
-                    response_text = response.read()
-                    try:
-                        response_dict = json.loads(response_text)
-                    except ValueError:
-                        log.error(response_text)
+                    if response.code == 404:
+                        log.warning(u"Deleted user doesn't exist: {}".format(user['id']))
+                        response_dict = json.loads(response.read())
+                    else:
+                        log.error(u'An error occured while deleting user: {}'.format(user))
+                        response_text = response.read()
+                        try:
+                            response_dict = json.loads(response_text)
+                        except ValueError:
+                            log.error(response_text)
+                            raise
+                        for key, value in response_dict.iteritems():
+                            print '{} = {}'.format(key, value)
                         raise
-                    for key, value in response_dict.iteritems():
-                        print '{} = {}'.format(key, value)
-                    raise
                 else:
                     assert response.code == 200
                     response_dict = json.loads(response.read())
