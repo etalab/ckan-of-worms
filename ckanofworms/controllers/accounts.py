@@ -530,13 +530,14 @@ def api1_set_ckan(req):
             )
 
     account_attributes = data['value']
-    account = model.Account.find_one(account_attributes['_id'], as_class = collections.OrderedDict)
-    if account is None:
-        account = model.Account(**account_attributes)
-    else:
-        if account.errors:
-            del account.errors
-        account.set_attributes(**account_attributes)
+    existing_account = model.Account.find_one(account_attributes['_id'], as_class = collections.OrderedDict)
+    account = model.Account(**account_attributes)
+    if existing_account is not None:
+        # Keep existing attributes that are not part of this CKAN object.
+        if existing_account.admin:
+            account.admin = existing_account.admin
+        if existing_account.api_key:
+            account.api_key = existing_account.api_key
     account.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,

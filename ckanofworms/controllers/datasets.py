@@ -945,13 +945,11 @@ def api1_set_ckan(req):
 
     dataset_attributes = data['value']
     # Retrieve existing dataset when it exists, to ensure that its related links are not lost.
-    dataset = model.Dataset.find_one(dataset_attributes['_id'], as_class = collections.OrderedDict)
-    if dataset is None:
-        dataset = model.Dataset(**dataset_attributes)
-    else:
-        if dataset.errors:
-            del dataset.errors
-        dataset.set_attributes(**dataset_attributes)
+    existing_dataset = model.Dataset.find_one(dataset_attributes['_id'], as_class = collections.OrderedDict)
+    dataset = model.Dataset(**dataset_attributes)
+    if existing_dataset is not None and existing_dataset.related is not None:
+        # Keep existing attributes that are not part of this CKAN object.
+        dataset.related = existing_dataset.related
     dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 
