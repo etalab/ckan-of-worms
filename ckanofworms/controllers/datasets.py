@@ -579,6 +579,7 @@ def api1_index(req):
                     conv.cleanup_line,
                     ),
                 context = conv.test_isinstance(basestring),
+                related = conv.guess_bool,
                 ),
             ),
         )(inputs, state = ctx)
@@ -606,7 +607,10 @@ def api1_index(req):
             jsonp = inputs['callback'],
             )
 
-    cursor = model.Dataset.get_collection().find(None, [])
+    criteria = {}
+    if data['related'] is not None:
+        criteria['related'] = {'$exists': data['related']}
+    cursor = model.Dataset.get_collection().find(criteria, [])
     return wsgihelpers.respond_json(ctx,
         collections.OrderedDict(sorted(dict(
             apiVersion = '1.0',
