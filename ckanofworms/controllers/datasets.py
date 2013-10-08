@@ -118,7 +118,7 @@ def admin_edit(req):
 @wsgihelpers.wsgify
 def admin_index(req):
     ctx = contexts.Ctx(req)
-    model.is_admin(ctx, check = True)
+#    model.is_admin(ctx, check = True)
 
     assert req.method == 'GET'
     params = req.GET
@@ -214,7 +214,7 @@ def admin_stats(req):
     ctx = contexts.Ctx(req)
     dataset = ctx.node
 
-    model.is_admin(ctx, check = True)
+#    model.is_admin(ctx, check = True)
 
     return templates.render(ctx, '/datasets/admin-stats.mako', dataset = dataset)
 
@@ -224,7 +224,7 @@ def admin_view(req):
     ctx = contexts.Ctx(req)
     dataset = ctx.node
 
-    model.is_admin(ctx, check = True)
+#    model.is_admin(ctx, check = True)
 
     return templates.render(ctx, '/datasets/admin-view.mako', dataset = dataset)
 
@@ -569,6 +569,7 @@ def api1_index(req):
     inputs = dict(
         callback = params.get('callback'),
         context = params.get('context'),
+        related = params.get('related'),
         )
     data, errors = conv.pipe(
         conv.struct(

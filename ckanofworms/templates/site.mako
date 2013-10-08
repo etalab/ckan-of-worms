@@ -224,8 +224,9 @@ $(function () {
         <div class="collapse navbar-collapse navbar-topbar-collapse">
             <ul class="nav navbar-nav">
                 <%self:topbar_dropdown_admin/>
-##                <li><a href="${model.Project.get_class_url(ctx)}">${_('Forms')}</a></li>
-##                <li><a href="${urls.get_url(ctx, 'forms', 'load_file')}">${_(u'Open Form')}</a></li>
+                <li><a href="${model.Dataset.get_admin_class_url(ctx)}">${_('Datasets')}</a></li>
+                <li><a href="${model.Group.get_admin_class_url(ctx)}">${_('Groups')}</a></li>
+                <li><a href="${model.Organization.get_admin_class_url(ctx)}">${_('Organizations')}</a></li>
             </ul>
             <%self:topbar_user/>
         </div>

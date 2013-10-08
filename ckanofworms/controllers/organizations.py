@@ -118,7 +118,7 @@ def admin_edit(req):
 @wsgihelpers.wsgify
 def admin_index(req):
     ctx = contexts.Ctx(req)
-    model.is_admin(ctx, check = True)
+#    model.is_admin(ctx, check = True)
 
     assert req.method == 'GET'
     params = req.GET
@@ -166,7 +166,7 @@ def admin_view(req):
     ctx = contexts.Ctx(req)
     organization = ctx.node
 
-    model.is_admin(ctx, check = True)
+#    model.is_admin(ctx, check = True)
 
     return templates.render(ctx, '/organizations/admin-view.mako', organization = organization)
 
