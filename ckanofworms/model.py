@@ -38,10 +38,10 @@ from . import conf, objects, urls, wsgihelpers
 
 class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
     admin = False
+    alerts = None
     api_key = None
     collection_name = 'accounts'
     email = None
-    errors = None
 
     # CKAN attributes
     about = None
@@ -117,8 +117,8 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
 
 
 class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
+    alerts = None
     collection_name = u'datasets'
-    errors = None
     timestamp = None
 
     # CKAN attributes
@@ -227,8 +227,8 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
 
 
 class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
+    alerts = None
     collection_name = u'groups'
-    errors = None
 
     # CKAN attributes
     created = None
@@ -316,8 +316,8 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
 
 
 class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
+    alerts = None
     collection_name = u'organizations'
-    errors = None
 
     # CKAN attributes
     created = None

@@ -61,116 +61,117 @@ ${account.get_title(ctx)} - ${parent.title_content()}
 
 <%def name="view_fields()" filter="trim">
 <%
-    account_errors = copy.deepcopy(account.errors) if account.errors is not None else {}
+    account_alerts = copy.deepcopy(account.alerts) if account.alerts is not None else {}
 %>\
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'fullname')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'fullname')
         value = account.fullname
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Fullname"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'name')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'name')
         value = account.name
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'email')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'email')
         value = account.email
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Email"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'email_hash')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'email_hash')
         value = account.email_hash
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Email Hash"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'about')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'about')
         value = account.about
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("About"))}</b></div>
             <pre class="break-word col-sm-10">${value}</pre>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'admin')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'admin')
         value = account.admin
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Admin"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'sysadmin')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'sysadmin')
         value = account.sysadmin
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Sysadmin"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'api_key')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'api_key')
         value = account.api_key
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("API Key"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(account_errors, 'created')
+        alerts = self.attr.extract_item_alerts(account_alerts, 'created')
         value = account.created
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Created"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("ID"))}</b></div>
             <div class="col-sm-10">${account._id}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(account_errors, 'id')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(account_alerts, 'id')}"/>
 <%
     remaining_keys = set()
-    for author, author_errors in account_errors.iteritems():
-        remaining_keys.update(author_errors['error'].iterkeys())
+    for level_alerts in account_alerts.itervalues():
+        for author_alerts in level_alerts.itervalues():
+            remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
     % for key in sorted(remaining_keys):
        <div class="row">
@@ -178,7 +179,7 @@ ${account.get_title(ctx)} - ${parent.title_content()}
             <pre class="col-sm-10">${json.dumps(getattr(account, key, None),
                     encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(account_errors, key)}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(account_alerts, key)}"/>
     % endfor
 </%def>
 

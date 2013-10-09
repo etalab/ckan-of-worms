@@ -62,71 +62,72 @@ ${group.get_title(ctx)} - ${parent.title_content()}
 
 <%def name="view_fields()" filter="trim">
 <%
-    group_errors = copy.deepcopy(group.errors) if group.errors is not None else {}
+    group_alerts = copy.deepcopy(group.alerts) if group.alerts is not None else {}
 %>\
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
             <div class="col-sm-10">${group.name}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(group_errors, 'name')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(group_alerts, 'name')}"/>
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Title"))}</b></div>
             <div class="col-sm-10">${group.title}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(group_errors, 'title')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(group_alerts, 'title')}"/>
 <%
-        errors = self.attr.extract_item_errors(group_errors, 'description')
+        alerts = self.attr.extract_item_alerts(group_alerts, 'description')
         value = group.description
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Description"))}</b></div>
             <pre class="break-word col-sm-10">${value}</pre>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(group_errors, 'image_url')
+        alerts = self.attr.extract_item_alerts(group_alerts, 'image_url')
         value = group.image_url
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Image"))}</b></div>
             <div class="break-word col-sm-10"><img class="img-responsive" src="${value}"></div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(group_errors, 'created')
+        alerts = self.attr.extract_item_alerts(group_alerts, 'created')
         value = group.created
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Created"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(group_errors, 'revision_id')
+        alerts = self.attr.extract_item_alerts(group_alerts, 'revision_id')
         value = group.revision_id
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Revision ID"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("ID"))}</b></div>
             <div class="col-sm-10">${group._id}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(group_errors, 'id')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(group_alerts, 'id')}"/>
 <%
     remaining_keys = set()
-    for author, author_errors in group_errors.iteritems():
-        remaining_keys.update(author_errors['error'].iterkeys())
+    for level_alerts in group_alerts.itervalues():
+        for author_alerts in level_alerts.itervalues():
+            remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
     % for key in sorted(remaining_keys):
        <div class="row">
@@ -134,7 +135,7 @@ ${group.get_title(ctx)} - ${parent.title_content()}
             <pre class="col-sm-10">${json.dumps(getattr(group, key, None),
                     encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(group_errors, key)}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(group_alerts, key)}"/>
     % endfor
 </%def>
 

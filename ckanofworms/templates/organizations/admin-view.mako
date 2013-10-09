@@ -63,71 +63,72 @@ ${organization.get_title(ctx)} - ${parent.title_content()}
 
 <%def name="view_fields()" filter="trim">
 <%
-    organization_errors = copy.deepcopy(organization.errors) if organization.errors is not None else {}
+    organization_alerts = copy.deepcopy(organization.alerts) if organization.alerts is not None else {}
 %>\
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
             <div class="col-sm-10">${organization.name}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(organization_errors, 'name')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(organization_alerts, 'name')}"/>
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Title"))}</b></div>
             <div class="col-sm-10">${organization.title}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(organization_errors, 'title')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(organization_alerts, 'title')}"/>
 <%
-        errors = self.attr.extract_item_errors(organization_errors, 'description')
+        alerts = self.attr.extract_item_alerts(organization_alerts, 'description')
         value = organization.description
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Description"))}</b></div>
             <pre class="break-word col-sm-10">${value}</pre>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(organization_errors, 'image_url')
+        alerts = self.attr.extract_item_alerts(organization_alerts, 'image_url')
         value = organization.image_url
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Image"))}</b></div>
             <div class="break-word col-sm-10"><img class="img-responsive" src="${value}"></div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(organization_errors, 'created')
+        alerts = self.attr.extract_item_alerts(organization_alerts, 'created')
         value = organization.created
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Created"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(organization_errors, 'revision_id')
+        alerts = self.attr.extract_item_alerts(organization_alerts, 'revision_id')
         value = organization.revision_id
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Revision ID"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("ID"))}</b></div>
             <div class="col-sm-10">${organization._id}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(organization_errors, 'id')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(organization_alerts, 'id')}"/>
 <%
     remaining_keys = set()
-    for author, author_errors in organization_errors.iteritems():
-        remaining_keys.update(author_errors['error'].iterkeys())
+    for level_alerts in organization_alerts.itervalues():
+        for author_alerts in level_alerts.itervalues():
+            remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
     % for key in sorted(remaining_keys):
        <div class="row">
@@ -135,7 +136,7 @@ ${organization.get_title(ctx)} - ${parent.title_content()}
             <pre class="col-sm-10">${json.dumps(getattr(organization, key, None),
                     encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(organization_errors, key)}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(organization_alerts, key)}"/>
     % endfor
 </%def>
 

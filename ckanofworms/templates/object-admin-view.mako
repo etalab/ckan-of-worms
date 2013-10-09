@@ -24,32 +24,51 @@
 
 
 <%!
-def extract_item_errors(container_errors, key):
-    item_errors = {}
-    for author, author_errors in container_errors.iteritems():
-        error = author_errors['error'].pop(unicode(key), None)
-        if error:
-            item_errors[author] = dict(
-                error = error,
-                timestamp = author_errors['timestamp']
-                )
-    return item_errors
+def extract_item_alerts(container_alerts, key):
+    item_alerts = {}
+    for level, level_alerts in container_alerts.iteritems():
+        for author, author_alerts in level_alerts.iteritems():
+            error = author_alerts['error'].pop(unicode(key), None)
+            if error:
+                item_alerts.setdefault(level, {})[author] = dict(
+                    error = error,
+                    timestamp = author_alerts['timestamp'],
+                    )
+    return item_alerts
 %>
 
 
 <%inherit file="/site.mako"/>
 
 
-<%def name="field_error(errors)" filter="trim">
-    % for author, author_errors in sorted(errors.iteritems()):
-        % if author_errors['error']:
+<%def name="field_alerts(alerts)" filter="trim">
+    % for level in ('critical', 'error', 'warning', 'info', 'debug'):
+<%
+        level_alerts = alerts.get(level) or {}
+        level_class_suffix = dict(
+            critical = 'danger',
+            debug = 'info',
+            error = 'danger',
+            info = 'info',
+            warning = 'warning',
+            )[level]
+%>\
+        % for author, author_alerts in sorted(level_alerts.iteritems()):
+            % if author_alerts['error']:
         <div class="row">
-            <div class="alert alert-danger col-sm-offset-2 col-sm-10">${author_errors['error']} <small>${
+            <div class="alert alert-${level_class_suffix} col-sm-offset-2 col-sm-10">
+                % if level == 'critical':
+                <span class="glyphicon glyphicon-warning-sign"></span>
+                % endif
+                ${author_alerts['error']}
+                <small>${
                 markupsafe.Markup(_(u"(signaled by <em>{0}</em>, {1})")).format(author,
-                    author_errors['timestamp'].split('T')[0])
-                }</small></div>
+                    author_alerts['timestamp'].split(' ')[0])
+                }</small>
+            </div>
         </div>
-        % endif
+            % endif
+        % endfor
     % endfor
 </%def>
 

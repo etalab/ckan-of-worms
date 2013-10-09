@@ -64,111 +64,112 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
 
 <%def name="view_fields()" filter="trim">
 <%
-    dataset_errors = copy.deepcopy(dataset.errors) if dataset.errors is not None else {}
+    dataset_alerts = copy.deepcopy(dataset.alerts) if dataset.alerts is not None else {}
 %>\
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
             <div class="col-sm-10">${dataset.name}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(dataset_errors, 'name')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(dataset_alerts, 'name')}"/>
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Title"))}</b></div>
             <div class="col-sm-10">${dataset.title}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(dataset_errors, 'title')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(dataset_alerts, 'title')}"/>
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'notes')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'notes')
         value = dataset.notes
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Notes"))}</b></div>
             <pre class="break-word col-sm-10">${value}</pre>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-    resources_errors = self.attr.extract_item_errors(dataset_errors, 'resources')
+    resources_alerts = self.attr.extract_item_alerts(dataset_alerts, 'resources')
 %>\
-    % if dataset.resources or resources_errors:
+    % if dataset.resources or resources_alerts:
        <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Resources"))}</b></div>
             <ul class="col-sm-10 list-group">
         % for resource_index, resource in enumerate(dataset.resources or []):
 <%
-            resource_errors = self.attr.extract_item_errors(resources_errors, resource_index)
+            resource_alerts = self.attr.extract_item_alerts(resources_alerts, resource_index)
 %>\
             <li class="list-group-item">
 <%
-            errors = self.attr.extract_item_errors(resource_errors, 'name')
+            alerts = self.attr.extract_item_alerts(resource_alerts, 'name')
             value = resource.get('name')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(resource_errors, 'description')
+            alerts = self.attr.extract_item_alerts(resource_alerts, 'description')
             value = resource.get('description')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Description"))}</b></div>
                     <pre class="break-word col-sm-10">${value}</pre>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(resource_errors, 'url')
+            alerts = self.attr.extract_item_alerts(resource_alerts, 'url')
             value = resource.get('url')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("URL"))}</b></div>
                     <div class="break-word col-sm-10"><a href="${value}">${value}</a></div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(resource_errors, 'format')
+            alerts = self.attr.extract_item_alerts(resource_alerts, 'format')
             value = resource.get('format')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Format"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(resource_errors, 'last_modified')
+            alerts = self.attr.extract_item_alerts(resource_alerts, 'last_modified')
             value = resource.get('last_modified')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Last Modified"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(resource_errors, 'created')
+            alerts = self.attr.extract_item_alerts(resource_alerts, 'created')
             value = resource.get('created')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Created"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
             remaining_keys = set()
-            for author, author_errors in resource_errors.iteritems():
-                remaining_keys.update(author_errors['error'].iterkeys())
+            for level_alerts in resource_alerts.itervalues():
+                for author_alerts in level_alerts.itervalues():
+                    remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
             % for key in sorted(remaining_keys):
                <div class="row">
@@ -176,52 +177,53 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                     <pre class="col-sm-10">${json.dumps(resource.get(key),
                             encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
                 </div>
-                <%self:field_error errors="${self.attr.extract_item_errors(resource_errors, key)}"/>
+                <%self:field_alerts alerts="${self.attr.extract_item_alerts(resource_alerts, key)}"/>
             % endfor
             </li>
         % endfor
             </ul>
         </div>
-        <%self:field_error errors="${resources_errors}"/>
+        <%self:field_alerts alerts="${resources_alerts}"/>
     % endif
 <%
-    extras_errors = self.attr.extract_item_errors(dataset_errors, 'extras')
+    extras_alerts = self.attr.extract_item_alerts(dataset_alerts, 'extras')
 %>\
-    % if dataset.extras or extras_errors:
+    % if dataset.extras or extras_alerts:
        <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Extras"))}</b></div>
             <ul class="col-sm-10 list-group">
         % for extra_index, extra in enumerate(dataset.extras or []):
 <%
-            extra_errors = self.attr.extract_item_errors(extras_errors, extra_index)
+            extra_alerts = self.attr.extract_item_alerts(extras_alerts, extra_index)
 %>\
             <li class="list-group-item">
 <%
-            errors = self.attr.extract_item_errors(extra_errors, 'key')
+            alerts = self.attr.extract_item_alerts(extra_alerts, 'key')
             value = extra.get('key')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Key"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(extra_errors, 'value')
+            alerts = self.attr.extract_item_alerts(extra_alerts, 'value')
             value = extra.get('value')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Value"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
             remaining_keys = set()
-            for author, author_errors in extra_errors.iteritems():
-                remaining_keys.update(author_errors['error'].iterkeys())
+            for level_alerts in extra_alerts.itervalues():
+                for author_alerts in level_alerts.itervalues():
+                    remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
             % for key in sorted(remaining_keys):
                <div class="row">
@@ -229,33 +231,33 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                     <pre class="col-sm-10">${json.dumps(extra.get(key),
                             encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
                 </div>
-                <%self:field_error errors="${self.attr.extract_item_errors(extra_errors, key)}"/>
+                <%self:field_alerts alerts="${self.attr.extract_item_alerts(extra_alerts, key)}"/>
             % endfor
             </li>
         % endfor
             </ul>
         </div>
-        <%self:field_error errors="${extras_errors}"/>
+        <%self:field_alerts alerts="${extras_alerts}"/>
     % endif
 <%
         # TODO: Replace with groups_id.
-        groups_errors = self.attr.extract_item_errors(dataset_errors, 'groups')
+        groups_alerts = self.attr.extract_item_alerts(dataset_alerts, 'groups')
 %>\
-    % if dataset.groups or groups_errors:
+    % if dataset.groups or groups_alerts:
        <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Groups"))}</b></div>
             <ul class="col-sm-10 list-group">
         % for group_index, group_attributes in enumerate(dataset.groups or []):
 <%
-            group_errors = self.attr.extract_item_errors(groups_errors, group_index)
+            group_alerts = self.attr.extract_item_alerts(groups_alerts, group_index)
 %>\
             <li class="list-group-item">
 <%
-            errors = self.attr.extract_item_errors(group_errors, 'id')
+            alerts = self.attr.extract_item_alerts(group_alerts, 'id')
             value = group_attributes.get('id')
             group = model.Group.find_one(value) if value is not None else None
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("ID"))}</b></div>
                     <div class="col-sm-10">
@@ -266,12 +268,13 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                     % endif
                     </div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
             remaining_keys = set()
-            for author, author_errors in group_errors.iteritems():
-                remaining_keys.update(author_errors['error'].iterkeys())
+            for level_alerts in group_alerts.itervalues():
+                for author_alerts in level_alerts.itervalues():
+                    remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
             % for key in sorted(remaining_keys):
                <div class="row">
@@ -279,44 +282,45 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                     <pre class="col-sm-10">${json.dumps(group_attributes.get(key),
                             encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
                 </div>
-                <%self:field_error errors="${self.attr.extract_item_errors(group_errors, key)}"/>
+                <%self:field_alerts alerts="${self.attr.extract_item_alerts(group_alerts, key)}"/>
             % endfor
             </li>
         % endfor
             </ul>
         </div>
-        <%self:field_error errors="${groups_errors}"/>
+        <%self:field_alerts alerts="${groups_alerts}"/>
     % endif
 <%
         # TODO: Replace list of dicts with a list of strings.
-        tags_errors = self.attr.extract_item_errors(dataset_errors, 'tags')
+        tags_alerts = self.attr.extract_item_alerts(dataset_alerts, 'tags')
 %>\
-    % if dataset.tags or tags_errors:
+    % if dataset.tags or tags_alerts:
        <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Tags"))}</b></div>
             <ul class="col-sm-10 list-group">
         % for tag_index, tag in enumerate(dataset.tags or []):
 <%
-            tag_errors = self.attr.extract_item_errors(tags_errors, tag_index)
+            tag_alerts = self.attr.extract_item_alerts(tags_alerts, tag_index)
 %>\
             <li class="list-group-item">
 <%
-            errors = self.attr.extract_item_errors(tag_errors, 'name')
+            alerts = self.attr.extract_item_alerts(tag_alerts, 'name')
             value = tag.get('name')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
                     <div class="col-sm-10">
                         <a href="${model.Dataset.get_admin_class_url(ctx, tag = value)}">${value}</a>
                     </div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
             remaining_keys = set()
-            for author, author_errors in tag_errors.iteritems():
-                remaining_keys.update(author_errors['error'].iterkeys())
+            for level_alerts in tag_alerts.itervalues():
+                for author_alerts in level_alerts.itervalues():
+                    remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
             % for key in sorted(remaining_keys):
                <div class="row">
@@ -324,64 +328,64 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                     <pre class="col-sm-10">${json.dumps(tag.get(key),
                             encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
                 </div>
-                <%self:field_error errors="${self.attr.extract_item_errors(tag_errors, key)}"/>
+                <%self:field_alerts alerts="${self.attr.extract_item_alerts(tag_alerts, key)}"/>
             % endfor
             </li>
         % endfor
             </ul>
         </div>
-        <%self:field_error errors="${tags_errors}"/>
+        <%self:field_alerts alerts="${tags_alerts}"/>
     % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'temporal_coverage_from')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'temporal_coverage_from')
         value = dataset.temporal_coverage_from
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Temporal Coverage From"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'temporal_coverage_to')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'temporal_coverage_to')
         value = dataset.temporal_coverage_to
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Temporal Coverage To"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'territorial_coverage')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'territorial_coverage')
         value = dataset.territorial_coverage
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Territorial Coverage"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'territorial_coverage_granularity')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'territorial_coverage_granularity')
         value = dataset.territorial_coverage_granularity
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Territorial Coverage Granularity"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'owner_org')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'owner_org')
         value = dataset.owner_org
         organization = model.Organization.find_one(value) if value is not None else None
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Organization"))}</b></div>
             <div class="col-sm-10">
@@ -392,58 +396,58 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
             % endif
             </div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'author')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'author')
         value = dataset.author
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Office, Department or Service"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'author_email')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'author_email')
         value = dataset.author_email
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Contact Email"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'maintainer')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'maintainer')
         value = dataset.maintainer
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Maintainer"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'maintainer_email')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'maintainer_email')
         value = dataset.maintainer_email
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Maintainer Email"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'supplier_id')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'supplier_id')
         value = dataset.supplier_id
         organization = model.Organization.find_one(value) if value is not None else None
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Supplier"))}</b></div>
             <div class="col-sm-10">
@@ -454,86 +458,87 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
             % endif
             </div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'license_id')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'license_id')
         value = dataset.license_id
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("License"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'metadata_modified')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'metadata_modified')
         value = dataset.metadata_modified
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Metadata Modified"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'metadata_created')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'metadata_created')
         value = dataset.metadata_created
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Metadata Created"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'revision_timestamp')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'revision_timestamp')
         value = dataset.revision_timestamp
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Revision Timestamp"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'timestamp')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'timestamp')
         value = dataset.timestamp
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Timestamp"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
-        errors = self.attr.extract_item_errors(dataset_errors, 'revision_id')
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'revision_id')
         value = dataset.revision_id
 %>\
-        % if value is not None or errors:
+        % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Revision ID"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
-        <%self:field_error errors="${errors}"/>
+        <%self:field_alerts alerts="${alerts}"/>
         % endif
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("ID"))}</b></div>
             <div class="col-sm-10">${dataset._id}</div>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(dataset_errors, 'id')}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(dataset_alerts, 'id')}"/>
 <%
-    related_links_errors = self.attr.extract_item_errors(dataset_errors, 'related')
+    related_links_alerts = self.attr.extract_item_alerts(dataset_alerts, 'related')
 %>\
  <%
     remaining_keys = set()
-    for author, author_errors in dataset_errors.iteritems():
-        remaining_keys.update(author_errors['error'].iterkeys())
+    for level_alerts in dataset_alerts.itervalues():
+        for author_alerts in level_alerts.itervalues():
+            remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
     % for key in sorted(remaining_keys):
        <div class="row">
@@ -541,79 +546,79 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
             <pre class="col-sm-10">${json.dumps(getattr(dataset, key, None),
                     encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
         </div>
-        <%self:field_error errors="${self.attr.extract_item_errors(dataset_errors, key)}"/>
+        <%self:field_alerts alerts="${self.attr.extract_item_alerts(dataset_alerts, key)}"/>
     % endfor
-   % if dataset.related or related_links_errors:
+   % if dataset.related or related_links_alerts:
         <h3>${u"Community Resources"}</h3>
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Related"))}</b></div>
             <ul class="col-sm-10 list-group">
         % for related_link_index, related_link in enumerate(dataset.related or []):
 <%
-            related_link_errors = self.attr.extract_item_errors(related_links_errors, related_link_index)
+            related_link_alerts = self.attr.extract_item_alerts(related_links_alerts, related_link_index)
 %>\
             <li class="list-group-item">
 <%
-            errors = self.attr.extract_item_errors(related_link_errors, 'title')
+            alerts = self.attr.extract_item_alerts(related_link_alerts, 'title')
             value = related_link.get('title')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Title"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(related_link_errors, 'description')
+            alerts = self.attr.extract_item_alerts(related_link_alerts, 'description')
             value = related_link.get('description')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Description"))}</b></div>
                     <pre class="break-word col-sm-10">${value}</pre>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(related_link_errors, 'url')
+            alerts = self.attr.extract_item_alerts(related_link_alerts, 'url')
             value = related_link.get('url')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("URL"))}</b></div>
                     <div class="break-word col-sm-10"><a href="${value}">${value}</a></div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(related_link_errors, 'image_url')
+            alerts = self.attr.extract_item_alerts(related_link_alerts, 'image_url')
             value = related_link.get('image_url')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Image"))}</b></div>
                     <div class="break-word col-sm-10"><img class="img-responsive" src="${value}"></div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(related_link_errors, 'type')
+            alerts = self.attr.extract_item_alerts(related_link_alerts, 'type')
             value = related_link.get('type')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Type"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(related_link_errors, 'owner_id')
+            alerts = self.attr.extract_item_alerts(related_link_alerts, 'owner_id')
             value = related_link.get('owner_id')
             account = model.Account.find_one(value) if value is not None else None
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Owner"))}</b></div>
                     <div class="col-sm-10">
@@ -624,23 +629,24 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                     % endif
                     </div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
-            errors = self.attr.extract_item_errors(related_link_errors, 'created')
+            alerts = self.attr.extract_item_alerts(related_link_alerts, 'created')
             value = related_link.get('created')
 %>\
-            % if value is not None or errors:
+            % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Created"))}</b></div>
                     <div class="col-sm-10">${value}</div>
                 </div>
-                <%self:field_error errors="${errors}"/>
+                <%self:field_alerts alerts="${alerts}"/>
             % endif
 <%
             remaining_keys = set()
-            for author, author_errors in related_link_errors.iteritems():
-                remaining_keys.update(author_errors['error'].iterkeys())
+            for level_alerts in related_link_alerts.itervalues():
+                for author_alerts in level_alerts.itervalues():
+                    remaining_keys.update(author_alerts['error'].iterkeys())
 %>\
             % for key in sorted(remaining_keys):
                <div class="row">
@@ -648,13 +654,13 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                     <pre class="col-sm-10">${json.dumps(related_link.get(key),
                             encoding = 'utf-8', ensure_ascii = False, indent = 2)}</pre>
                 </div>
-                <%self:field_error errors="${self.attr.extract_item_errors(related_link_errors, key)}"/>
+                <%self:field_alerts alerts="${self.attr.extract_item_alerts(related_link_alerts, key)}"/>
             % endfor
             </li>
         % endfor
             </ul>
         </div>
-        <%self:field_error errors="${related_links_errors}"/>
+        <%self:field_alerts alerts="${related_links_alerts}"/>
     % endif
 </%def>
 
