@@ -73,8 +73,10 @@ setup(
     include_package_data = True,
     install_requires = [
         'Biryani1 >= 0.9dev',
+        'bleach >= 1.2',
         'CKAN-Toolbox >= 0.1dev',
         'Mako >= 0.8',
+        'Markdown >= 2.3',
         'PyYAML',
         'pymongo >= 2.2',
         'requests >= 1.2',

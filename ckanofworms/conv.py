@@ -26,7 +26,6 @@
 """Conversion functions"""
 
 
-from biryani1 import strings
 from biryani1.baseconv import *
 from biryani1.bsonconv import *
 from biryani1.datetimeconv import *
@@ -34,6 +33,8 @@ from biryani1.objectconv import *
 from biryani1.jsonconv import *
 from biryani1.states import default_state, State
 from ckantoolbox.ckanconv import *
+
+from . import texthelpers
 
 
 ckan_group_to_attributes = pipe(
@@ -90,7 +91,7 @@ ckan_user_to_account_attributes = pipe(
 
 
 def input_to_name(value, state = None):
-    return namify(value) or None, None
+    return texthelpers.namify(value) or None, None
 
 
 input_to_token = cleanup_line
@@ -150,37 +151,3 @@ def method(method_name, *args, **kwargs):
             return value, None
         return getattr(value, method_name)(state or default_state, *args, **kwargs)
     return method_converter
-
-
-def namify(s, encoding = 'utf-8'):
-    """Convert a string to a CKAN name."""
-    if s is None:
-        return None
-    if isinstance(s, str):
-        s = s.decode(encoding)
-    assert isinstance(s, unicode), str((s,))
-    simplified = u''.join([namify_char(unicode_char) for unicode_char in s])
-    # CKAN accepts names with duplicate "-" or "_" and/or ending with "-" or "_".
-    #while u'--' in simplified:
-    #    simplified = simplified.replace(u'--', u'-')
-    #while u'__' in simplified:
-    #    simplified = simplified.replace(u'__', u'_')
-    #simplified = simplified.strip(u'-_')
-    return simplified
-
-
-def namify_char(unicode_char):
-    """Convert an unicode character to a subset of lowercase ASCII characters or an empty string.
-
-    The result can be composed of several characters (for example, 'œ' becomes 'oe').
-    """
-    chars = strings.unicode_char_to_ascii(unicode_char)
-    if chars:
-        chars = chars.lower()
-        split_chars = []
-        for char in chars:
-            if char not in '-_0123456789abcdefghijklmnopqrstuvwxyz':
-                char = '-'
-            split_chars.append(char)
-        chars = ''.join(split_chars)
-    return chars
