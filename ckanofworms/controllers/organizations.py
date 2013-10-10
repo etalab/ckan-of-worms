@@ -782,10 +782,10 @@ def route_admin(environ, start_response):
     ctx = contexts.Ctx(req)
 
     organization, error = conv.pipe(
-        conv.input_to_token,
+        conv.input_to_name,
         conv.not_none,
-        model.Organization.make_id_to_instance(),
-        )(req.urlvars.get('id'), state = ctx)
+        model.Organization.make_id_or_name_to_instance(),
+        )(req.urlvars.get('id_or_name'), state = ctx)
     if error is not None:
         return wsgihelpers.not_found(ctx, explanation = ctx._('Organization Error: {}').format(error))(
             environ, start_response)
@@ -803,7 +803,7 @@ def route_admin(environ, start_response):
 def route_admin_class(environ, start_response):
     router = urls.make_router(
         ('GET', '^/?$', admin_index),
-        (None, '^/(?P<id>[^/]+)(?=/|$)', route_admin),
+        (None, '^/(?P<id_or_name>[^/]+)(?=/|$)', route_admin),
         )
     return router(environ, start_response)
 
@@ -813,10 +813,10 @@ def route_api1(environ, start_response):
     ctx = contexts.Ctx(req)
 
     organization, error = conv.pipe(
-        conv.input_to_token,
+        conv.input_to_name,
         conv.not_none,
-        model.Organization.make_id_to_instance(),
-        )(req.urlvars.get('id'), state = ctx)
+        model.Organization.make_id_or_name_to_instance(),
+        )(req.urlvars.get('id_or_name'), state = ctx)
     if error is not None:
         params = req.GET
         return wsgihelpers.respond_json(ctx,
@@ -847,6 +847,6 @@ def route_api1_class(environ, start_response):
         ('GET', '^/?$', api1_index),
         ('POST', '^/ckan/?$', api1_set_ckan),
         ('GET', '^/typeahead/?$', api1_typeahead),
-        (None, '^/(?P<id>[^/]+)(?=/|$)', route_api1),
+        (None, '^/(?P<id_or_name>[^/]+)(?=/|$)', route_api1),
         )
     return router(environ, start_response)

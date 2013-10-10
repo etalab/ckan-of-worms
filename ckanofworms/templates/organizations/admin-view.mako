@@ -49,7 +49,7 @@ from ckanofworms import conv, model, urls
             <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, organization = organization.title)}">${_(u'Produced Datasets')}</a>
             <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, supplier = organization.title)}">${_(u'Supplied Datasets')}</a>
 ##            <a class="btn btn-default" href="${organization.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
-            <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'organizations', organization._id)}">${_(u'JSON')}</a>
+            <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'organizations', organization.name)}">${_(u'JSON')}</a>
 ##            <a class="btn btn-default" href="${organization.get_admin_url(ctx, 'edit')}">${_(u'Edit')}</a>
 ##            <a class="btn btn-danger"  href="${organization.get_admin_url(ctx, 'delete')}"><span class="glyphicon glyphicon-trash"></span> ${_('Delete')}</a>
         </div>

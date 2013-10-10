@@ -160,9 +160,12 @@ def namify(s, encoding = 'utf-8'):
         s = s.decode(encoding)
     assert isinstance(s, unicode), str((s,))
     simplified = u''.join([namify_char(unicode_char) for unicode_char in s])
-    while u'--' in simplified:
-        simplified = simplified.replace(u'--', u'-')
-    simplified = simplified.strip(u'-')
+    # CKAN accepts names with duplicate "-" or "_" and/or ending with "-" or "_".
+    #while u'--' in simplified:
+    #    simplified = simplified.replace(u'--', u'-')
+    #while u'__' in simplified:
+    #    simplified = simplified.replace(u'__', u'_')
+    #simplified = simplified.strip(u'-_')
     return simplified
 
 

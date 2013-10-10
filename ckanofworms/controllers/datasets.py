@@ -1283,9 +1283,9 @@ def api1_set_ckan_related(req):
 
     related = data['value']
     dataset, error = conv.pipe(
-        conv.input_to_token,
+        conv.input_to_name,
         conv.not_none,
-        model.Dataset.make_id_to_instance(),
+        model.Dataset.make_id_or_name_to_instance(),
         )(related.get('dataset_id'), state = ctx)
     if error is not None:
         return wsgihelpers.respond_json(ctx,
@@ -1346,10 +1346,10 @@ def route_admin(environ, start_response):
     ctx = contexts.Ctx(req)
 
     dataset, error = conv.pipe(
-        conv.input_to_token,
+        conv.input_to_name,
         conv.not_none,
-        model.Dataset.make_id_to_instance(),
-        )(req.urlvars.get('id'), state = ctx)
+        model.Dataset.make_id_or_name_to_instance(),
+        )(req.urlvars.get('id_or_name'), state = ctx)
     if error is not None:
         return wsgihelpers.not_found(ctx, explanation = ctx._('Dataset Error: {}').format(error))(
             environ, start_response)
@@ -1369,7 +1369,7 @@ def route_admin(environ, start_response):
 def route_admin_class(environ, start_response):
     router = urls.make_router(
         ('GET', '^/?$', admin_index),
-        (None, '^/(?P<id>[^/]+)(?=/|$)', route_admin),
+        (None, '^/(?P<id_or_name>[^/]+)(?=/|$)', route_admin),
         )
     return router(environ, start_response)
 
@@ -1379,10 +1379,10 @@ def route_api1(environ, start_response):
     ctx = contexts.Ctx(req)
 
     dataset, error = conv.pipe(
-        conv.input_to_token,
+        conv.input_to_name,
         conv.not_none,
-        model.Dataset.make_id_to_instance(),
-        )(req.urlvars.get('id'), state = ctx)
+        model.Dataset.make_id_or_name_to_instance(),
+        )(req.urlvars.get('id_or_name'), state = ctx)
     if error is not None:
         params = req.GET
         return wsgihelpers.respond_json(ctx,
@@ -1416,6 +1416,6 @@ def route_api1_class(environ, start_response):
         ('POST', '^/ckan/related/?$', api1_set_ckan_related),
         ('GET', '^/related/?$', api1_related),
         ('DELETE', '^/related/(?P<id>[^/]+)/?$', api1_delete_related),
-        (None, '^/(?P<id>[^/]+)(?=/|$)', route_api1),
+        (None, '^/(?P<id_or_name>[^/]+)(?=/|$)', route_api1),
         )
     return router(environ, start_response)

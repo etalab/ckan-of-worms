@@ -49,7 +49,7 @@ from ckanofworms import model, urls
             <a class="btn btn-default" href="${dataset.get_front_url(ctx)}" target="_blank">${_(u'View in Front')}</a>
             <a class="btn btn-default" href="${dataset.get_back_url(ctx)}" target="_blank">${_(u'View in Back')}</a>
             <a class="btn btn-default" href="${dataset.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
-            <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'datasets', dataset._id)}">${_(u'JSON')}</a>
+            <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'datasets', dataset.name)}">${_(u'JSON')}</a>
             <a class="btn btn-default" href="${dataset.get_admin_url(ctx, 'publish')}">${_(u'Publish')}</a>
 ##            <a class="btn btn-default" href="${dataset.get_admin_url(ctx, 'edit')}">${_(u'Edit')}</a>
 ##            <a class="btn btn-danger"  href="${dataset.get_admin_url(ctx, 'delete')}"><span class="glyphicon glyphicon-trash"></span> ${_('Delete')}</a>

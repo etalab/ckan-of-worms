@@ -29,11 +29,15 @@
 import collections
 import conv
 import datetime
+import re
 import urlparse
 
 import fedmsg
 
 from . import conf, objects, urls, wsgihelpers
+
+
+uuid_re = re.compile(ur'[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$')
 
 
 class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
@@ -80,9 +84,9 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return urls.get_url(ctx, 'admin', 'accounts', *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
-        if self._id is None:
+        if self._id is None and self.name is None:
             return None
-        return self.get_admin_class_url(ctx, self._id, *path, **query)
+        return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
 
     def get_groups_cursor(self):
         return Group.find({'users.id': self._id})
@@ -94,17 +98,23 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return self.fullname or self.name or self.email or self._id
 
     @classmethod
-    def make_id_to_instance(cls):
-        def id_to_instance(value, state = None):
+    def make_id_or_name_to_instance(cls):
+        def id_or_name_to_instance(value, state = None):
             if value is None:
                 return value, None
             if state is None:
                 state = conv.default_state
-            self = cls.find_one(value, as_class = collections.OrderedDict)
-            if self is None:
-                return value, state._(u"No account with ID {0}").format(value)
+            match = uuid_re.match(value)
+            if match is None:
+                self = cls.find_one(dict(name = value), as_class = collections.OrderedDict)
+                if self is None:
+                    return value, state._(u"No account with name {0}").format(value)
+            else:
+                self = cls.find_one(value, as_class = collections.OrderedDict)
+                if self is None:
+                    return value, state._(u"No account with ID {0}").format(value)
             return self, None
-        return id_to_instance
+        return id_or_name_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
@@ -186,9 +196,9 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return urls.get_url(ctx, 'admin', 'datasets', *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
-        if self._id is None:
+        if self._id is None and self.name is None:
             return None
-        return self.get_admin_class_url(ctx, self._id, *path, **query)
+        return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
 
     def get_back_url(self, ctx, *path, **query):
         if self.name is None:
@@ -204,15 +214,21 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return self.title or self.name or self._id
 
     @classmethod
-    def make_id_to_instance(cls):
+    def make_id_or_name_to_instance(cls):
         def id_to_instance(value, state = None):
             if value is None:
                 return value, None
             if state is None:
                 state = conv.default_state
-            self = cls.find_one(value, as_class = collections.OrderedDict)
-            if self is None:
-                return value, state._(u"No dataset with ID {0}").format(value)
+            match = uuid_re.match(value)
+            if match is None:
+                self = cls.find_one(dict(name = value), as_class = collections.OrderedDict)
+                if self is None:
+                    return value, state._(u"No dataset with name {0}").format(value)
+            else:
+                self = cls.find_one(value, as_class = collections.OrderedDict)
+                if self is None:
+                    return value, state._(u"No dataset with ID {0}").format(value)
             return self, None
         return id_to_instance
 
@@ -267,23 +283,29 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
         return urls.get_url(ctx, 'admin', 'groups', *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
-        if self._id is None:
+        if self._id is None and self.name is None:
             return None
-        return self.get_admin_class_url(ctx, self._id, *path, **query)
+        return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
 
     def get_title(self, ctx):
         return self.title or self.name or self._id
 
     @classmethod
-    def make_id_to_instance(cls):
+    def make_id_or_name_to_instance(cls):
         def id_to_instance(value, state = None):
             if value is None:
                 return value, None
             if state is None:
                 state = conv.default_state
-            self = cls.find_one(value, as_class = collections.OrderedDict)
-            if self is None:
-                return value, state._(u"No group with ID {0}").format(value)
+            match = uuid_re.match(value)
+            if match is None:
+                self = cls.find_one(dict(name = value), as_class = collections.OrderedDict)
+                if self is None:
+                    return value, state._(u"No group with name {0}").format(value)
+            else:
+                self = cls.find_one(value, as_class = collections.OrderedDict)
+                if self is None:
+                    return value, state._(u"No group with ID {0}").format(value)
             return self, None
         return id_to_instance
 
@@ -356,23 +378,29 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
         return urls.get_url(ctx, 'admin', 'organizations', *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
-        if self._id is None:
+        if self._id is None and self.name is None:
             return None
-        return self.get_admin_class_url(ctx, self._id, *path, **query)
+        return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
 
     def get_title(self, ctx):
         return self.title or self.name or self._id
 
     @classmethod
-    def make_id_to_instance(cls):
+    def make_id_or_name_to_instance(cls):
         def id_to_instance(value, state = None):
             if value is None:
                 return value, None
             if state is None:
                 state = conv.default_state
-            self = cls.find_one(value, as_class = collections.OrderedDict)
-            if self is None:
-                return value, state._(u"No organization with ID {0}").format(value)
+            match = uuid_re.match(value)
+            if match is None:
+                self = cls.find_one(dict(name = value), as_class = collections.OrderedDict)
+                if self is None:
+                    return value, state._(u"No organization with name {0}").format(value)
+            else:
+                self = cls.find_one(value, as_class = collections.OrderedDict)
+                if self is None:
+                    return value, state._(u"No organization with ID {0}").format(value)
             return self, None
         return id_to_instance
 
@@ -532,13 +560,16 @@ def setup():
     Account.ensure_index('admin', sparse = True)
     Account.ensure_index('api_key', sparse = True, unique = True)
     Account.ensure_index('email')
+    Account.ensure_index('name', unique = True)
 
     Dataset.ensure_index('name', unique = True)
     Dataset.ensure_index('related.id')
     Dataset.ensure_index('timestamp')
 
+    Group.ensure_index('name', unique = True)
     Group.ensure_index('users.id')
 
+    Organization.ensure_index('name', unique = True)
     Organization.ensure_index('users.id')
 
     Session.ensure_index('expiration')

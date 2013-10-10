@@ -47,7 +47,7 @@ from ckanofworms import conv, model, urls
         <%self:view_fields/>
         <div class="btn-toolbar">
 ##            <a class="btn btn-default" href="${account.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
-            <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'accounts', account._id)}">${_(u'JSON')}</a>
+            <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'accounts', account.name)}">${_(u'JSON')}</a>
             <a class="btn btn-default" href="${account.get_admin_url(ctx, 'edit')}">${_(u'Edit')}</a>
             <a class="btn btn-danger"  href="${account.get_admin_url(ctx, 'delete')}"><span class="glyphicon glyphicon-trash"></span> ${_('Delete')}</a>
         </div>
