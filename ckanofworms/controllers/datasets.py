@@ -125,7 +125,7 @@ def admin_index(req):
     params = req.GET
     inputs = dict(
         advanced_search = params.get('advanced_search'),
-        bad = params.get('bad'),
+        alerts = params.get('alerts'),
         group = params.get('group'),
         organization = params.get('organization'),
         page = params.get('page'),
@@ -139,7 +139,10 @@ def admin_index(req):
         conv.struct(
             dict(
                 advanced_search = conv.guess_bool,
-                bad = conv.guess_bool,
+                alerts = conv.pipe(
+                    conv.input_to_slug,
+                    conv.test_in(['critical', 'debug', 'error', 'info', 'warning']),
+                    ),
                 group = conv.pipe(
                     conv.cleanup_line,
                     model.Group.make_title_to_instance(),
@@ -172,8 +175,28 @@ def admin_index(req):
         return wsgihelpers.not_found(ctx, explanation = ctx._('Dataset search error: {}').format(errors))
 
     criteria = {}
-    if data['bad'] is not None:
-        criteria['errors'] = {'$exists': data['bad']}
+    if data['alerts'] == 'debug':
+        criteria['alerts'] = {'$exists': True}
+    elif data['alerts'] == 'info':
+        criteria['$or'] = [
+            {'alerts.critical': {'$exists': True}},
+            {'alerts.error': {'$exists': True}},
+            {'alerts.info': {'$exists': True}},
+            {'alerts.warning': {'$exists': True}},
+            ]
+    elif data['alerts'] == 'warning':
+        criteria['$or'] = [
+            {'alerts.critical': {'$exists': True}},
+            {'alerts.error': {'$exists': True}},
+            {'alerts.warning': {'$exists': True}},
+            ]
+    elif data['alerts'] == 'error':
+        criteria['$or'] = [
+            {'alerts.critical': {'$exists': True}},
+            {'alerts.error': {'$exists': True}},
+            ]
+    elif data['alerts'] == 'critical':
+        criteria['alerts.critical'] = {'$exists': True}
     if data['group'] is not None:
         criteria['groups.id'] = data['group']._id
     if data['organization'] is not None:

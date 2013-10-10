@@ -77,6 +77,7 @@ from ckanofworms import model, texthelpers, urls
                     <th><a href="${model.Dataset.get_admin_class_url(ctx, **urls.relative_query(inputs, page = None,
                             sort = 'metadata_created'))}">${_(u"Creation")}</a></th>
             % endif
+                    <th>${_(u"Alerts")}</th>
                 </tr>
             </thead>
             <tbody>
@@ -105,8 +106,17 @@ from ckanofworms import model, texthelpers, urls
             % endif
             % if dataset.frequency is not None or dataset.temporal_coverage_from is not None \
                     or dataset.temporal_coverage_to is not None or dataset.territorial_coverage is not None \
-                    or dataset.territorial_coverage_granularity is not None:
+                    or dataset.territorial_coverage_granularity is not None or dataset.weight is not None:
                         <ul class="list-inline">
+                % if dataset.weight is not None:
+                            <li>
+                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                        _(u"Search ranking")}">
+                                    <span class="glyphicon glyphicon-star"></span>
+                                </a>
+                                <span class="badge">${_(u'{:3.2f}').format(dataset.weight)}</span>
+                            </li>
+                % endif
                 % if dataset.temporal_coverage_from is not None or dataset.temporal_coverage_to is not None:
                             <li>
                                 <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
@@ -149,6 +159,45 @@ from ckanofworms import model, texthelpers, urls
                     </td>
                     <td>${dataset.timestamp or ''}</td>
                     <td>${dataset.metadata_created or ''}</td>
+                    <td>
+<%
+            alerts = dataset.alerts
+%>\
+            % if alerts:
+                <ul class="list-unstyled">
+                % if alerts.get('critical'):
+                    <li><span class="label label-danger">${_(u"{}: {}").format(_(u"Critical"), sum(
+                            len(author_alerts['error'])
+                            for author_alerts in alerts['critical'].itervalues()
+                            ))} <span class="glyphicon glyphicon-warning-sign"></span></span></li>
+                % endif
+                % if alerts.get('error'):
+                    <li><span class="label label-danger">${_(u"{}: {}").format(_(u"Error"), sum(
+                            len(author_alerts['error'])
+                            for author_alerts in alerts['error'].itervalues()
+                            ))}</span></span></li>
+                % endif
+                % if alerts.get('warning'):
+                    <li><span class="label label-warning">${_(u"{}: {}").format(_(u"Warning"), sum(
+                            len(author_alerts['error'])
+                            for author_alerts in alerts['warning'].itervalues()
+                            ))}</span></span></li>
+                % endif
+                % if alerts.get('info'):
+                    <li><span class="label label-info">${_(u"{}: {}").format(_(u"Info"), sum(
+                            len(author_alerts['error'])
+                            for author_alerts in alerts['info'].itervalues()
+                            ))}</span></span></li>
+                % endif
+                % if alerts.get('debug'):
+                    <li><span class="label label-info">${_(u"{}: {}").format(_(u"Debug"), sum(
+                            len(author_alerts['error'])
+                            for author_alerts in alerts['debug'].itervalues()
+                            ))}</span></span></li>
+                % endif
+                </ul>
+            % endif
+                    </td>
                 </tr>
         % endfor
             </tbody>
@@ -229,6 +278,33 @@ from ckanofworms import model, texthelpers, urls
             </div>
     % endif
 <%
+    error = errors.get('alerts') if errors is not None else None
+    input_value = inputs['alerts']
+    options = [
+        ('debug', _(u"All")),
+        ('info', _(u"Info or above")),
+        ('warning', _(u"Warning or above")),
+        ('error', _(u"Error or above")),
+        ('critical', _(u"Critical")),
+        ]
+    value = data['alerts']
+%>\
+    % if data['advanced_search'] or error or input_value:
+            <div class="form-group${' has-error' if error else ''}">
+                <label for="alerts">${_("Alert Level")}</label>
+                <select class="form-control" id="alerts" name="alerts">
+                    <option value=""></option>
+        % for option_value, option_title in options:
+                    <option${' selected' if option_value == value else ''} value="${option_value}">${option_title
+                        }</option>
+        % endfor
+                </select>
+        % if error:
+                <span class="help-block">${error}</span>
+        % endif
+            </div>
+    % endif
+<%
     error = errors.get('related') if errors is not None else None
     input_value = inputs['related']
 %>\
@@ -237,21 +313,6 @@ from ckanofworms import model, texthelpers, urls
                 <label>
                     <input${' checked' if input_value else ''} id="related" name="related" type="checkbox" value="1">
                     ${_(u'Related only')}
-                </label>
-        % if error:
-                <span class="help-block">${error}</span>
-        % endif
-            </div>
-    % endif
-<%
-    error = errors.get('bad') if errors is not None else None
-    input_value = inputs['bad']
-%>\
-    % if data['advanced_search'] or error or input_value:
-            <div class="checkbox${' has-error' if error else ''}">
-                <label>
-                    <input${' checked' if input_value else ''} id="bad" name="bad" type="checkbox" value="1">
-                    ${_(u'Errors only')}
                 </label>
         % if error:
                 <span class="help-block">${error}</span>
