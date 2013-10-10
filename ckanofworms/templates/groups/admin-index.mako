@@ -28,7 +28,7 @@ from ckanofworms import model, urls
 %>
 
 
-<%inherit file="/site.mako"/>
+<%inherit file="/object-admin-index.mako"/>
 
 
 <%def name="breadcrumb_content()" filter="trim">
@@ -54,7 +54,7 @@ from ckanofworms import model, urls
         % else:
         <h2>${_(u"{} groups").format(pager.item_count)}</h2>
         % endif
-        <%self:pagination/>
+        <%self:pagination object_class="${model.Group}" pager="${pager}"/>
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
@@ -87,41 +87,7 @@ from ckanofworms import model, urls
         % endfor
             </tbody>
         </table>
-        <%self:pagination/>
-    % endif
-</%def>
-
-
-<%def name="pagination()" filter="trim">
-    % if pager.page_count > 1:
-            <div class="text-center">
-                <ul class="pagination">
-                    <li class="prev${' disabled' if pager.page_number <= 1 else ''}">
-                        <a href="${model.Group.get_admin_class_url(ctx, **urls.relative_query(inputs,
-                                page = max(pager.page_number - 1, 1)))}">&larr;</a>
-                    </li>
-        % for page_number in range(max(pager.page_number - 5, 1), pager.page_number):
-                    <li>
-                        <a href="${model.Group.get_admin_class_url(ctx, **urls.relative_query(inputs,
-                                page = page_number))}">${page_number}</a>
-                    </li>
-        % endfor
-                    <li class="active">
-                        <a href="${model.Group.get_admin_class_url(ctx, **urls.relative_query(inputs,
-                                page = pager.page_number))}">${pager.page_number}</a>
-                    </li>
-        % for page_number in range(pager.page_number + 1, min(pager.page_number + 5, pager.last_page_number) + 1):
-                    <li>
-                        <a href="${model.Group.get_admin_class_url(ctx, **urls.relative_query(inputs,
-                                page = page_number))}">${page_number}</a>
-                    </li>
-        % endfor
-                    <li class="next${' disabled' if pager.page_number >= pager.last_page_number else ''}">
-                        <a href="${model.Group.get_admin_class_url(ctx, **urls.relative_query(inputs,
-                                page = min(pager.page_number + 1, pager.last_page_number)))}">&rarr;</a>
-                    </li>
-                </ul>
-            </div>
+        <%self:pagination object_class="${model.Group}" pager="${pager}"/>
     % endif
 </%def>
 
