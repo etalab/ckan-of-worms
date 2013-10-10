@@ -127,6 +127,7 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
 
 
 class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
+    _organization = UnboundLocalError
     alerts = None
     collection_name = u'datasets'
     timestamp = None
@@ -136,6 +137,7 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     author = None
     author_email = None
     extras = None
+    frequency = None
     groups = None  # TODO: Replace with groups_id
     license_id = None
     maintainer = None
@@ -213,6 +215,11 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         if self.name is None:
             return None
         return urlparse.urljoin(conf['weckan_url'], u'dataset/{}'.format(self.name))
+
+    def get_organization(self, ctx):
+        if self._organization is UnboundLocalError:
+            self._organization = Organization.find_one(self.owner_org) if self.owner_org is not None else None
+        return self._organization
 
     def get_title(self, ctx):
         return self.title or self.name or self._id

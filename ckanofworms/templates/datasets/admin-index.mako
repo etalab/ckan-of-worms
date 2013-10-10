@@ -24,7 +24,7 @@
 
 
 <%!
-from ckanofworms import model, urls
+from ckanofworms import model, texthelpers, urls
 %>
 
 
@@ -58,6 +58,7 @@ from ckanofworms import model, urls
         <table class="table table-bordered table-condensed table-striped">
             <thead>
                 <tr>
+                    <th>${_(u"Organization")}</th>
             % if data['sort'] == 'name':
                     <th>${_(u"Title")} <span class="glyphicon glyphicon-sort-by-attributes"></span></th>
             % else:
@@ -81,7 +82,71 @@ from ckanofworms import model, urls
             <tbody>
         % for dataset in datasets:
                 <tr>
-                    <td><a href="${dataset.get_admin_url(ctx)}">${dataset.title}</a></td>
+                    <td>
+<%
+            organization = dataset.get_organization(ctx)
+%>\
+            % if organization is None:
+                        <img alt="" src="${urls.get_url(ctx, 'images', 'placeholder-organization.png')
+                                }" class="img-responsive" width="80">
+            % else:
+                        <img alt="${organization.title}" src="${organization.image_url \
+                                or urls.get_url(ctx, 'images', 'placeholder-organization.png')
+                                }" class="img-responsive" width="80">
+            % endif
+                    </td>
+                    <td>
+                        <h4><a href="${dataset.get_admin_url(ctx)}">${dataset.title}</a></h4>
+<%
+            notes_text = texthelpers.textify_markdown(dataset.notes)
+%>\
+            % if notes_text:
+                        ${texthelpers.truncate(notes_text, length = 180, whole_word = True)}
+            % endif
+            % if dataset.frequency is not None or dataset.temporal_coverage_from is not None \
+                    or dataset.temporal_coverage_to is not None or dataset.territorial_coverage is not None \
+                    or dataset.territorial_coverage_granularity is not None:
+                        <ul class="list-inline">
+                % if dataset.temporal_coverage_from is not None or dataset.temporal_coverage_to is not None:
+                            <li>
+                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                        _(u"Temporal coverage")}">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </a>
+                                ${_(u"{0} to {1}").format(dataset.temporal_coverage_from or _(u"…"),
+                                    dataset.temporal_coverage_to or _(u"…"))}
+                            </li>
+                % endif
+                % if dataset.frequency is not None:
+                            <li>
+                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                        _(u"Update frequency")}">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </a>
+                                ${dataset.frequency}
+                            </li>
+                % endif
+                % if dataset.territorial_coverage is not None:
+                            <li>
+                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                        _(u"Territorial coverage")}">
+                                    <span class="glyphicon glyphicon-globe"></span>
+                                </a>
+                                ${dataset.territorial_coverage}
+                            </li>
+                % endif
+                % if dataset.territorial_coverage_granularity is not None:
+                            <li>
+                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                        _(u"Territorial coverage granularity")}">
+                                    <span class="glyphicon glyphicon-screenshot"></span>
+                                </a>
+                                ${dataset.territorial_coverage_granularity}
+                            </li>
+                % endif
+                        </ul>
+            % endif
+                    </td>
                     <td>${dataset.timestamp or ''}</td>
                     <td>${dataset.metadata_created or ''}</td>
                 </tr>
