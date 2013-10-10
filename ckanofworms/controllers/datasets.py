@@ -107,6 +107,7 @@ def admin_edit(req):
             if dataset.alerts:
                 del dataset.alerts
             dataset.set_attributes(**data)
+            dataset.compute_weight()
             dataset.compute_timestamp()
             dataset.save(ctx, safe = True)
 
@@ -407,6 +408,10 @@ def api1_alert(req):
         dataset.alerts = alerts
     elif dataset.alerts is not None:
         del dataset.alerts
+    # Don't update weight, because it doesn't depend from alerts (yet).
+    # dataset.compute_weight()
+    # Don't update timestamp, because it doesn't depend from alerts.
+    # dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -676,6 +681,7 @@ def api1_delete_related(req):
 
     if dataset.alerts:
         del dataset.alerts
+    dataset.compute_weight()
     dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 
@@ -1012,6 +1018,7 @@ def api1_related(req):
 #    dataset = model.Dataset(**dataset_attributes)
 #    if dataset.alerts:
 #        del dataset.alerts
+#    dataset.compute_weight()
 #    dataset.compute_timestamp()
 #    dataset.save(ctx, safe = True)
 
@@ -1150,6 +1157,7 @@ def api1_set_ckan(req):
     if existing_dataset is not None and existing_dataset.related is not None:
         # Keep existing attributes that are not part of this CKAN object.
         dataset.related = existing_dataset.related
+    dataset.compute_weight()
     dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 
@@ -1315,6 +1323,7 @@ def api1_set_ckan_related(req):
 
     if dataset.alerts:
         del dataset.alerts
+    dataset.compute_weight()
     dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 

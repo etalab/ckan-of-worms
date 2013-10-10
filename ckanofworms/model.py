@@ -34,7 +34,7 @@ import urlparse
 
 import fedmsg
 
-from . import conf, objects, urls, wsgihelpers
+from . import conf, objects, urls, weights, wsgihelpers
 
 
 uuid_re = re.compile(ur'[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$')
@@ -130,6 +130,7 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     alerts = None
     collection_name = u'datasets'
     timestamp = None
+    weight = None
 
     # CKAN attributes
     author = None
@@ -190,6 +191,9 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             if resource['revision_timestamp'] > timestamp:
                 timestamp = resource['revision_timestamp']
         self.timestamp = timestamp
+
+    def compute_weight(self):
+        return weights.compute_dataset_weight(self)
 
     @classmethod
     def get_admin_class_url(cls, ctx, *path, **query):

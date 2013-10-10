@@ -472,6 +472,17 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
+        alerts = self.attr.extract_item_alerts(dataset_alerts, 'weight')
+        value = dataset.weight
+%>\
+        % if value is not None or alerts:
+        <div class="row">
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Weight"))}</b></div>
+            <div class="col-sm-10">${_(u'{:3.2f}').format(value)}</div>
+        </div>
+        <%self:field_alerts alerts="${alerts}"/>
+        % endif
+<%
         alerts = self.attr.extract_item_alerts(dataset_alerts, 'metadata_modified')
         value = dataset.metadata_modified
 %>\
