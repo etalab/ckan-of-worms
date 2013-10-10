@@ -14,6 +14,13 @@ site-js:
     filters: uglifyjs
     output: js/site.min.js
 
+site-css:
+    contents:
+        - site-less-css
+        - css/typeahead.css
+    filters: cssrewrite,cssmin
+    output: css/site.min.css
+
 site-less-css:
     contents: less/site.less
     depends:
@@ -21,10 +28,3 @@ site-less-css:
         - less/*.less
     filters: less
     output: css/site-less.css
-
-site-css:
-    contents:
-        - site-less-css
-        - css/typeahead.css
-    filters: cssrewrite,cssmin
-    output: css/site.min.css
