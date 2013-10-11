@@ -115,7 +115,7 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         % endif
 ##        % if dataset.weight is not None and dataset.weight < 4.0:
                     <li>
-                        ${_(u"Bad search rank:")}
+                        ${_(u"Low search rank:")}
                         <span class="label label-default">${_(u"{:3.2f}").format(dataset.weight or 1.23)}</span>
                     </li>
 ##        % endif
