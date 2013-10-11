@@ -94,23 +94,29 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
     % if alerts_ranking or dataset.weight is not None and dataset.weight < 4.0:
         <div class="jumbotron">
             <div class="container">
+                <h1>${_(u"This dataset has some defects")}</h1>
+                <ul class="list-unstyled">
         % if alerts_ranking:
-                <h1>${_(U"This dataset has defects!")}</h1>
-                <ul>
             % for level in ('critical', 'error', 'warning'):
 <%
                 count = alerts_ranking.get(level)
                 if count is None:
                     continue
 %>\
-                    <li><span class="label ${label_class_by_level[level]}">${_(u"{}: {}").format(
-                        _(title_by_level[level]), count)}</span></li>
+                    <li>
+                        ${_(u"{}:").format(_(title_by_level[level]), count)}
+                        <span class="label ${label_class_by_level[level]}">${count}</span>
+                    </li>
             % endfor
+        % endif
+##        % if dataset.weight is not None and dataset.weight < 4.0:
+                    <li>
+                        ${_(u"Bad search rank:")}
+                        <span class="label label-default">${_(u"{:3.2f}").format(dataset.weight or 1.23)}</span>
+                    </li>
+##        % endif
                 </ul>
-        % endif
-        % if dataset.weight is not None and dataset.weight < 4.0:
-                <h1>${_(U"Bad search rank!")} <small>${_(u"Score: {:3.2f}").format(dataset.weight)}</small></h1>
-        % endif
+                <p>${_(u"Please look at the alerts below and repair this dataset now.")}</p>
                 <p><a class="btn btn-primary btn-lg" href="${dataset.get_back_url(ctx)}">${_(u"Repair")}</a></p>
             </div>
         </div>
