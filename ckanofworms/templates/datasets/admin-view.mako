@@ -27,7 +27,7 @@
 import copy
 import json
 
-from ckanofworms import model, urls
+from ckanofworms import model, texthelpers, urls
 
 
 N_ = lambda message: message
@@ -138,7 +138,22 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Notes"))}</b></div>
-            <pre class="break-word col-sm-10">${value}</pre>
+            % if value is not None:
+            <div class="col-sm-10">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#notes-view">${_(u"View")}</a></li>
+                    <li><a data-toggle="tab" href="#notes-source">${_(u"Source")}</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="active tab-pane" id="notes-view">
+                        ${texthelpers.htmlify_markdown(value) | n}
+                    </div>
+                    <div class="tab-pane" id="notes-source">
+                        <pre class="break-word">${value}</pre>
+                    </div>
+                </div>
+            </div>
+            % endif
         </div>
         <%self:field_alerts alerts="${alerts}"/>
         % endif

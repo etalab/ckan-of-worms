@@ -31,6 +31,38 @@ import bleach
 import markdown
 
 
+bleach_allowed_attributes = dict(
+    a = ['href', 'title'],
+    acronym = ['title'],
+    abbr = ['title'],
+    img = ['alt', 'src', 'title'],
+    )
+bleach_allowed_styles = []
+bleach_allowed_tags = [
+    'a',
+    'abbr',
+    'acronym',
+    'b',
+    'blockquote',
+    'code',
+    'em',
+    'i',
+    'img',
+    'li',
+    'ol',
+    'p',
+    'strong',
+    'ul',
+    ]
+
+
+def htmlify_markdown(text):
+    if not text:
+        return u''
+    return bleach.clean(markdown.markdown(text), attributes = bleach_allowed_attributes, styles = bleach_allowed_styles,
+        tags = bleach_allowed_tags)
+
+
 def namify(text, encoding = 'utf-8'):
     """Convert a string to a CKAN name."""
     if text is None:

@@ -27,7 +27,7 @@
 import copy
 import json
 
-from ckanofworms import conv, model, urls
+from ckanofworms import model, texthelpers, urls
 %>
 
 
@@ -114,7 +114,22 @@ ${account.get_title(ctx)} - ${parent.title_content()}
         % if value is not None or alerts:
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("About"))}</b></div>
-            <pre class="break-word col-sm-10">${value}</pre>
+            % if value is not None:
+            <div class="col-sm-10">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#about-view">${_(u"View")}</a></li>
+                    <li><a data-toggle="tab" href="#about-source">${_(u"Source")}</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="active tab-pane" id="about-view">
+                        ${texthelpers.htmlify_markdown(value) | n}
+                    </div>
+                    <div class="tab-pane" id="about-source">
+                        <pre class="break-word">${value}</pre>
+                    </div>
+                </div>
+            </div>
+            % endif
         </div>
         <%self:field_alerts alerts="${alerts}"/>
         % endif
