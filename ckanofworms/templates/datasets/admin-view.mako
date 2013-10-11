@@ -109,7 +109,7 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                 </ul>
         % endif
         % if dataset.weight is not None and dataset.weight < 4.0:
-                <h1>${_(U"Bad search rank!")} <small>${_(u"Score: {}").format(dataset.weight)}</small></h1>
+                <h1>${_(U"Bad search rank!")} <small>${_(u"Score: {:3.2f}").format(dataset.weight)}</small></h1>
         % endif
                 <p><a class="btn btn-primary btn-lg" href="${dataset.get_back_url(ctx)}">${_(u"Repair")}</a></p>
             </div>
