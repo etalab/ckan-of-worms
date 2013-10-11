@@ -25,6 +25,24 @@
 
 <%!
 from ckanofworms import model, texthelpers, urls
+
+
+alert_levels = ['critical', 'error', 'warning', 'info', 'debug']
+label_class_by_alert_level = dict(
+    critical = 'label-danger',
+    debug = 'label-info',
+    error = 'label-danger',
+    info = 'label-info',
+    warning = 'label-warning',
+    )
+N_ = lambda message: message
+title_by_alert_level = dict(
+    critical = N_(u"Critical"),
+    debug = N_(u"Debug"),
+    error = N_(u"Error"),
+    info = N_(u"Info"),
+    warning = N_(u"Warning"),
+    )
 %>
 
 
@@ -161,40 +179,31 @@ from ckanofworms import model, texthelpers, urls
                     <td>${dataset.metadata_created or ''}</td>
                     <td>
 <%
-            alerts = dataset.alerts
+            alerts_ranking = dict(
+                (level, sum(
+                    len(author_alerts['error'])
+                    for author_alerts in level_alerts.itervalues()
+                    ))
+                for level, level_alerts in (dataset.alerts or {}).iteritems()
+                )
 %>\
-            % if alerts:
+            % if alerts_ranking:
                 <ul class="list-unstyled">
-                % if alerts.get('critical'):
-                    <li><span class="label label-danger">${_(u"{}: {}").format(_(u"Critical"), sum(
-                            len(author_alerts['error'])
-                            for author_alerts in alerts['critical'].itervalues()
-                            ))} <span class="glyphicon glyphicon-warning-sign"></span></span></li>
-                % endif
-                % if alerts.get('error'):
-                    <li><span class="label label-danger">${_(u"{}: {}").format(_(u"Error"), sum(
-                            len(author_alerts['error'])
-                            for author_alerts in alerts['error'].itervalues()
-                            ))}</span></span></li>
-                % endif
-                % if alerts.get('warning'):
-                    <li><span class="label label-warning">${_(u"{}: {}").format(_(u"Warning"), sum(
-                            len(author_alerts['error'])
-                            for author_alerts in alerts['warning'].itervalues()
-                            ))}</span></span></li>
-                % endif
-                % if alerts.get('info'):
-                    <li><span class="label label-info">${_(u"{}: {}").format(_(u"Info"), sum(
-                            len(author_alerts['error'])
-                            for author_alerts in alerts['info'].itervalues()
-                            ))}</span></span></li>
-                % endif
-                % if alerts.get('debug'):
-                    <li><span class="label label-info">${_(u"{}: {}").format(_(u"Debug"), sum(
-                            len(author_alerts['error'])
-                            for author_alerts in alerts['debug'].itervalues()
-                            ))}</span></span></li>
-                % endif
+                % for level in alert_levels:
+<%
+                    count = alerts_ranking.get(level)
+                    if count is None:
+                        continue
+%>\
+                    <li>
+                        <a href="${dataset.get_admin_url(ctx)}"><span class="label ${label_class_by_alert_level[level]
+                                }">${_(u"{}: {}").format(title_by_alert_level[level], count)}\
+                    % if level == 'critical':
+ <span class="glyphicon glyphicon-warning-sign"></span>\
+                    % endif
+</span></a>
+                    </li>
+                % endfor
                 </ul>
             % endif
                     </td>

@@ -30,7 +30,22 @@ import json
 from ckanofworms import model, texthelpers, urls
 
 
+alert_levels = ['critical', 'error', 'warning']
+label_class_by_alert_level = dict(
+    critical = 'label-danger',
+    debug = 'label-info',
+    error = 'label-danger',
+    info = 'label-info',
+    warning = 'label-warning',
+    )
 N_ = lambda message: message
+title_by_alert_level = dict(
+    critical = N_(u"Critical"),
+    debug = N_(u"Debug"),
+    error = N_(u"Error"),
+    info = N_(u"Info"),
+    warning = N_(u"Warning"),
+    )
 %>
 
 
@@ -49,8 +64,8 @@ N_ = lambda message: message
         <h2>${dataset.get_title(ctx)}</h2>
         <%self:view_fields/>
         <div class="btn-toolbar">
+            <a class="btn btn-primary" href="${dataset.get_back_url(ctx)}" target="_blank">${_(u'Repair')}</a>
             <a class="btn btn-default" href="${dataset.get_front_url(ctx)}" target="_blank">${_(u'View in Front')}</a>
-            <a class="btn btn-default" href="${dataset.get_back_url(ctx)}" target="_blank">${_(u'View in Back')}</a>
             <a class="btn btn-default" href="${dataset.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
             <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'datasets', dataset.name)}">${_(u'JSON')}</a>
             <a class="btn btn-default" href="${dataset.get_admin_url(ctx, 'publish')}">${_(u'Publish')}</a>
@@ -74,21 +89,7 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
             for author_alerts in level_alerts.itervalues()
             ))
         for level, level_alerts in (dataset.alerts or {}).iteritems()
-        if level in ('critical', 'error', 'warning')
-        )
-    label_class_by_level = dict(
-        critical = 'label-danger',
-        debug = 'label-info',
-        error = 'label-danger',
-        info = 'label-info',
-        warning = 'label-warning',
-        )
-    title_by_level = dict(
-        critical = N_(u"Critical"),
-        debug = N_(u"Debug"),
-        error = N_(u"Error"),
-        info = N_(u"Info"),
-        warning = N_(u"Warning"),
+        if level in alert_levels
         )
 %>\
     % if alerts_ranking or dataset.weight is not None and dataset.weight < 4.0:
@@ -97,15 +98,18 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                 <h1>${_(u"This dataset has some defects")}</h1>
                 <ul class="list-unstyled">
         % if alerts_ranking:
-            % for level in ('critical', 'error', 'warning'):
+            % for level in alert_levels:
 <%
                 count = alerts_ranking.get(level)
                 if count is None:
                     continue
 %>\
                     <li>
-                        ${_(u"{}:").format(_(title_by_level[level]), count)}
-                        <span class="label ${label_class_by_level[level]}">${count}</span>
+                        ${_(u"{}:").format(_(title_by_alert_level[level]), count)}
+                        <span class="label ${label_class_by_alert_level[level]}">${count}</span>
+                    % if level == 'critical':
+                        <span class="glyphicon glyphicon-warning-sign"></span>
+                    % endif
                     </li>
             % endfor
         % endif
