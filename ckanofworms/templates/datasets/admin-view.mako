@@ -28,6 +28,9 @@ import copy
 import json
 
 from ckanofworms import model, urls
+
+
+N_ = lambda message: message
 %>
 
 
@@ -65,7 +68,53 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
 <%def name="view_fields()" filter="trim">
 <%
     dataset_alerts = copy.deepcopy(dataset.alerts) if dataset.alerts is not None else {}
+    alerts_ranking = dict(
+        (level, sum(
+            len(author_alerts['error'])
+            for author_alerts in level_alerts.itervalues()
+            ))
+        for level, level_alerts in (dataset.alerts or {}).iteritems()
+        if level in ('critical', 'error', 'warning')
+        )
+    label_class_by_level = dict(
+        critical = 'label-danger',
+        debug = 'label-info',
+        error = 'label-danger',
+        info = 'label-info',
+        warning = 'label-warning',
+        )
+    title_by_level = dict(
+        critical = N_(u"Critical"),
+        debug = N_(u"Debug"),
+        error = N_(u"Error"),
+        info = N_(u"Info"),
+        warning = N_(u"Warning"),
+        )
 %>\
+    % if alerts_ranking or dataset.weight is not None and dataset.weight < 4.0:
+        <div class="jumbotron">
+            <div class="container">
+        % if alerts_ranking:
+                <h1>${_(U"This dataset has defects!")}</h1>
+                <ul>
+            % for level in ('critical', 'error', 'warning'):
+<%
+                count = alerts_ranking.get(level)
+                if count is None:
+                    continue
+%>\
+                    <li><span class="label ${label_class_by_level[level]}">${_(u"{}: {}").format(
+                        _(title_by_level[level]), count)}</span></li>
+            % endfor
+                </ul>
+        % endif
+        % if dataset.weight is not None and dataset.weight < 4.0:
+                <h1>${_(U"Bad search rank!")} <small>${_(u"Score: {}").format(dataset.weight)}</small></h1>
+        % endif
+                <p><a class="btn btn-primary btn-lg" href="${dataset.get_back_url(ctx)}">${_(u"Repair")}</a></p>
+            </div>
+        </div>
+    % endif
         <div class="row">
             <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Name"))}</b></div>
             <div class="col-sm-10">${dataset.name}</div>
