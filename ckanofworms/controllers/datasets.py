@@ -852,6 +852,80 @@ def api1_index(req):
 
 
 @wsgihelpers.wsgify
+def api1_ranking(req):
+    """Return a JSON object describing the various scores of a datasets (alerts, weights)."""
+    ctx = contexts.Ctx(req)
+    headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
+
+    assert req.method == 'GET', req.method
+    params = req.GET
+    inputs = dict(
+        callback = params.get('callback'),
+        context = params.get('context'),
+        )
+    data, errors = conv.pipe(
+        conv.struct(
+            dict(
+                callback = conv.pipe(
+                    conv.test_isinstance(basestring),
+                    conv.cleanup_line,
+                    ),
+                context = conv.test_isinstance(basestring),
+                ),
+            ),
+        )(inputs, state = ctx)
+    if errors is not None:
+        return wsgihelpers.respond_json(ctx,
+            dict(
+                apiVersion = '1.0',
+                context = inputs['context'],
+                error = dict(
+                    code = 400,  # Bad Request
+                    errors = [
+                        dict(
+                            location = key,
+                            message = error,
+                            )
+                        for key, error in sorted(errors.iteritems())
+                        ],
+                    # message will be automatically defined.
+                    ),
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                ),
+            headers = headers,
+            jsonp = inputs['callback'],
+            )
+
+    dataset = ctx.node
+    ranking = dict(
+        id = dataset._id,
+        name = dataset.name,
+        title = dataset.title,
+        weight = dataset.weight,
+        )
+    for level, level_alerts in (dataset.alerts or {}).iteritems():
+        ranking[level] = sum(
+            len(author_alerts['error'])
+            for author_alerts in level_alerts.itervalues()
+            )
+
+    return wsgihelpers.respond_json(ctx,
+        collections.OrderedDict(sorted(dict(
+            apiVersion = '1.0',
+            context = data['context'],
+            method = req.script_name,
+            params = inputs,
+            url = req.url.decode('utf-8'),
+            value = ranking,
+            ).iteritems())),
+        headers = headers,
+        jsonp = data['callback'],
+        )
+
+
+@wsgihelpers.wsgify
 def api1_related(req):
     """Controller created for Epita application"""
     ctx = contexts.Ctx(req)
@@ -1448,6 +1522,7 @@ def route_api1(environ, start_response):
         ('DELETE', '^/?$', api1_delete),
         ('GET', '^/?$', api1_get),
         ('POST', '^/alert/?$', api1_alert),
+        ('GET', '^/ranking/?$', api1_ranking),
         )
     return router(environ, start_response)
 
