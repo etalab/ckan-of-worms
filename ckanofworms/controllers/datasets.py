@@ -52,6 +52,7 @@ inputs_to_dataset_data = conv.struct(
     default = 'drop',
     )
 log = logging.getLogger(__name__)
+N_ = lambda message: message
 
 
 @wsgihelpers.wsgify
@@ -861,6 +862,7 @@ def api1_related(req):
     inputs = dict(
         callback = params.get('callback'),
         context = params.get('context'),
+        territory = params.getall('territory')
         )
     data, errors = conv.pipe(
         conv.struct(
@@ -870,6 +872,14 @@ def api1_related(req):
                     conv.cleanup_line,
                     ),
                 context = conv.test_isinstance(basestring),
+                territory = conv.uniform_sequence(
+                    conv.pipe(
+                        conv.test_isinstance(basestring),
+                        conv.cleanup_line,
+                        conv.test(lambda s: s.count(u'/') == 1, error = N_(u'Territory must have the form "kind/code"'))
+                        ),
+                    drop_none_items = True,
+                    ),
                 ),
             ),
         )(inputs, state = ctx)
@@ -900,6 +910,8 @@ def api1_related(req):
     criteria = dict(
         related = {'$exists': True},
         )
+    if data['territory']:
+        criteria['territorial_coverage'] = {'$in': data['territory']}
     cursor = model.Dataset.find(criteria, as_class = collections.OrderedDict)
     return wsgihelpers.respond_json(ctx,
         collections.OrderedDict(sorted(dict(
