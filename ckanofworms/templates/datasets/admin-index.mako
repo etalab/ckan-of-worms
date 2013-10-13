@@ -128,7 +128,7 @@ title_by_alert_level = dict(
                         <ul class="list-inline">
                 % if dataset.weight is not None:
                             <li>
-                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                <a href class="btn btn-default btn-xs" data-placement="left" data-toggle="tooltip" title="${
                                         _(u"Search ranking")}">
                                     <span class="glyphicon glyphicon-star"></span>
                                 </a>
@@ -137,7 +137,7 @@ title_by_alert_level = dict(
                 % endif
                 % if dataset.temporal_coverage_from is not None or dataset.temporal_coverage_to is not None:
                             <li>
-                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                <a href class="btn btn-default btn-xs" data-placement="left" data-toggle="tooltip" title="${
                                         _(u"Temporal coverage")}">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </a>
@@ -147,7 +147,7 @@ title_by_alert_level = dict(
                 % endif
                 % if dataset.frequency is not None:
                             <li>
-                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                <a href class="btn btn-default btn-xs" data-placement="left" data-toggle="tooltip" title="${
                                         _(u"Update frequency")}">
                                     <span class="glyphicon glyphicon-time"></span>
                                 </a>
@@ -156,7 +156,7 @@ title_by_alert_level = dict(
                 % endif
                 % if dataset.territorial_coverage is not None:
                             <li>
-                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                <a href class="btn btn-default btn-xs" data-placement="left" data-toggle="tooltip" title="${
                                         _(u"Territorial coverage")}">
                                     <span class="glyphicon glyphicon-globe"></span>
                                 </a>
@@ -165,7 +165,7 @@ title_by_alert_level = dict(
                 % endif
                 % if dataset.territorial_coverage_granularity is not None:
                             <li>
-                                <a href class="btn btn-default btn-xs" data-placement="left" rel="tooltip" title="${
+                                <a href class="btn btn-default btn-xs" data-placement="left" data-toggle="tooltip" title="${
                                         _(u"Territorial coverage granularity")}">
                                     <span class="glyphicon glyphicon-screenshot"></span>
                                 </a>
