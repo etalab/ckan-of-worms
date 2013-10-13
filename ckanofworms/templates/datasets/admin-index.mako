@@ -130,7 +130,11 @@ title_by_alert_level = dict(
                             <li>
                                 <a href class="btn btn-default btn-xs" data-placement="left" data-toggle="tooltip" title="${
                                         _(u"Search ranking")}">
+                    % if dataset.weight < 3:
+                                    <span class="glyphicon glyphicon-star text-danger"></span>
+                    % else:
                                     <span class="glyphicon glyphicon-star"></span>
+                    % endif
                                 </a>
                                 <span class="badge">${_(u'{:3.2f}').format(dataset.weight)}</span>
                             </li>

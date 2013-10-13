@@ -92,7 +92,7 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         if level in alert_levels
         )
 %>\
-    % if alerts_ranking or dataset.weight is not None and dataset.weight < 4.0:
+    % if alerts_ranking or dataset.weight is not None and dataset.weight < 3.0:
         <div class="jumbotron">
             <div class="container">
                 <h1>${_(u"This dataset has some defects")}</h1>
@@ -113,12 +113,12 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
                     </li>
             % endfor
         % endif
-##        % if dataset.weight is not None and dataset.weight < 4.0:
+        % if dataset.weight is not None and dataset.weight < 3.0:
                     <li>
                         ${_(u"Low search rank:")}
-                        <span class="label label-default">${_(u"{:3.2f}").format(dataset.weight or 1.23)}</span>
+                        <span class="label label-default">${_(u"{:3.2f}").format(dataset.weight)}</span>
                     </li>
-##        % endif
+        % endif
                 </ul>
                 <p>${_(u"Please look at the alerts below and repair this dataset now.")}</p>
                 <p><a class="btn btn-primary btn-lg" href="${dataset.get_back_url(ctx)}">${_(u"Repair")}</a></p>
