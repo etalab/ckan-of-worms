@@ -166,8 +166,8 @@ def admin_index(req):
                     conv.cleanup_line,
                     model.Organization.make_title_to_instance(),
                     ),
-                tag = conv.input_to_name,
-                term = conv.input_to_name,
+                tag = conv.input_to_ckan_tag_name,
+                term = conv.input_to_ckan_name,
                 ),
             ),
         conv.rename_item('page', 'page_number'),
@@ -1400,7 +1400,7 @@ def api1_set_ckan_related(req):
 
     related = data['value']
     dataset, error = conv.pipe(
-        conv.input_to_name,
+        conv.input_to_ckan_name,
         conv.not_none,
         model.Dataset.make_id_or_name_to_instance(),
         )(related.get('dataset_id'), state = ctx)
@@ -1464,7 +1464,7 @@ def route_admin(environ, start_response):
     ctx = contexts.Ctx(req)
 
     dataset, error = conv.pipe(
-        conv.input_to_name,
+        conv.input_to_ckan_name,
         conv.not_none,
         model.Dataset.make_id_or_name_to_instance(),
         )(req.urlvars.get('id_or_name'), state = ctx)
@@ -1497,7 +1497,7 @@ def route_api1(environ, start_response):
     ctx = contexts.Ctx(req)
 
     dataset, error = conv.pipe(
-        conv.input_to_name,
+        conv.input_to_ckan_name,
         conv.not_none,
         model.Dataset.make_id_or_name_to_instance(),
         )(req.urlvars.get('id_or_name'), state = ctx)

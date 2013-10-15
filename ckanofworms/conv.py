@@ -34,8 +34,6 @@ from biryani1.jsonconv import *
 from biryani1.states import default_state, State
 from ckantoolbox.ckanconv import *
 
-from . import texthelpers
-
 
 ckan_group_to_attributes = pipe(
     make_ckan_json_to_group(drop_none_values = 'missing'),
@@ -88,10 +86,6 @@ ckan_user_to_account_attributes = pipe(
     make_ckan_json_to_user(drop_none_values = 'missing'),
     rename_item('id', '_id'),
     )
-
-
-def input_to_name(value, state = None):
-    return texthelpers.namify(value) or None, None
 
 
 input_to_token = cleanup_line

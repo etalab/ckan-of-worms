@@ -139,7 +139,7 @@ def admin_index(req):
                     conv.cleanup_line,
                     conv.test_in(['created', 'name']),
                     ),
-                term = conv.input_to_name,
+                term = conv.input_to_ckan_name,
                 ),
             ),
         conv.rename_item('page', 'page_number'),
@@ -782,7 +782,7 @@ def route_admin(environ, start_response):
     ctx = contexts.Ctx(req)
 
     organization, error = conv.pipe(
-        conv.input_to_name,
+        conv.input_to_ckan_name,
         conv.not_none,
         model.Organization.make_id_or_name_to_instance(),
         )(req.urlvars.get('id_or_name'), state = ctx)
@@ -813,7 +813,7 @@ def route_api1(environ, start_response):
     ctx = contexts.Ctx(req)
 
     organization, error = conv.pipe(
-        conv.input_to_name,
+        conv.input_to_ckan_name,
         conv.not_none,
         model.Organization.make_id_or_name_to_instance(),
         )(req.urlvars.get('id_or_name'), state = ctx)

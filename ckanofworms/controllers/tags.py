@@ -44,7 +44,7 @@ def api1_typeahead(req):
         )
     data, errors = conv.struct(
         dict(
-            q = conv.input_to_name,
+            q = conv.input_to_ckan_tag_name,
             ),
         )(inputs, state = ctx)
     if errors is not None:

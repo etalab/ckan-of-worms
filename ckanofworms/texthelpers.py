@@ -26,8 +26,8 @@
 """Helpers to handle strings"""
 
 
-from biryani1 import strings
 import bleach
+from ckantoolbox.texthelpers import namify
 import markdown
 
 
@@ -61,40 +61,6 @@ def htmlify_markdown(text):
         return u''
     return bleach.clean(markdown.markdown(text), attributes = bleach_allowed_attributes, styles = bleach_allowed_styles,
         tags = bleach_allowed_tags)
-
-
-def namify(text, encoding = 'utf-8'):
-    """Convert a string to a CKAN name."""
-    if text is None:
-        return None
-    if isinstance(text, str):
-        text = text.decode(encoding)
-    assert isinstance(text, unicode), str((text,))
-    simplified = u''.join(namify_char(unicode_char) for unicode_char in text)
-    # CKAN accepts names with duplicate "-" or "_" and/or ending with "-" or "_".
-    #while u'--' in simplified:
-    #    simplified = simplified.replace(u'--', u'-')
-    #while u'__' in simplified:
-    #    simplified = simplified.replace(u'__', u'_')
-    #simplified = simplified.strip(u'-_')
-    return simplified
-
-
-def namify_char(unicode_char):
-    """Convert an unicode character to a subset of lowercase ASCII characters or an empty string.
-
-    The result can be composed of several characters (for example, 'œ' becomes 'oe').
-    """
-    chars = strings.unicode_char_to_ascii(unicode_char)
-    if chars:
-        chars = chars.lower()
-        split_chars = []
-        for char in chars:
-            if char not in '-_0123456789abcdefghijklmnopqrstuvwxyz':
-                char = '-'
-            split_chars.append(char)
-        chars = ''.join(split_chars)
-    return chars
 
 
 def textify_markdown(text):
@@ -138,6 +104,6 @@ def truncate(text, length = 30, indicator = u'…', whole_word = False):
         while i >= 0 and text[i].isspace():
             i -= 1
         if i > 0:
-            return text[:i+1] + indicator
+            return text[:i + 1] + indicator
         # Entire text before break is one word.
     return text[:short_length] + indicator
