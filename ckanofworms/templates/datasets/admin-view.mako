@@ -546,6 +546,17 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         <%self:field_alerts alerts="${alerts}"/>
         % endif
 <%
+            alerts = self.attr.extract_item_alerts(dataset_alerts, 'url')
+            value = dataset.get('url')
+%>\
+            % if value is not None or alerts:
+                <div class="row">
+                    <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("URL (in supplier site)"))}</b></div>
+                    <div class="break-word col-sm-10"><a href="${value}">${value}</a></div>
+                </div>
+                <%self:field_alerts alerts="${alerts}"/>
+            % endif
+<%
         alerts = self.attr.extract_item_alerts(dataset_alerts, 'license_id')
         value = dataset.license_id
 %>\
