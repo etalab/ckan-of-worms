@@ -547,7 +547,7 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         % endif
 <%
             alerts = self.attr.extract_item_alerts(dataset_alerts, 'url')
-            value = dataset.get('url')
+            value = dataset.url
 %>\
             % if value is not None or alerts:
                 <div class="row">
