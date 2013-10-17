@@ -229,6 +229,14 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             return None
         return urlparse.urljoin(conf['ckan_url'], u'dataset/{}'.format(self.name))
 
+    @classmethod
+    def get_class_back_url(cls, ctx, *path, **query):
+        return urlparse.urljoin(conf['ckan_url'], u'dataset')
+
+    @classmethod
+    def get_class_front_url(cls, ctx, *path, **query):
+        return urlparse.urljoin(conf['weckan_url'], u'dataset')
+
     def get_front_url(self, ctx, *path, **query):
         if self.name is None:
             return None
@@ -324,6 +332,24 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
         if self._id is None and self.name is None:
             return None
         return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
+
+    def get_back_url(self, ctx, *path, **query):
+        if self.name is None:
+            return None
+        return urlparse.urljoin(conf['ckan_url'], u'group/{}'.format(self.name))
+
+    @classmethod
+    def get_class_back_url(cls, ctx, *path, **query):
+        return urlparse.urljoin(conf['ckan_url'], u'group')
+
+    @classmethod
+    def get_class_front_url(cls, ctx, *path, **query):
+        return urlparse.urljoin(conf['weckan_url'], u'group')
+
+    def get_front_url(self, ctx, *path, **query):
+        if self.name is None:
+            return None
+        return urlparse.urljoin(conf['weckan_url'], u'group/{}'.format(self.name))
 
     def get_title(self, ctx):
         return self.title or self.name or self._id
@@ -428,6 +454,24 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
         if self._id is None and self.name is None:
             return None
         return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
+
+    def get_back_url(self, ctx, *path, **query):
+        if self.name is None:
+            return None
+        return urlparse.urljoin(conf['ckan_url'], u'organization/{}'.format(self.name))
+
+    @classmethod
+    def get_class_back_url(cls, ctx, *path, **query):
+        return urlparse.urljoin(conf['ckan_url'], u'organization')
+
+    @classmethod
+    def get_class_front_url(cls, ctx, *path, **query):
+        return urlparse.urljoin(conf['weckan_url'], u'organization')
+
+    def get_front_url(self, ctx, *path, **query):
+        if self.name is None:
+            return None
+        return urlparse.urljoin(conf['weckan_url'], u'organization/{}'.format(self.name))
 
     def get_title(self, ctx):
         return self.title or self.name or self._id

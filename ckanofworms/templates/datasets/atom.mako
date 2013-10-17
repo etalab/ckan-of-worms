@@ -32,7 +32,9 @@ from ckanofworms import conf, model, texthelpers, urls
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>${conf['realm']}</title>
     <id>${urls.get_full_url(ctx, 'api', '1', 'datasets', **urls.relative_query(inputs))}</id>
-    <link href="${model.Dataset.get_admin_class_full_url(ctx)}"/>
+    <link href="${model.Dataset.get_admin_class_full_url(ctx) if data['target'] is None \
+            else model.Dataset.get_class_back_url(ctx) if data['target'] == 'back' \
+            else model.Dataset.get_class_front_url(ctx)}"/>
     <link href="${urls.get_full_url(ctx, 'api', '1', 'datasets', **urls.relative_query(inputs))}" rel="self"/>
 ##    <author>
 ##        <name>${_('CKAN-of-Worms contributors')}</name>
@@ -58,14 +60,18 @@ from ckanofworms import conf, model, texthelpers, urls
     <entry>
         <title>${dataset.title}</title>
         <id>${dataset.get_admin_full_url(ctx)}</id>
-        <link href="${dataset.get_admin_full_url(ctx)}"/>
+        <link href="${dataset.get_admin_full_url(ctx) if data['target'] is None \
+                else dataset.get_back_url(ctx) if data['target'] == 'back' \
+                else dataset.get_front_url(ctx)}"/>
 <%
         organization = dataset.get_organization(ctx)
 %>\
         % if organization is not None:
         <author>
             <name>${organization.title}</name>
-            <uri>${organization.get_admin_full_url(ctx)}</uri>
+            <uri>${organization.get_admin_full_url(ctx) if data['target'] is None \
+                    else organization.get_back_url(ctx) if data['target'] == 'back' \
+                    else organization.get_front_url(ctx)}</uri>
         </author>
         % endif
         % for tag in (dataset.tags or []):

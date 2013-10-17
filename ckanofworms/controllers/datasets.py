@@ -835,6 +835,11 @@ def api1_index(req):
             conv.test_isinstance(basestring),
             conv.input_to_ckan_tag_name,
             ),
+        target = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.cleanup_line,
+            conv.test_in(['back', 'front']),
+            ),
         term = conv.pipe(
             conv.test_isinstance(basestring),
             conv.cleanup_line,
@@ -876,6 +881,7 @@ def api1_index(req):
                 dict(
                     page = conv.test_none(),
                     sort = conv.test_none(),
+                    target = conv.test_none(),
                     ),
                 default = conv.noop,
                 )(data, state = ctx)
@@ -892,10 +898,11 @@ def api1_index(req):
                 default = conv.noop,
                 )(data, state = ctx)
         else:
-            # Always use timestamp as sort criteria for Atom format.
+            assert data['format'] == 'json'
             data, errors = conv.struct(
                 dict(
                     page = conv.default(1),
+                    target = conv.test_none(),
                     ),
                 default = conv.noop,
                 )(data, state = ctx)
