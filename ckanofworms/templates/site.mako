@@ -94,6 +94,8 @@ ${conf['realm']}
 
 
 <%def name="feeds()" filter="trim">
+    <link href="${urls.get_url(ctx, 'api', '1', 'datasets', format = 'atom')}" rel="alternate" title="${
+            _(u'{} - Datasets Atom feed').format(conf['realm'])}" type="application/atom+xml">
 </%def>
 
 
