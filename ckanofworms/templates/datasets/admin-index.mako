@@ -332,7 +332,10 @@ title_by_alert_level = dict(
         % endif
             </div>
     % endif
-            <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span> ${_('Search')}</button>
+            <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-search"></span> ${
+                _('Search')}</button>
+            <a href="${urls.get_url(ctx, 'api', '1', 'datasets', **urls.relative_query(inputs,
+                    advanced_search = None, format = 'atom', page = None, sort = None))}">${_('News Feed')}</a>
     % if data['advanced_search']:
             <a class="pull-right" href="${model.Dataset.get_admin_class_url(ctx, **urls.relative_query(inputs,
                     advanced_search = None))}">${_('Simplified Search')}</a>

@@ -80,8 +80,17 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return value, None
 
     @classmethod
+    def get_admin_class_full_url(cls, ctx, *path, **query):
+        return urls.get_full_url(ctx, 'admin', 'accounts', *path, **query)
+
+    @classmethod
     def get_admin_class_url(cls, ctx, *path, **query):
         return urls.get_url(ctx, 'admin', 'accounts', *path, **query)
+
+    def get_admin_full_url(self, ctx, *path, **query):
+        if self._id is None and self.name is None:
+            return None
+        return self.get_admin_class_full_url(ctx, self.name or self._id, *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
         if self._id is None and self.name is None:
@@ -198,8 +207,17 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return weights.compute_dataset_weight(self)
 
     @classmethod
+    def get_admin_class_full_url(cls, ctx, *path, **query):
+        return urls.get_full_url(ctx, 'admin', 'datasets', *path, **query)
+
+    @classmethod
     def get_admin_class_url(cls, ctx, *path, **query):
         return urls.get_url(ctx, 'admin', 'datasets', *path, **query)
+
+    def get_admin_full_url(self, ctx, *path, **query):
+        if self._id is None and self.name is None:
+            return None
+        return self.get_admin_class_full_url(ctx, self.name or self._id, *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
         if self._id is None and self.name is None:
@@ -290,8 +308,17 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
         return value, None
 
     @classmethod
+    def get_admin_class_full_url(cls, ctx, *path, **query):
+        return urls.get_full_url(ctx, 'admin', 'groups', *path, **query)
+
+    @classmethod
     def get_admin_class_url(cls, ctx, *path, **query):
         return urls.get_url(ctx, 'admin', 'groups', *path, **query)
+
+    def get_admin_full_url(self, ctx, *path, **query):
+        if self._id is None and self.name is None:
+            return None
+        return self.get_admin_class_full_url(ctx, self.name or self._id, *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
         if self._id is None and self.name is None:
@@ -385,8 +412,17 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
         return value, None
 
     @classmethod
+    def get_admin_class_full_url(cls, ctx, *path, **query):
+        return urls.get_full_url(ctx, 'admin', 'organizations', *path, **query)
+
+    @classmethod
     def get_admin_class_url(cls, ctx, *path, **query):
         return urls.get_url(ctx, 'admin', 'organizations', *path, **query)
+
+    def get_admin_full_url(self, ctx, *path, **query):
+        if self._id is None and self.name is None:
+            return None
+        return self.get_admin_class_full_url(ctx, self.name or self._id, *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
         if self._id is None and self.name is None:
@@ -451,8 +487,17 @@ class Session(objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper)
     user_id = None
 
     @classmethod
+    def get_admin_class_full_url(cls, ctx, *path, **query):
+        return urls.get_full_url(ctx, 'admin', 'sessions', *path, **query)
+
+    @classmethod
     def get_admin_class_url(cls, ctx, *path, **query):
         return urls.get_url(ctx, 'admin', 'sessions', *path, **query)
+
+    def get_admin_full_url(self, ctx, *path, **query):
+        if self.token is None:
+            return None
+        return self.get_admin_class_full_url(ctx, self.token, *path, **query)
 
     def get_admin_url(self, ctx, *path, **query):
         if self.token is None:
