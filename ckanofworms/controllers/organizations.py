@@ -546,23 +546,105 @@ def api1_index(req):
     ctx = contexts.Ctx(req)
     headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
 
-    assert req.method == 'GET', req.method
-    params = req.GET
-    inputs = dict(
-        callback = params.get('callback'),
-        context = params.get('context'),
-        )
-    data, errors = conv.pipe(
-        conv.struct(
-            dict(
-                callback = conv.pipe(
-                    conv.test_isinstance(basestring),
-                    conv.cleanup_line,
-                    ),
-                context = conv.test_isinstance(basestring),
-                ),
+    assert req.method in ('GET', 'POST'), req.method
+
+    inputs_converters = dict(
+        alerts = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.input_to_slug,
+            conv.test_in(['critical', 'debug', 'error', 'info', 'warning']),
             ),
-        )(inputs, state = ctx)
+        callback = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.cleanup_line,
+            ),
+        context = conv.test_isinstance(basestring),
+        format = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.input_to_slug,
+            conv.test_in(['atom', 'json']),  # When None, return only the IDs of the datasets.
+            ),
+        page = conv.pipe(
+            conv.anything_to_int,
+            conv.test_greater_or_equal(1),
+            # conv.default(1),  # Set below.
+            ),
+        sort = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.cleanup_line,
+            conv.test_in(['created', 'name']),
+            ),
+        target = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.cleanup_line,
+            conv.test_in(['back', 'front']),
+            ),
+        term = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.cleanup_line,
+            ),
+        )
+
+    content_type = req.content_type
+    if content_type is not None:
+        content_type = content_type.split(';', 1)[0].strip()
+    if content_type == 'application/json':
+        inputs, error = conv.pipe(
+            conv.make_input_to_json(),
+            conv.test_isinstance(dict),
+            )(req.body, state = ctx)
+        if error is not None:
+            return wsgihelpers.respond_json(ctx,
+                collections.OrderedDict(sorted(dict(
+                    apiVersion = '1.0',
+                    error = collections.OrderedDict(sorted(dict(
+                        code = 400,  # Bad Request
+                        errors = [error],
+                        message = ctx._(u'Invalid JSON in request POST body'),
+                        ).iteritems())),
+                    method = req.script_name,
+                    params = req.body,
+                    url = req.url.decode('utf-8'),
+                    ).iteritems())),
+                headers = headers,
+                )
+    else:
+        # URL-encoded GET or POST.
+        inputs = dict(req.params)
+
+    data, errors = conv.struct(inputs_converters)(inputs, state = ctx)
+    if errors is None:
+        if data['format'] is None:
+            # Return full list of dataset ids, ignoring page number and sort criteria.
+            data, errors = conv.struct(
+                dict(
+                    page = conv.test_none(),
+                    sort = conv.test_none(),
+                    target = conv.test_none(),
+                    ),
+                default = conv.noop,
+                )(data, state = ctx)
+        elif data['format'] == 'atom':
+            # Always use timestamp as sort criteria for Atom format.
+            data, errors = conv.struct(
+                dict(
+                    page = conv.default(1),
+                    sort = conv.pipe(
+                        conv.test_none(),
+                        conv.default(u'created'),
+                        ),
+                    ),
+                default = conv.noop,
+                )(data, state = ctx)
+        else:
+            assert data['format'] == 'json'
+            data, errors = conv.struct(
+                dict(
+                    page = conv.default(1),
+                    target = conv.test_none(),
+                    ),
+                default = conv.noop,
+                )(data, state = ctx)
     if errors is not None:
         return wsgihelpers.respond_json(ctx,
             dict(
@@ -586,8 +668,63 @@ def api1_index(req):
             headers = headers,
             jsonp = inputs['callback'],
             )
+    data['page_number'] = data.pop('page')
 
-    cursor = model.Organization.get_collection().find(None, [])
+    criteria = {}
+    if data['alerts'] == 'debug':
+        criteria['alerts'] = {'$exists': True}
+    elif data['alerts'] == 'info':
+        criteria['$or'] = [
+            {'alerts.critical': {'$exists': True}},
+            {'alerts.error': {'$exists': True}},
+            {'alerts.info': {'$exists': True}},
+            {'alerts.warning': {'$exists': True}},
+            ]
+    elif data['alerts'] == 'warning':
+        criteria['$or'] = [
+            {'alerts.critical': {'$exists': True}},
+            {'alerts.error': {'$exists': True}},
+            {'alerts.warning': {'$exists': True}},
+            ]
+    elif data['alerts'] == 'error':
+        criteria['$or'] = [
+            {'alerts.critical': {'$exists': True}},
+            {'alerts.error': {'$exists': True}},
+            ]
+    elif data['alerts'] == 'critical':
+        criteria['alerts.critical'] = {'$exists': True}
+    if data['term'] is not None:
+        criteria['name'] = re.compile(re.escape(data['term']))
+
+    if data['format'] is None:
+        # Return full list of organization ids, ignoring page number and sort criteria.
+        cursor = model.Organization.get_collection().find(criteria, [])
+        return wsgihelpers.respond_json(ctx,
+            collections.OrderedDict(sorted(dict(
+                apiVersion = '1.0',
+                context = data['context'],
+                method = req.script_name,
+                params = inputs,
+                url = req.url.decode('utf-8'),
+                value = [
+                    organization_attributes['_id']
+                    for organization_attributes in cursor
+                    ],
+                ).iteritems())),
+            headers = headers,
+            jsonp = data['callback'],
+            )
+    cursor = model.Organization.find(criteria, as_class = collections.OrderedDict)
+    pager = paginations.Pager(item_count = cursor.count(), page_number = data['page_number'])
+    if data['sort'] == 'name':
+        cursor.sort([('name', pymongo.ASCENDING)])
+    elif data['sort'] == 'created':
+        cursor.sort([(data['sort'], pymongo.DESCENDING), ('name', pymongo.ASCENDING)])
+    cursor.skip(pager.first_item_index or 0).limit(pager.page_size)
+    if data['format'] == 'atom':
+        return templates.render(ctx, '/organizations/atom.mako', cursor = cursor, data = data, inputs = inputs,
+            pager = pager)
+    assert data['format'] == 'json'
     return wsgihelpers.respond_json(ctx,
         collections.OrderedDict(sorted(dict(
             apiVersion = '1.0',
@@ -596,8 +733,8 @@ def api1_index(req):
             params = inputs,
             url = req.url.decode('utf-8'),
             value = [
-                organization_attributes['_id']
-                for organization_attributes in cursor
+                conv.check(conv.method('turn_to_json'))(organization, state = ctx)
+                for organization in cursor
                 ],
             ).iteritems())),
         headers = headers,
@@ -844,7 +981,7 @@ def route_api1(environ, start_response):
 
 def route_api1_class(environ, start_response):
     router = urls.make_router(
-        ('GET', '^/?$', api1_index),
+        (('GET', 'POST'), '^/?$', api1_index),
         ('POST', '^/ckan/?$', api1_set_ckan),
         ('GET', '^/typeahead/?$', api1_typeahead),
         (None, '^/(?P<id_or_name>[^/]+)(?=/|$)', route_api1),
