@@ -1065,6 +1065,7 @@ def api1_ranking(req):
         id = dataset._id,
         name = dataset.name,
         title = dataset.title,
+        url = dataset.get_url(ctx),
         weight = dataset.weight,
         )
     for level, level_alerts in (dataset.alerts or {}).iteritems():
