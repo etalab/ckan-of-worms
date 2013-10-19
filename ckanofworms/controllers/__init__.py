@@ -60,5 +60,13 @@ def make_router():
         (None, '^/api/1/tags(?=/|$)', tags.route_api1_class),
         ('POST', '^/login/?$', accounts.login),
         ('POST', '^/logout/?$', accounts.logout),
+        ('GET', '^/sitemap/?$', sitemap),
         )
     return router
+
+
+@wsgihelpers.wsgify
+def sitemap(req):
+    ctx = contexts.Ctx(req)
+    req.response.content_type = 'application/xml'
+    return templates.render(ctx, '/sitemap.mako')
