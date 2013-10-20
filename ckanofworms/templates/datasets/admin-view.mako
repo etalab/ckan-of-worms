@@ -121,7 +121,8 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         % endif
                 </ul>
                 <p>${_(u"Please look at the alerts below and repair this dataset now.")}</p>
-                <p><a class="btn btn-primary btn-lg" href="${dataset.get_back_url(ctx)}">${_(u"Repair")}</a></p>
+                <p><a class="btn btn-primary btn-lg" href="${dataset.get_back_url(ctx)}" target="_blank">${
+                    _(u"Repair")}</a></p>
             </div>
         </div>
     % endif
@@ -202,7 +203,7 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
             % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("URL"))}</b></div>
-                    <div class="break-word col-sm-10"><a href="${value}">${value}</a></div>
+                    <div class="break-word col-sm-10"><a href="${value}" target="_blank">${value}</a></div>
                 </div>
                 <%self:field_alerts alerts="${alerts}"/>
             % endif
@@ -552,7 +553,7 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
             % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("URL (in supplier site)"))}</b></div>
-                    <div class="break-word col-sm-10"><a href="${value}">${value}</a></div>
+                    <div class="break-word col-sm-10"><a href="${value}" target="_blank">${value}</a></div>
                 </div>
                 <%self:field_alerts alerts="${alerts}"/>
             % endif
@@ -694,7 +695,7 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
             % if value is not None or alerts:
                 <div class="row">
                     <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("URL"))}</b></div>
-                    <div class="break-word col-sm-10"><a href="${value}">${value}</a></div>
+                    <div class="break-word col-sm-10"><a href="${value}" target="_blank">${value}</a></div>
                 </div>
                 <%self:field_alerts alerts="${alerts}"/>
             % endif

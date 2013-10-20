@@ -167,6 +167,7 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     territorial_coverage = None
     territorial_coverage_granularity = None
     title = None
+    url = None
 
     def after_delete(self, ctx, old_bson):
         fedmsg.publish(
@@ -224,13 +225,16 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             return None
         return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
 
-    def get_back_url(self, ctx, *path, **query):
+    def get_back_url(self, ctx):
+        if self.url is not None:
+            # When dataset has been supplied by another repository, it should be edited in the supplier's site.
+            return self.url
         if self.name is None:
             return None
         return urlparse.urljoin(conf['ckan_url'], u'dataset/{}'.format(self.name))
 
     @classmethod
-    def get_class_back_url(cls, ctx, *path, **query):
+    def get_class_back_url(cls, ctx):
         return urlparse.urljoin(conf['ckan_url'], u'dataset')
 
     @classmethod
@@ -333,13 +337,13 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
             return None
         return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
 
-    def get_back_url(self, ctx, *path, **query):
+    def get_back_url(self, ctx):
         if self.name is None:
             return None
         return urlparse.urljoin(conf['ckan_url'], u'group/{}'.format(self.name))
 
     @classmethod
-    def get_class_back_url(cls, ctx, *path, **query):
+    def get_class_back_url(cls, ctx):
         return urlparse.urljoin(conf['ckan_url'], u'group')
 
     @classmethod
@@ -455,13 +459,13 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
             return None
         return self.get_admin_class_url(ctx, self.name or self._id, *path, **query)
 
-    def get_back_url(self, ctx, *path, **query):
+    def get_back_url(self, ctx):
         if self.name is None:
             return None
         return urlparse.urljoin(conf['ckan_url'], u'organization/{}'.format(self.name))
 
     @classmethod
-    def get_class_back_url(cls, ctx, *path, **query):
+    def get_class_back_url(cls, ctx):
         return urlparse.urljoin(conf['ckan_url'], u'organization')
 
     @classmethod
