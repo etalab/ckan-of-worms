@@ -1,0 +1,8 @@
+[main]
+host = https://www.transifex.com
+
+[ckan-of-worms.python]
+file_filter = ckanofworms/i18n/<lang>/LC_MESSAGES/ckan-of-worms.po
+source_file = ckanofworms/i18n/ckan-of-worms.pot
+source_lang = en
+

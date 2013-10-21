@@ -69,7 +69,7 @@ ${account.get_title(ctx)} - ${parent.title_content()}
 %>\
         % if value is not None or alerts:
         <div class="row">
-            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Fullname"))}</b></div>
+            <div class="col-sm-2 text-right"><b>${_(u'{0}:').format(_("Full Name"))}</b></div>
             <div class="col-sm-10">${value}</div>
         </div>
         <%self:field_alerts alerts="${alerts}"/>

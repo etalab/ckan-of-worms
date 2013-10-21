@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CKAN-of-Worms 0.1dev\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-10-21 18:33+0200\n"
+"POT-Creation-Date: 2013-10-21 23:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -668,6 +668,7 @@ msgid "ID"
 msgstr ""
 
 #: ckanofworms/templates/accounts/admin-index.mako:63
+#: ckanofworms/templates/accounts/admin-view.mako:72
 msgid "Full Name"
 msgstr ""
 
@@ -716,10 +717,6 @@ msgstr ""
 #: ckanofworms/templates/groups/admin-view.mako:51
 #: ckanofworms/templates/organizations/admin-view.mako:52
 msgid "JSON"
-msgstr ""
-
-#: ckanofworms/templates/accounts/admin-view.mako:72
-msgid "Fullname"
 msgstr ""
 
 #: ckanofworms/templates/accounts/admin-view.mako:105
