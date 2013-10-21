@@ -1,0 +1,1228 @@
+# French translations for CKAN-of-Worms.
+# Copyright (C) 2013 ORGANIZATION
+# This file is distributed under the same license as the CKAN-of-Worms
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: CKAN-of-Worms 0.1dev\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2013-10-21 18:33+0200\n"
+"PO-Revision-Date: 2013-10-11 23:28+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: fr <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: ckanofworms/conv.py:138
+msgid "Errors can't contain a list"
+msgstr ""
+
+#: ckanofworms/model.py:120
+msgid "No account with name {0}"
+msgstr ""
+
+#: ckanofworms/model.py:124
+msgid "No account with ID {0}"
+msgstr ""
+
+#: ckanofworms/model.py:268
+msgid "No dataset with name {0}"
+msgstr ""
+
+#: ckanofworms/model.py:272
+msgid "No dataset with ID {0}"
+msgstr ""
+
+#: ckanofworms/model.py:372
+msgid "No group with name {0}"
+msgstr ""
+
+#: ckanofworms/model.py:376
+msgid "No group with ID {0}"
+msgstr ""
+
+#: ckanofworms/model.py:394
+msgid "No group with title {0}"
+msgstr ""
+
+#: ckanofworms/model.py:494
+msgid "No organization with name {0}"
+msgstr ""
+
+#: ckanofworms/model.py:498
+msgid "No organization with ID {0}"
+msgstr ""
+
+#: ckanofworms/model.py:516
+msgid "No organization with title {0}"
+msgstr ""
+
+#: ckanofworms/model.py:558
+msgid "Session {0}"
+msgstr ""
+
+#: ckanofworms/model.py:559 ckanofworms/templates/sessions/admin-index.mako:47
+msgid "Session {0} of {1}"
+msgstr ""
+
+#: ckanofworms/model.py:574
+msgid "No session with token {0}"
+msgstr ""
+
+#: ckanofworms/model.py:629
+msgid "You must be an administrator to access this page."
+msgstr ""
+
+#: ckanofworms/objects.py:129
+msgid "Expected a dictionary. Got {0}"
+msgstr ""
+
+#: ckanofworms/urls.py:129
+msgid "Invalid path: {0}"
+msgstr ""
+
+#: ckanofworms/urls.py:150
+msgid "Path not found: {0}"
+msgstr ""
+
+#: ckanofworms/urls.py:156
+msgid "Page not found: {0}"
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:46
+msgid "Request is faulty"
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:47
+msgid "Access is restricted to authorized persons."
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:48
+msgid "Access is forbidden."
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:49
+msgid "The requested page was not found."
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:52
+msgid "You must login to access this page."
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:55 ckanofworms/wsgihelpers.py:58
+msgid "Unable to Access"
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:56 ckanofworms/wsgihelpers.py:57
+msgid "Access Denied"
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:161
+msgid "{0} <a href=\"{1}\">{1}</a>."
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:162
+msgid "You'll be redirected to page"
+msgstr ""
+
+#: ckanofworms/wsgihelpers.py:170
+msgid "Redirection in progress..."
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:67
+#: ckanofworms/controllers/datasets.py:65 ckanofworms/controllers/groups.py:64
+#: ckanofworms/controllers/organizations.py:64
+#: ckanofworms/controllers/sessions.py:47
+msgid "Deletion forbidden"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:68
+msgid "You can not delete an account."
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:69
+#: ckanofworms/controllers/accounts.py:87
+#: ckanofworms/controllers/datasets.py:67
+#: ckanofworms/controllers/datasets.py:85 ckanofworms/controllers/groups.py:66
+#: ckanofworms/controllers/groups.py:84
+#: ckanofworms/controllers/organizations.py:66
+#: ckanofworms/controllers/organizations.py:84
+#: ckanofworms/controllers/sessions.py:49
+msgid "Operation denied"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:85
+#: ckanofworms/controllers/datasets.py:83 ckanofworms/controllers/groups.py:82
+#: ckanofworms/controllers/organizations.py:82
+msgid "Edition forbidden"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:86
+msgid "You can not edit an account."
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:108
+msgid "An account with the same email already exists."
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:150
+msgid "Account search error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:220
+#: ckanofworms/controllers/accounts.py:644
+#: ckanofworms/controllers/datasets.py:301
+#: ckanofworms/controllers/datasets.py:864
+#: ckanofworms/controllers/datasets.py:1344
+#: ckanofworms/controllers/datasets.py:1483
+#: ckanofworms/controllers/groups.py:217 ckanofworms/controllers/groups.py:641
+#: ckanofworms/controllers/organizations.py:218
+#: ckanofworms/controllers/organizations.py:603
+#: ckanofworms/controllers/organizations.py:779
+msgid "Invalid JSON in request POST body"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:270
+#: ckanofworms/controllers/accounts.py:423
+#: ckanofworms/controllers/accounts.py:678
+#: ckanofworms/controllers/datasets.py:351
+#: ckanofworms/controllers/datasets.py:508
+#: ckanofworms/controllers/datasets.py:626
+#: ckanofworms/controllers/datasets.py:1378
+#: ckanofworms/controllers/datasets.py:1517
+#: ckanofworms/controllers/groups.py:267 ckanofworms/controllers/groups.py:420
+#: ckanofworms/controllers/groups.py:675
+#: ckanofworms/controllers/organizations.py:268
+#: ckanofworms/controllers/organizations.py:421
+#: ckanofworms/controllers/organizations.py:813
+msgid "Bad parameters in request"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:293
+#: ckanofworms/controllers/accounts.py:446
+#: ckanofworms/controllers/accounts.py:701
+#: ckanofworms/controllers/datasets.py:374
+#: ckanofworms/controllers/datasets.py:531
+#: ckanofworms/controllers/datasets.py:649
+#: ckanofworms/controllers/datasets.py:1401
+#: ckanofworms/controllers/datasets.py:1540
+#: ckanofworms/controllers/groups.py:290 ckanofworms/controllers/groups.py:443
+#: ckanofworms/controllers/groups.py:698
+#: ckanofworms/controllers/organizations.py:291
+#: ckanofworms/controllers/organizations.py:444
+#: ckanofworms/controllers/organizations.py:836
+msgid "Unknown API Key: {}"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:308
+#: ckanofworms/controllers/accounts.py:461
+#: ckanofworms/controllers/accounts.py:716
+#: ckanofworms/controllers/datasets.py:389
+#: ckanofworms/controllers/datasets.py:546
+#: ckanofworms/controllers/datasets.py:664
+#: ckanofworms/controllers/datasets.py:1416
+#: ckanofworms/controllers/datasets.py:1555
+#: ckanofworms/controllers/groups.py:305 ckanofworms/controllers/groups.py:458
+#: ckanofworms/controllers/groups.py:713
+#: ckanofworms/controllers/organizations.py:306
+#: ckanofworms/controllers/organizations.py:459
+#: ckanofworms/controllers/organizations.py:851
+msgid "Non-admin API Key: {}"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:326
+#: ckanofworms/controllers/datasets.py:407
+#: ckanofworms/controllers/groups.py:323
+#: ckanofworms/controllers/organizations.py:324
+msgid "Wrong version: {}, expected: {}"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:391
+#: ckanofworms/controllers/datasets.py:476
+#: ckanofworms/controllers/datasets.py:594
+#: ckanofworms/controllers/groups.py:388
+#: ckanofworms/controllers/organizations.py:389
+msgid "Invalid JSON in request DELETE body"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:777
+msgid "Login Error: {0}"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:789
+#: ckanofworms/controllers/accounts.py:796
+msgid "Error while verifying authentication assertion"
+msgstr ""
+
+#: ckanofworms/controllers/accounts.py:861
+#: ckanofworms/controllers/accounts.py:899
+msgid "Account Error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:66
+msgid "You can not delete a dataset."
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:84
+msgid "You can not edit a dataset."
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:106
+msgid "A dataset with the same email already exists."
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:176
+msgid "Dataset search error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:680
+msgid "No dataset containing a related link with ID {0}"
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:689
+msgid "No related link with ID {0}"
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:697
+msgid "Related Error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:1116
+msgid "Territory must have the form \"kind/code\""
+msgstr ""
+
+#: ckanofworms/controllers/datasets.py:1577
+#: ckanofworms/controllers/datasets.py:1635
+#: ckanofworms/controllers/datasets.py:1675
+msgid "Dataset Error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/groups.py:65
+msgid "You can not delete a group."
+msgstr ""
+
+#: ckanofworms/controllers/groups.py:83
+msgid "You can not edit a group."
+msgstr ""
+
+#: ckanofworms/controllers/groups.py:105
+msgid "A group with the same email already exists."
+msgstr ""
+
+#: ckanofworms/controllers/groups.py:147 ckanofworms/controllers/groups.py:755
+msgid "Group search error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/groups.py:789 ckanofworms/controllers/groups.py:827
+msgid "Group Error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/organizations.py:65
+msgid "You can not delete an organization."
+msgstr ""
+
+#: ckanofworms/controllers/organizations.py:83
+msgid "You can not edit an organization."
+msgstr ""
+
+#: ckanofworms/controllers/organizations.py:105
+msgid "An organization with the same email already exists."
+msgstr ""
+
+#: ckanofworms/controllers/organizations.py:148
+#: ckanofworms/controllers/organizations.py:893
+msgid "Organization search error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/organizations.py:927
+#: ckanofworms/controllers/organizations.py:965
+msgid "Organization Error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/sessions.py:48
+msgid "You can not delete a session."
+msgstr ""
+
+#: ckanofworms/controllers/sessions.py:70
+msgid "Page number error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/sessions.py:98
+msgid "Session Error: {}"
+msgstr ""
+
+#: ckanofworms/controllers/tags.py:51
+msgid "Tag search error: {}"
+msgstr ""
+
+#: ckanofworms/templates/index.mako:54
+msgid "Welcome to CKAN-of-Worms"
+msgstr ""
+
+#: ckanofworms/templates/index.mako:55
+msgid "A logger for errors found in CKAN datasets"
+msgstr ""
+
+#: ckanofworms/templates/index.mako:57
+msgid "Sign In"
+msgstr ""
+
+#: ckanofworms/templates/object-admin-view.mako:65
+msgid "(signaled by <em>{0}</em>, {1})"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:60
+msgid "Home"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:78
+msgid "Error!"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:89
+msgid "Please, correct the informations below."
+msgstr ""
+
+#: ckanofworms/templates/site.mako:98
+msgid "{} - Datasets Atom feed"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:100
+msgid "{} - Organizations Atom feed"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:108
+#: ckanofworms/templates/accounts/admin-view.mako:72
+#: ckanofworms/templates/accounts/admin-view.mako:83
+#: ckanofworms/templates/accounts/admin-view.mako:94
+#: ckanofworms/templates/accounts/admin-view.mako:105
+#: ckanofworms/templates/accounts/admin-view.mako:116
+#: ckanofworms/templates/accounts/admin-view.mako:142
+#: ckanofworms/templates/accounts/admin-view.mako:153
+#: ckanofworms/templates/accounts/admin-view.mako:164
+#: ckanofworms/templates/accounts/admin-view.mako:175
+#: ckanofworms/templates/accounts/admin-view.mako:181
+#: ckanofworms/templates/accounts/admin-view.mako:193
+#: ckanofworms/templates/datasets/admin-view.mako:130
+#: ckanofworms/templates/datasets/admin-view.mako:135
+#: ckanofworms/templates/datasets/admin-view.mako:145
+#: ckanofworms/templates/datasets/admin-view.mako:170
+#: ckanofworms/templates/datasets/admin-view.mako:183
+#: ckanofworms/templates/datasets/admin-view.mako:194
+#: ckanofworms/templates/datasets/admin-view.mako:205
+#: ckanofworms/templates/datasets/admin-view.mako:216
+#: ckanofworms/templates/datasets/admin-view.mako:227
+#: ckanofworms/templates/datasets/admin-view.mako:238
+#: ckanofworms/templates/datasets/admin-view.mako:251
+#: ckanofworms/templates/datasets/admin-view.mako:268
+#: ckanofworms/templates/datasets/admin-view.mako:281
+#: ckanofworms/templates/datasets/admin-view.mako:292
+#: ckanofworms/templates/datasets/admin-view.mako:305
+#: ckanofworms/templates/datasets/admin-view.mako:323
+#: ckanofworms/templates/datasets/admin-view.mako:337
+#: ckanofworms/templates/datasets/admin-view.mako:356
+#: ckanofworms/templates/datasets/admin-view.mako:374
+#: ckanofworms/templates/datasets/admin-view.mako:387
+#: ckanofworms/templates/datasets/admin-view.mako:402
+#: ckanofworms/templates/datasets/admin-view.mako:420
+#: ckanofworms/templates/datasets/admin-view.mako:431
+#: ckanofworms/templates/datasets/admin-view.mako:442
+#: ckanofworms/templates/datasets/admin-view.mako:453
+#: ckanofworms/templates/datasets/admin-view.mako:464
+#: ckanofworms/templates/datasets/admin-view.mako:476
+#: ckanofworms/templates/datasets/admin-view.mako:493
+#: ckanofworms/templates/datasets/admin-view.mako:504
+#: ckanofworms/templates/datasets/admin-view.mako:515
+#: ckanofworms/templates/datasets/admin-view.mako:526
+#: ckanofworms/templates/datasets/admin-view.mako:538
+#: ckanofworms/templates/datasets/admin-view.mako:555
+#: ckanofworms/templates/datasets/admin-view.mako:566
+#: ckanofworms/templates/datasets/admin-view.mako:577
+#: ckanofworms/templates/datasets/admin-view.mako:588
+#: ckanofworms/templates/datasets/admin-view.mako:599
+#: ckanofworms/templates/datasets/admin-view.mako:610
+#: ckanofworms/templates/datasets/admin-view.mako:621
+#: ckanofworms/templates/datasets/admin-view.mako:632
+#: ckanofworms/templates/datasets/admin-view.mako:638
+#: ckanofworms/templates/datasets/admin-view.mako:653
+#: ckanofworms/templates/datasets/admin-view.mako:662
+#: ckanofworms/templates/datasets/admin-view.mako:675
+#: ckanofworms/templates/datasets/admin-view.mako:686
+#: ckanofworms/templates/datasets/admin-view.mako:697
+#: ckanofworms/templates/datasets/admin-view.mako:708
+#: ckanofworms/templates/datasets/admin-view.mako:719
+#: ckanofworms/templates/datasets/admin-view.mako:731
+#: ckanofworms/templates/datasets/admin-view.mako:748
+#: ckanofworms/templates/datasets/admin-view.mako:761
+#: ckanofworms/templates/groups/admin-view.mako:68
+#: ckanofworms/templates/groups/admin-view.mako:73
+#: ckanofworms/templates/groups/admin-view.mako:83
+#: ckanofworms/templates/groups/admin-view.mako:109
+#: ckanofworms/templates/groups/admin-view.mako:120
+#: ckanofworms/templates/groups/admin-view.mako:131
+#: ckanofworms/templates/groups/admin-view.mako:137
+#: ckanofworms/templates/groups/admin-view.mako:149
+#: ckanofworms/templates/organizations/admin-view.mako:69
+#: ckanofworms/templates/organizations/admin-view.mako:74
+#: ckanofworms/templates/organizations/admin-view.mako:84
+#: ckanofworms/templates/organizations/admin-view.mako:110
+#: ckanofworms/templates/organizations/admin-view.mako:121
+#: ckanofworms/templates/organizations/admin-view.mako:132
+#: ckanofworms/templates/organizations/admin-view.mako:138
+#: ckanofworms/templates/organizations/admin-view.mako:150
+#: ckanofworms/templates/sessions/admin-view.mako:58
+#: ckanofworms/templates/sessions/admin-view.mako:66
+#: ckanofworms/templates/sessions/admin-view.mako:71
+#: ckanofworms/templates/sessions/admin-view.mako:76
+msgid "{0}:"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:108
+msgid "Software"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:113
+msgid "GNU Affero General Public License"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:173
+msgid "Login failure: "
+msgstr ""
+
+#: ckanofworms/templates/site.mako:185
+msgid "Logout failure: "
+msgstr ""
+
+#: ckanofworms/templates/site.mako:221
+msgid "Toggle navigation"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:231 ckanofworms/templates/site.mako:247
+#: ckanofworms/templates/datasets/admin-delete.mako:38
+#: ckanofworms/templates/datasets/admin-edit.mako:37
+#: ckanofworms/templates/datasets/admin-index.mako:55
+#: ckanofworms/templates/datasets/admin-index.mako:351
+#: ckanofworms/templates/datasets/admin-stats.mako:40
+#: ckanofworms/templates/datasets/admin-view.mako:58
+#: ckanofworms/templates/groups/admin-view.mako:49
+msgid "Datasets"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:232 ckanofworms/templates/site.mako:248
+#: ckanofworms/templates/datasets/admin-view.mako:323
+#: ckanofworms/templates/groups/admin-delete.mako:38
+#: ckanofworms/templates/groups/admin-edit.mako:37
+#: ckanofworms/templates/groups/admin-index.mako:37
+#: ckanofworms/templates/groups/admin-index.mako:114
+#: ckanofworms/templates/groups/admin-view.mako:40
+msgid "Groups"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:233 ckanofworms/templates/site.mako:249
+#: ckanofworms/templates/accounts/admin-index.mako:77
+#: ckanofworms/templates/organizations/admin-delete.mako:38
+#: ckanofworms/templates/organizations/admin-edit.mako:37
+#: ckanofworms/templates/organizations/admin-index.mako:37
+#: ckanofworms/templates/organizations/admin-index.mako:114
+#: ckanofworms/templates/organizations/admin-view.mako:40
+msgid "Organizations"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:244
+msgid "Administration"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:246
+#: ckanofworms/templates/accounts/admin-delete.mako:38
+#: ckanofworms/templates/accounts/admin-edit.mako:37
+#: ckanofworms/templates/accounts/admin-index.mako:37
+#: ckanofworms/templates/accounts/admin-index.mako:134
+#: ckanofworms/templates/accounts/admin-view.mako:40
+msgid "Accounts"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:262
+msgid "Sign in with Persona"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:262
+msgid "Sign in"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:267
+msgid "Sign out from Persona"
+msgstr ""
+
+#: ckanofworms/templates/site.mako:267
+msgid "Sign out"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-delete.mako:37
+#: ckanofworms/templates/accounts/admin-edit.mako:36
+#: ckanofworms/templates/accounts/admin-index.mako:36
+#: ckanofworms/templates/accounts/admin-view.mako:39
+#: ckanofworms/templates/accounts/admin-view.mako:142
+#: ckanofworms/templates/datasets/admin-delete.mako:37
+#: ckanofworms/templates/datasets/admin-edit.mako:36
+#: ckanofworms/templates/datasets/admin-index.mako:54
+#: ckanofworms/templates/datasets/admin-stats.mako:39
+#: ckanofworms/templates/datasets/admin-view.mako:57
+#: ckanofworms/templates/groups/admin-delete.mako:37
+#: ckanofworms/templates/groups/admin-edit.mako:36
+#: ckanofworms/templates/groups/admin-index.mako:36
+#: ckanofworms/templates/groups/admin-view.mako:39
+#: ckanofworms/templates/organizations/admin-delete.mako:37
+#: ckanofworms/templates/organizations/admin-edit.mako:36
+#: ckanofworms/templates/organizations/admin-index.mako:36
+#: ckanofworms/templates/organizations/admin-view.mako:39
+#: ckanofworms/templates/sessions/admin-delete.mako:37
+#: ckanofworms/templates/sessions/admin-index.mako:36
+#: ckanofworms/templates/sessions/admin-view.mako:36
+msgid "Admin"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-delete.mako:40
+#: ckanofworms/templates/accounts/admin-delete.mako:49
+#: ckanofworms/templates/accounts/admin-delete.mako:55
+#: ckanofworms/templates/accounts/admin-view.mako:52
+#: ckanofworms/templates/datasets/admin-delete.mako:40
+#: ckanofworms/templates/datasets/admin-delete.mako:49
+#: ckanofworms/templates/datasets/admin-delete.mako:55
+#: ckanofworms/templates/groups/admin-delete.mako:40
+#: ckanofworms/templates/groups/admin-delete.mako:49
+#: ckanofworms/templates/groups/admin-delete.mako:55
+#: ckanofworms/templates/organizations/admin-delete.mako:40
+#: ckanofworms/templates/organizations/admin-delete.mako:49
+#: ckanofworms/templates/organizations/admin-delete.mako:55
+#: ckanofworms/templates/sessions/admin-delete.mako:40
+#: ckanofworms/templates/sessions/admin-delete.mako:49
+#: ckanofworms/templates/sessions/admin-delete.mako:55
+#: ckanofworms/templates/sessions/admin-view.mako:46
+msgid "Delete"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-delete.mako:45
+#: ckanofworms/templates/datasets/admin-delete.mako:45
+#: ckanofworms/templates/groups/admin-delete.mako:45
+#: ckanofworms/templates/organizations/admin-delete.mako:45
+#: ckanofworms/templates/sessions/admin-delete.mako:45
+msgid "Deletion of {}"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-delete.mako:46
+msgid "Are you sure that you want to delete this account?"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-edit.mako:39
+#: ckanofworms/templates/accounts/admin-edit.mako:87
+#: ckanofworms/templates/accounts/admin-view.mako:51
+#: ckanofworms/templates/datasets/admin-edit.mako:39
+#: ckanofworms/templates/datasets/admin-edit.mako:87
+#: ckanofworms/templates/groups/admin-edit.mako:39
+#: ckanofworms/templates/groups/admin-edit.mako:87
+#: ckanofworms/templates/organizations/admin-edit.mako:39
+#: ckanofworms/templates/organizations/admin-edit.mako:87
+msgid "Edit"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-edit.mako:47
+#: ckanofworms/templates/datasets/admin-edit.mako:47
+#: ckanofworms/templates/groups/admin-edit.mako:47
+#: ckanofworms/templates/organizations/admin-edit.mako:47
+#, python-format
+msgid "Edition of %s"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-edit.mako:50
+#: ckanofworms/templates/datasets/admin-edit.mako:50
+#: ckanofworms/templates/groups/admin-edit.mako:50
+#: ckanofworms/templates/organizations/admin-edit.mako:50
+msgid "Save"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-edit.mako:61
+#: ckanofworms/templates/accounts/admin-index.mako:62
+#: ckanofworms/templates/accounts/admin-view.mako:94
+#: ckanofworms/templates/datasets/admin-edit.mako:61
+#: ckanofworms/templates/groups/admin-edit.mako:61
+#: ckanofworms/templates/organizations/admin-edit.mako:61
+msgid "Email"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-edit.mako:73
+#: ckanofworms/templates/accounts/admin-index.mako:87
+#: ckanofworms/templates/datasets/admin-edit.mako:73
+#: ckanofworms/templates/groups/admin-edit.mako:73
+#: ckanofworms/templates/organizations/admin-edit.mako:73
+msgid "Administrator"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:44
+msgid "No account found"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:48
+msgid "Account {0} of {1}"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:50
+msgid "Accounts {0} - {1} of {2}"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:53
+msgid "Single account"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:55
+msgid "{} accounts"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:61
+#: ckanofworms/templates/accounts/admin-view.mako:181
+#: ckanofworms/templates/datasets/admin-view.mako:337
+#: ckanofworms/templates/datasets/admin-view.mako:638
+#: ckanofworms/templates/groups/admin-view.mako:137
+#: ckanofworms/templates/organizations/admin-view.mako:138
+msgid "ID"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:63
+msgid "Full Name"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:65
+#: ckanofworms/templates/accounts/admin-index.mako:68
+#: ckanofworms/templates/accounts/admin-view.mako:83
+#: ckanofworms/templates/datasets/admin-view.mako:130
+#: ckanofworms/templates/datasets/admin-view.mako:183
+#: ckanofworms/templates/datasets/admin-view.mako:387
+#: ckanofworms/templates/groups/admin-view.mako:68
+#: ckanofworms/templates/organizations/admin-view.mako:69
+msgid "Name"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:70
+msgid "Profile"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:72
+#: ckanofworms/templates/accounts/admin-index.mako:75
+#: ckanofworms/templates/datasets/admin-index.mako:93
+#: ckanofworms/templates/datasets/admin-index.mako:96
+#: ckanofworms/templates/groups/admin-index.mako:68
+#: ckanofworms/templates/groups/admin-index.mako:71
+#: ckanofworms/templates/organizations/admin-index.mako:68
+#: ckanofworms/templates/organizations/admin-index.mako:71
+msgid "Creation"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:122
+#: ckanofworms/templates/datasets/admin-index.mako:233
+#: ckanofworms/templates/groups/admin-index.mako:102
+#: ckanofworms/templates/organizations/admin-index.mako:102
+msgid "Term"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-index.mako:128
+#: ckanofworms/templates/datasets/admin-index.mako:336
+#: ckanofworms/templates/groups/admin-index.mako:108
+#: ckanofworms/templates/organizations/admin-index.mako:108
+msgid "Search"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:50
+#: ckanofworms/templates/datasets/admin-view.mako:70
+#: ckanofworms/templates/groups/admin-view.mako:51
+#: ckanofworms/templates/organizations/admin-view.mako:52
+msgid "JSON"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:72
+msgid "Fullname"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:105
+msgid "Email Hash"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:116
+msgid "About"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:120
+#: ckanofworms/templates/datasets/admin-stats.mako:50
+#: ckanofworms/templates/datasets/admin-view.mako:149
+#: ckanofworms/templates/groups/admin-view.mako:87
+#: ckanofworms/templates/organizations/admin-view.mako:88
+msgid "View"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:121
+#: ckanofworms/templates/datasets/admin-view.mako:150
+#: ckanofworms/templates/groups/admin-view.mako:88
+#: ckanofworms/templates/organizations/admin-view.mako:89
+msgid "Source"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:153
+msgid "Sysadmin"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:164
+msgid "API Key"
+msgstr ""
+
+#: ckanofworms/templates/accounts/admin-view.mako:175
+#: ckanofworms/templates/datasets/admin-view.mako:238
+#: ckanofworms/templates/datasets/admin-view.mako:748
+#: ckanofworms/templates/groups/admin-view.mako:120
+#: ckanofworms/templates/organizations/admin-view.mako:121
+msgid "Created"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-delete.mako:46
+msgid "Are you sure that you want to delete this dataset?"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:40
+#: ckanofworms/templates/datasets/admin-index.mako:301
+#: ckanofworms/templates/datasets/admin-view.mako:43
+msgid "Critical"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:41
+#: ckanofworms/templates/datasets/admin-view.mako:44
+msgid "Debug"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:42
+#: ckanofworms/templates/datasets/admin-view.mako:45
+msgid "Error"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:43
+#: ckanofworms/templates/datasets/admin-view.mako:46
+msgid "Info"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:44
+#: ckanofworms/templates/datasets/admin-view.mako:47
+msgid "Warning"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:62
+msgid "No dataset found"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:66
+msgid "Dataset {0} of {1}"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:68
+msgid "Datasets {0} - {1} of {2}"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:71
+msgid "Single dataset"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:73
+msgid "{} datasets"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:79
+#: ckanofworms/templates/datasets/admin-index.mako:271
+#: ckanofworms/templates/datasets/admin-view.mako:476
+msgid "Organization"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:81
+#: ckanofworms/templates/datasets/admin-index.mako:84
+#: ckanofworms/templates/datasets/admin-view.mako:135
+#: ckanofworms/templates/datasets/admin-view.mako:675
+#: ckanofworms/templates/groups/admin-index.mako:62
+#: ckanofworms/templates/groups/admin-index.mako:65
+#: ckanofworms/templates/groups/admin-view.mako:73
+#: ckanofworms/templates/organizations/admin-index.mako:62
+#: ckanofworms/templates/organizations/admin-index.mako:65
+#: ckanofworms/templates/organizations/admin-view.mako:74
+msgid "Title"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:87
+#: ckanofworms/templates/datasets/admin-index.mako:90
+msgid "Last Modification"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:98
+msgid "Alerts"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:132
+msgid "Search ranking"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:139
+#: ckanofworms/templates/datasets/admin-view.mako:119
+#: ckanofworms/templates/datasets/admin-view.mako:578
+msgid "{:3.2f}"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:145
+msgid "Temporal coverage"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:148
+msgid "{0} to {1}"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:148
+#: ckanofworms/templates/datasets/admin-index.mako:149
+msgid "…"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:155
+msgid "Update frequency"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:164
+msgid "Territorial coverage"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:173
+msgid "Territorial coverage granularity"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:204
+msgid "{}: {}"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:245
+msgid "Tag"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:258
+msgid "Group"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:285
+#: ckanofworms/templates/datasets/admin-view.mako:538
+msgid "Supplier"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:297
+msgid "All"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:298
+msgid "Info or above"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:299
+msgid "Warning or above"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:300
+msgid "Error or above"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:307
+msgid "Alert Level"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:328
+msgid "Related only"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:338
+msgid "News Feed"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:341
+msgid "Simplified Search"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:344
+msgid "Advanced Search"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-stats.mako:42
+#: ckanofworms/templates/datasets/admin-stats.mako:47
+#: ckanofworms/templates/datasets/admin-stats.mako:88
+#: ckanofworms/templates/datasets/admin-view.mako:69
+msgid "Statistics"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:67
+#: ckanofworms/templates/datasets/admin-view.mako:125
+msgid "Repair"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:68
+msgid "View in Front"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:71
+msgid "Publish"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:98
+msgid "This dataset has some defects"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:108
+msgid "{}:"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:118
+msgid "Low search rank:"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:123
+msgid "Please look at the alerts below and repair this dataset now."
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:145
+msgid "Notes"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:170
+msgid "Resources"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:194
+#: ckanofworms/templates/datasets/admin-view.mako:686
+#: ckanofworms/templates/groups/admin-view.mako:83
+#: ckanofworms/templates/organizations/admin-view.mako:84
+msgid "Description"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:205
+#: ckanofworms/templates/datasets/admin-view.mako:697
+msgid "URL"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:216
+msgid "Format"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:227
+msgid "Last Modified"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:268
+msgid "Extras"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:281
+msgid "Key"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:292
+msgid "Value"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:374
+msgid "Tags"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:420
+msgid "Temporal Coverage From"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:431
+msgid "Temporal Coverage To"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:442
+msgid "Update Frequency"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:453
+msgid "Territorial Coverage"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:464
+msgid "Territorial Coverage Granularity"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:493
+msgid "Office, Department or Service"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:504
+msgid "Contact Email"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:515
+msgid "Maintainer"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:526
+msgid "Maintainer Email"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:555
+msgid "URL (in supplier site)"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:566
+msgid "License"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:577
+msgid "Weight"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:588
+msgid "Metadata Modified"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:599
+msgid "Metadata Created"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:610
+msgid "Revision Timestamp"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:621
+msgid "Timestamp"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:632
+#: ckanofworms/templates/groups/admin-view.mako:131
+#: ckanofworms/templates/organizations/admin-view.mako:132
+msgid "Revision ID"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:662
+msgid "Related"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:708
+#: ckanofworms/templates/groups/admin-view.mako:109
+#: ckanofworms/templates/organizations/admin-view.mako:110
+msgid "Image"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:719
+msgid "Type"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-view.mako:731
+msgid "Owner"
+msgstr ""
+
+#: ckanofworms/templates/groups/admin-delete.mako:46
+msgid "Are you sure that you want to delete this group?"
+msgstr ""
+
+#: ckanofworms/templates/groups/admin-index.mako:44
+msgid "No group found"
+msgstr ""
+
+#: ckanofworms/templates/groups/admin-index.mako:48
+msgid "Group {0} of {1}"
+msgstr ""
+
+#: ckanofworms/templates/groups/admin-index.mako:50
+msgid "Groups {0} - {1} of {2}"
+msgstr ""
+
+#: ckanofworms/templates/groups/admin-index.mako:53
+msgid "Single group"
+msgstr ""
+
+#: ckanofworms/templates/groups/admin-index.mako:55
+msgid "{} groups"
+msgstr ""
+
+#: ckanofworms/templates/groups/admin-index.mako:73
+#: ckanofworms/templates/organizations/admin-index.mako:73
+msgid "Logo"
+msgstr ""
+
+#: ckanofworms/templates/organizations/admin-delete.mako:46
+msgid "Are you sure that you want to delete this organization?"
+msgstr ""
+
+#: ckanofworms/templates/organizations/admin-index.mako:44
+msgid "No organization found"
+msgstr ""
+
+#: ckanofworms/templates/organizations/admin-index.mako:48
+msgid "Organization {0} of {1}"
+msgstr ""
+
+#: ckanofworms/templates/organizations/admin-index.mako:50
+msgid "Organizations {0} - {1} of {2}"
+msgstr ""
+
+#: ckanofworms/templates/organizations/admin-index.mako:53
+msgid "Single organization"
+msgstr ""
+
+#: ckanofworms/templates/organizations/admin-index.mako:55
+msgid "{} organizations"
+msgstr ""
+
+#: ckanofworms/templates/organizations/admin-view.mako:49
+msgid "Produced Datasets"
+msgstr ""
+
+#: ckanofworms/templates/organizations/admin-view.mako:50
+msgid "Supplied Datasets"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-delete.mako:38
+#: ckanofworms/templates/sessions/admin-index.mako:37
+#: ckanofworms/templates/sessions/admin-index.mako:88
+#: ckanofworms/templates/sessions/admin-view.mako:37
+msgid "Sessions"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-delete.mako:46
+msgid "Are you sure that you want to delete this session?"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-index.mako:43
+msgid "No session found"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-index.mako:49
+msgid "Sessions {0} - {1} of {2}"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-index.mako:52
+msgid "Single session"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-index.mako:54
+msgid "{} sessions"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-index.mako:60
+#: ckanofworms/templates/sessions/admin-view.mako:58
+msgid "Token"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-index.mako:61
+#: ckanofworms/templates/sessions/admin-view.mako:71
+msgid "User"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-index.mako:62
+#: ckanofworms/templates/sessions/admin-view.mako:76
+msgid "Expiration Date"
+msgstr ""
+
+#: ckanofworms/templates/sessions/admin-view.mako:66
+msgid "User ID"
+msgstr ""
+
