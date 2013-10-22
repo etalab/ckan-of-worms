@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: CKAN-of-Worms\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2013-10-21 23:53+0200\n"
-"PO-Revision-Date: 2013-10-21 22:14+0000\n"
+"PO-Revision-Date: 2013-10-22 07:32+0000\n"
 "Last-Translator: Emmanuel <emmanuel@raviart.com>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/ckan-of-worms/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -940,7 +940,7 @@ msgstr "Liens connexes uniquement"
 
 #: ckanofworms/templates/datasets/admin-index.mako:338
 msgid "News Feed"
-msgstr "Fils d'actualité"
+msgstr "Fil d'actualité"
 
 #: ckanofworms/templates/datasets/admin-index.mako:341
 msgid "Simplified Search"
