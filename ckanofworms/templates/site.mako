@@ -192,11 +192,11 @@ navigator.id.watch({
 $(function () {
     $('.dropdown-toggle').dropdown();
 
-    $('#sign-in').click(function() {
+    $('.sign-in').click(function() {
         navigator.id.request();
     });
 
-    $('#sign-out').click(function() {
+    $('.sign-out').click(function() {
         navigator.id.logout();
     });
 });
@@ -259,12 +259,12 @@ $(function () {
     user = model.get_user(ctx)
 %>\
     % if user is None:
-                <li><a href="#" id="sign-in" title="${_(u'Sign in with Persona')}">${_(u'Sign in')}</a></li>
+                <li><a class="sign-in" href="#" title="${_(u'Sign in with Persona')}">${_(u'Sign in')}</a></li>
     % else:
 ##                <li class="active"><a href="${user.get_url(ctx)}"><span class="glyphicon glyphicon-user"></span> ${
 ##                        user.email}</a></li>
                 <li class="active"><a href=""><span class="glyphicon glyphicon-user"></span> ${user.get_title(ctx)}</a></li>
-                <li><a href="#" id="sign-out" title="${_(u'Sign out from Persona')}">${_(u'Sign out')}</a></li>
+                <li><a class="sign-out" href="#" title="${_(u'Sign out from Persona')}">${_(u'Sign out')}</a></li>
     % endif
             </ul>
 </%def>

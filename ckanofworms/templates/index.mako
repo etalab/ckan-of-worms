@@ -54,7 +54,8 @@ from ckanofworms import model, urls
                 <h2>${_(u"Welcome to CKAN-of-Worms")}</h2>
                 <p>${_(u"A logger for errors found in CKAN datasets")}</p>
     % if user is None:
-                <a class="btn btn-large btn-primary" href="${urls.get_url(ctx, 'login')}">${_('Sign In')}</a>
+                <a class="btn btn-large btn-primary sign-in" href="#" title="${_(u'Sign in with Persona')}">${
+                    _('Sign In')}</a>
     % endif
             </div>
         </div>
