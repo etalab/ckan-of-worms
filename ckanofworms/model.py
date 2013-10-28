@@ -630,9 +630,8 @@ class Session(objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper)
 
     @property
     def user(self):
-        from . import model
         if self._user is UnboundLocalError:
-            self._user = model.Account.find_one(self.user_id) if self.user_id is not None else None
+            self._user = Account.find_one(self.user_id) if self.user_id is not None else None
         return self._user
 
 
