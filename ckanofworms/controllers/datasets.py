@@ -1149,7 +1149,7 @@ def api1_related(req):
         )
     if data['territory']:
         criteria['territorial_coverage'] = {'$in': data['territory']}
-    cursor = model.Dataset.find(criteria, as_class = collections.OrderedDict)
+    cursor = model.Dataset.find(criteria, as_class = collections.OrderedDict).sort([('timestamp', pymongo.DESCENDING)])
     return wsgihelpers.respond_json(ctx,
         collections.OrderedDict(sorted(dict(
             apiVersion = '1.0',
