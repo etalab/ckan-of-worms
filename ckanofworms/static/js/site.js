@@ -31,6 +31,10 @@ $(function() {
         name: 'organization',
         remote: '/api/1/organizations/typeahead?q=%QUERY'
     });
+    $('.typeahead#related_owner').typeahead({
+        name: 'related_owner',
+        remote: '/api/1/accounts/typeahead?q=%QUERY'
+    });
     $('.typeahead#supplier').typeahead({
         name: 'supplier',
         remote: '/api/1/organizations/typeahead?q=%QUERY'

@@ -107,6 +107,24 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return self.fullname or self.name or self.email or self._id
 
     @classmethod
+    def make_fullname_to_instance(cls):
+        def fullname_to_instance(value, state = None):
+            if value is None:
+                return value, None
+            if state is None:
+                state = conv.default_state
+            self = cls.find_one(
+                dict(
+                    fullname = value,
+                    ),
+                as_class = collections.OrderedDict,
+                )
+            if self is None:
+                return value, state._(u"No account with full name {0}").format(value)
+            return self, None
+        return fullname_to_instance
+
+    @classmethod
     def make_id_or_name_to_instance(cls):
         def id_or_name_to_instance(value, state = None):
             if value is None:
@@ -707,6 +725,7 @@ def setup():
 
     Dataset.ensure_index('name', unique = True)
     Dataset.ensure_index('related.id')
+    Dataset.ensure_index('related.owner_id')
     Dataset.ensure_index('timestamp')
 
     Group.ensure_index('name', unique = True)

@@ -291,6 +291,20 @@ title_by_alert_level = dict(
             </div>
     % endif
 <%
+    error = errors.get('related_owner') if errors is not None else None
+    input_value = inputs['related_owner']
+%>\
+    % if data['advanced_search'] or error or input_value:
+            <div class="form-group${' has-error' if error else ''}">
+                <label for="related_owner">${_("Related Owner (User)")}</label>
+                <input class="form-control typeahead" id="related_owner" name="related_owner" type="text" value="${
+                        input_value or ''}">
+        % if error:
+                <span class="help-block">${error}</span>
+        % endif
+            </div>
+    % endif
+<%
     error = errors.get('alerts') if errors is not None else None
     input_value = inputs['alerts']
     options = [

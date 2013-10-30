@@ -131,6 +131,7 @@ def admin_index(req):
         organization = params.get('organization'),
         page = params.get('page'),
         related = params.get('related'),
+        related_owner = params.get('related_owner'),
         sort = params.get('sort'),
         supplier = params.get('supplier'),
         tag = params.get('tag'),
@@ -158,6 +159,10 @@ def admin_index(req):
                     conv.default(1),
                     ),
                 related = conv.guess_bool,
+                related_owner = conv.pipe(
+                    conv.cleanup_line,
+                    model.Account.make_fullname_to_instance(),
+                    ),
                 sort = conv.pipe(
                     conv.cleanup_line,
                     conv.test_in(['metadata_created', 'name', 'timestamp']),
@@ -202,10 +207,12 @@ def admin_index(req):
         criteria['groups.id'] = data['group']._id
     if data['organization'] is not None:
         criteria['owner_org'] = data['organization']._id
-    if data['supplier'] is not None:
-        criteria['supplier_id'] = data['supplier']._id
     if data['related'] is not None:
         criteria['related'] = {'$exists': data['related']}
+    if data['related_owner'] is not None:
+        criteria['related.owner_id'] = data['related_owner']._id
+    if data['supplier'] is not None:
+        criteria['supplier_id'] = data['supplier']._id
     if data['tag'] is not None:
         criteria['tags.name'] = re.compile(re.escape(data['tag']))
     if data['term'] is not None:
@@ -821,6 +828,11 @@ def api1_index(req):
             # conv.default(1),  # Set below.
             ),
         related = conv.guess_bool,
+        related_owner = conv.pipe(
+            conv.test_isinstance(basestring),
+            conv.input_to_ckan_name,
+            model.Account.make_id_or_name_to_instance(),
+            ),
         sort = conv.pipe(
             conv.test_isinstance(basestring),
             conv.cleanup_line,
@@ -958,10 +970,12 @@ def api1_index(req):
         criteria['groups.id'] = data['group']._id
     if data['organization'] is not None:
         criteria['owner_org'] = data['organization']._id
-    if data['supplier'] is not None:
-        criteria['supplier_id'] = data['supplier']._id
     if data['related'] is not None:
         criteria['related'] = {'$exists': data['related']}
+    if data['related_owner'] is not None:
+        criteria['related.owner_id'] = data['related_owner']._id
+    if data['supplier'] is not None:
+        criteria['supplier_id'] = data['supplier']._id
     if data['tag'] is not None:
         criteria['tags.name'] = re.compile(re.escape(data['tag']))
     if data['term'] is not None:
