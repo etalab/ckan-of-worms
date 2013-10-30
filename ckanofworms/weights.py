@@ -47,27 +47,30 @@ def compute_dataset_weight(dataset):
     related_weight = normalize_weight(related_weight)
 
     # Compute temporal weight.
-    temporal_coverage_from = dataset.temporal_coverage_from
-    year_from = temporal_coverage_from.split('-', 1)[0] if temporal_coverage_from is not None else None
-    temporal_coverage_to = dataset.temporal_coverage_to
-    year_to = temporal_coverage_to.split('-', 1)[0] if temporal_coverage_to is not None else None
-    if not year_from:
-        if year_to:
-            covered_years = [year_to]
-        else:
-            covered_years = []
-    elif not year_to:
-        covered_years = [year_from]
+    if dataset.frequency == u'temps réel':
+        temporal_weight = 2.0
     else:
-        year_from, year_to = sorted([year_from, year_to])
-        covered_years = [
-            str(year)
-            for year in range(int(year_from), int(year_to) + 1)
-            ]
-    # When no temporal coverage is given, consider that it is less than a year (0.9), to boost datasets with a
-    # temporal coverage.
-    temporal_weight = max(0.9, len(covered_years))
-    temporal_weight = normalize_weight(temporal_weight)
+        temporal_coverage_from = dataset.temporal_coverage_from
+        year_from = temporal_coverage_from.split('-', 1)[0] if temporal_coverage_from is not None else None
+        temporal_coverage_to = dataset.temporal_coverage_to
+        year_to = temporal_coverage_to.split('-', 1)[0] if temporal_coverage_to is not None else None
+        if not year_from:
+            if year_to:
+                covered_years = [year_to]
+            else:
+                covered_years = []
+        elif not year_to:
+            covered_years = [year_from]
+        else:
+            year_from, year_to = sorted([year_from, year_to])
+            covered_years = [
+                str(year)
+                for year in range(int(year_from), int(year_to) + 1)
+                ]
+        # When no temporal coverage is given, consider that it is less than a year (0.9), to boost datasets with a
+        # temporal coverage.
+        temporal_weight = max(0.9, len(covered_years))
+        temporal_weight = normalize_weight(temporal_weight)
 
     # Compute a weight between 0 and 1.
     dataset.weight = (
