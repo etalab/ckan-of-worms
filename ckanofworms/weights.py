@@ -73,8 +73,8 @@ def compute_dataset_weight(dataset):
                     for year in range(int(year_from), int(year_to) + 1)
                     ]
             except ValueError:
-                log.exception(u"Error while extraction years from temporal coverage: {} - {}".format(
-                    temporal_coverage_from, temporal_coverage_to))
+                log.exception(u"Error in dataset {} while extraction years from temporal coverage: {} - {}".format(
+                    dataset.name, temporal_coverage_from, temporal_coverage_to))
                 covered_years = []
         # When no temporal coverage is given, consider that it is less than a year (0.9), to boost datasets with a
         # temporal coverage.
