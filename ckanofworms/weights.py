@@ -26,7 +26,11 @@
 """Helpers to compute ranking of datasets"""
 
 
+import logging
 import math
+
+
+log = logging.getLogger(__name__)
 
 
 def compute_dataset_weight(dataset):
@@ -63,10 +67,15 @@ def compute_dataset_weight(dataset):
             covered_years = [year_from]
         else:
             year_from, year_to = sorted([year_from, year_to])
-            covered_years = [
-                str(year)
-                for year in range(int(year_from), int(year_to) + 1)
-                ]
+            try:
+                covered_years = [
+                    str(year)
+                    for year in range(int(year_from), int(year_to) + 1)
+                    ]
+            except ValueError:
+                log.exception(u"Error while extraction years from temporal coverage: {} - {}".format(
+                    temporal_coverage_from, temporal_coverage_to))
+                covered_years = []
         # When no temporal coverage is given, consider that it is less than a year (0.9), to boost datasets with a
         # temporal coverage.
         temporal_weight = max(0.9, len(covered_years))
