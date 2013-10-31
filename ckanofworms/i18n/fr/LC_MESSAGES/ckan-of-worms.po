@@ -1,82 +1,89 @@
-# Translations template for CKAN-of-Worms.
+# French translations for CKAN-of-Worms.
 # Copyright (C) 2013 ORGANIZATION
-# This file is distributed under the same license as the CKAN-of-Worms project.
-# 
+# This file is distributed under the same license as the CKAN-of-Worms
+# project.
+#
 # Translators:
 # Emmanuel <emmanuel@raviart.com>, 2013
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2013
 msgid ""
 msgstr ""
-"Project-Id-Version: CKAN-of-Worms\n"
+"Project-Id-Version:  CKAN-of-Worms\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-10-21 23:53+0200\n"
+"POT-Creation-Date: 2013-10-31 10:28+0100\n"
 "PO-Revision-Date: 2013-10-22 07:32+0000\n"
 "Last-Translator: Emmanuel <emmanuel@raviart.com>\n"
-"Language-Team: French (http://www.transifex.com/projects/p/ckan-of-worms/language/fr/)\n"
+"Language-Team: French (http://www.transifex.com/projects/p/ckan-of-"
+"worms/language/fr/)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 0.9.6\n"
-"Language: fr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ckanofworms/conv.py:138
 msgid "Errors can't contain a list"
 msgstr "Les erreurs ne peuvent pas contenir de listes"
 
-#: ckanofworms/model.py:120
+#: ckanofworms/model.py:123
+#, fuzzy
+#| msgid "No account with name {0}"
+msgid "No account with full name {0}"
+msgstr "Aucun compte de nom {0}"
+
+#: ckanofworms/model.py:138
 msgid "No account with name {0}"
 msgstr "Aucun compte de nom {0}"
 
-#: ckanofworms/model.py:124
+#: ckanofworms/model.py:142
 msgid "No account with ID {0}"
 msgstr "Aucun compte d'identifiant {0}"
 
-#: ckanofworms/model.py:268
+#: ckanofworms/model.py:326
 msgid "No dataset with name {0}"
 msgstr "Aucun jeu de données de nom {0}"
 
-#: ckanofworms/model.py:272
+#: ckanofworms/model.py:330
 msgid "No dataset with ID {0}"
 msgstr "Aucun jeu de données d'identifiant {0}"
 
-#: ckanofworms/model.py:372
+#: ckanofworms/model.py:430
 msgid "No group with name {0}"
 msgstr "Aucun groupe de nom {0}"
 
-#: ckanofworms/model.py:376
+#: ckanofworms/model.py:434
 msgid "No group with ID {0}"
 msgstr "Aucun group d'identifiant {0}"
 
-#: ckanofworms/model.py:394
+#: ckanofworms/model.py:452
 msgid "No group with title {0}"
 msgstr "Aucun groupe de titre {0}"
 
-#: ckanofworms/model.py:494
+#: ckanofworms/model.py:552
 msgid "No organization with name {0}"
 msgstr "Aucune organisation de nom {0}"
 
-#: ckanofworms/model.py:498
+#: ckanofworms/model.py:556
 msgid "No organization with ID {0}"
 msgstr "Aucune organisation d'identifiant {0}"
 
-#: ckanofworms/model.py:516
+#: ckanofworms/model.py:574
 msgid "No organization with title {0}"
 msgstr "Aucune organisation de titre {0}"
 
-#: ckanofworms/model.py:558
+#: ckanofworms/model.py:616
 msgid "Session {0}"
 msgstr "Session {0}"
 
-#: ckanofworms/model.py:559 ckanofworms/templates/sessions/admin-index.mako:47
+#: ckanofworms/model.py:617 ckanofworms/templates/sessions/admin-index.mako:47
 msgid "Session {0} of {1}"
 msgstr "Session {0} sur {1}"
 
-#: ckanofworms/model.py:574
+#: ckanofworms/model.py:632
 msgid "No session with token {0}"
 msgstr "Aucune session de jeton {0}"
 
-#: ckanofworms/model.py:629
+#: ckanofworms/model.py:686
 msgid "You must be an administrator to access this page."
 msgstr "Vous devez être un administrateur pour accéder à cette page."
 
@@ -173,15 +180,16 @@ msgid "An account with the same email already exists."
 msgstr "Un compte avec le même courriel existe déjà."
 
 #: ckanofworms/controllers/accounts.py:150
+#: ckanofworms/controllers/accounts.py:765
 msgid "Account search error: {}"
 msgstr "Erreur dans la recherche de comptes : {}"
 
 #: ckanofworms/controllers/accounts.py:220
 #: ckanofworms/controllers/accounts.py:644
-#: ckanofworms/controllers/datasets.py:301
-#: ckanofworms/controllers/datasets.py:864
-#: ckanofworms/controllers/datasets.py:1344
-#: ckanofworms/controllers/datasets.py:1483
+#: ckanofworms/controllers/datasets.py:308
+#: ckanofworms/controllers/datasets.py:876
+#: ckanofworms/controllers/datasets.py:1358
+#: ckanofworms/controllers/datasets.py:1497
 #: ckanofworms/controllers/groups.py:217 ckanofworms/controllers/groups.py:641
 #: ckanofworms/controllers/organizations.py:218
 #: ckanofworms/controllers/organizations.py:603
@@ -192,11 +200,11 @@ msgstr "JSON incorrect dans le corps de la requête POST"
 #: ckanofworms/controllers/accounts.py:270
 #: ckanofworms/controllers/accounts.py:423
 #: ckanofworms/controllers/accounts.py:678
-#: ckanofworms/controllers/datasets.py:351
-#: ckanofworms/controllers/datasets.py:508
-#: ckanofworms/controllers/datasets.py:626
-#: ckanofworms/controllers/datasets.py:1378
-#: ckanofworms/controllers/datasets.py:1517
+#: ckanofworms/controllers/datasets.py:358
+#: ckanofworms/controllers/datasets.py:515
+#: ckanofworms/controllers/datasets.py:633
+#: ckanofworms/controllers/datasets.py:1392
+#: ckanofworms/controllers/datasets.py:1531
 #: ckanofworms/controllers/groups.py:267 ckanofworms/controllers/groups.py:420
 #: ckanofworms/controllers/groups.py:675
 #: ckanofworms/controllers/organizations.py:268
@@ -208,11 +216,11 @@ msgstr "Mauvais paramètres dans la requête"
 #: ckanofworms/controllers/accounts.py:293
 #: ckanofworms/controllers/accounts.py:446
 #: ckanofworms/controllers/accounts.py:701
-#: ckanofworms/controllers/datasets.py:374
-#: ckanofworms/controllers/datasets.py:531
-#: ckanofworms/controllers/datasets.py:649
-#: ckanofworms/controllers/datasets.py:1401
-#: ckanofworms/controllers/datasets.py:1540
+#: ckanofworms/controllers/datasets.py:381
+#: ckanofworms/controllers/datasets.py:538
+#: ckanofworms/controllers/datasets.py:656
+#: ckanofworms/controllers/datasets.py:1415
+#: ckanofworms/controllers/datasets.py:1554
 #: ckanofworms/controllers/groups.py:290 ckanofworms/controllers/groups.py:443
 #: ckanofworms/controllers/groups.py:698
 #: ckanofworms/controllers/organizations.py:291
@@ -224,11 +232,11 @@ msgstr "Clé d'API inconnue : {}"
 #: ckanofworms/controllers/accounts.py:308
 #: ckanofworms/controllers/accounts.py:461
 #: ckanofworms/controllers/accounts.py:716
-#: ckanofworms/controllers/datasets.py:389
-#: ckanofworms/controllers/datasets.py:546
-#: ckanofworms/controllers/datasets.py:664
-#: ckanofworms/controllers/datasets.py:1416
-#: ckanofworms/controllers/datasets.py:1555
+#: ckanofworms/controllers/datasets.py:396
+#: ckanofworms/controllers/datasets.py:553
+#: ckanofworms/controllers/datasets.py:671
+#: ckanofworms/controllers/datasets.py:1430
+#: ckanofworms/controllers/datasets.py:1569
 #: ckanofworms/controllers/groups.py:305 ckanofworms/controllers/groups.py:458
 #: ckanofworms/controllers/groups.py:713
 #: ckanofworms/controllers/organizations.py:306
@@ -238,31 +246,31 @@ msgid "Non-admin API Key: {}"
 msgstr "Clé d'API non admin : {}"
 
 #: ckanofworms/controllers/accounts.py:326
-#: ckanofworms/controllers/datasets.py:407
+#: ckanofworms/controllers/datasets.py:414
 #: ckanofworms/controllers/groups.py:323
 #: ckanofworms/controllers/organizations.py:324
 msgid "Wrong version: {}, expected: {}"
 msgstr "Mauvaise version : {}, attendue : {}"
 
 #: ckanofworms/controllers/accounts.py:391
-#: ckanofworms/controllers/datasets.py:476
-#: ckanofworms/controllers/datasets.py:594
+#: ckanofworms/controllers/datasets.py:483
+#: ckanofworms/controllers/datasets.py:601
 #: ckanofworms/controllers/groups.py:388
 #: ckanofworms/controllers/organizations.py:389
 msgid "Invalid JSON in request DELETE body"
 msgstr "JSON incorrect dans le corps de la requête DELETE"
 
-#: ckanofworms/controllers/accounts.py:777
+#: ckanofworms/controllers/accounts.py:808
 msgid "Login Error: {0}"
 msgstr "Erreur d'identification : {0}"
 
-#: ckanofworms/controllers/accounts.py:789
-#: ckanofworms/controllers/accounts.py:796
+#: ckanofworms/controllers/accounts.py:820
+#: ckanofworms/controllers/accounts.py:827
 msgid "Error while verifying authentication assertion"
 msgstr "Erreur durant la vérification de l'assertion d'authentification"
 
-#: ckanofworms/controllers/accounts.py:861
-#: ckanofworms/controllers/accounts.py:899
+#: ckanofworms/controllers/accounts.py:892
+#: ckanofworms/controllers/accounts.py:930
 msgid "Account Error: {}"
 msgstr "Erreur de compte : {}"
 
@@ -278,29 +286,29 @@ msgstr "Vous ne pouvez pas éditer un jeu de données."
 msgid "A dataset with the same email already exists."
 msgstr "Un jeu de données avec le même courriel existe déjà."
 
-#: ckanofworms/controllers/datasets.py:176
+#: ckanofworms/controllers/datasets.py:181
 msgid "Dataset search error: {}"
 msgstr "Erreur dans la recherche de jeux de données : {}"
 
-#: ckanofworms/controllers/datasets.py:680
+#: ckanofworms/controllers/datasets.py:687
 msgid "No dataset containing a related link with ID {0}"
 msgstr "Aucun jeu de données ne contient de lien connexe d'identifiant {0}"
 
-#: ckanofworms/controllers/datasets.py:689
+#: ckanofworms/controllers/datasets.py:696
 msgid "No related link with ID {0}"
 msgstr "Aucun lien connexe d'identifiant {0}"
 
-#: ckanofworms/controllers/datasets.py:697
+#: ckanofworms/controllers/datasets.py:704
 msgid "Related Error: {}"
 msgstr "Erreur de lien connexe : {}"
 
-#: ckanofworms/controllers/datasets.py:1116
+#: ckanofworms/controllers/datasets.py:1130
 msgid "Territory must have the form \"kind/code\""
 msgstr "Le territoire doit avoir la forme \"genre/code\""
 
-#: ckanofworms/controllers/datasets.py:1577
-#: ckanofworms/controllers/datasets.py:1635
-#: ckanofworms/controllers/datasets.py:1675
+#: ckanofworms/controllers/datasets.py:1591
+#: ckanofworms/controllers/datasets.py:1649
+#: ckanofworms/controllers/datasets.py:1689
 msgid "Dataset Error: {}"
 msgstr "Erreur de jeu de données : {}"
 
@@ -370,7 +378,11 @@ msgstr "Bienvenue sur CKAN-of-Worms"
 msgid "A logger for errors found in CKAN datasets"
 msgstr "Un journal des erreurs trouvées dans les jeux de données CKAN"
 
-#: ckanofworms/templates/index.mako:57
+#: ckanofworms/templates/index.mako:57 ckanofworms/templates/site.mako:262
+msgid "Sign in with Persona"
+msgstr "Connexion avec Persona"
+
+#: ckanofworms/templates/index.mako:58
 msgid "Sign In"
 msgstr "Connexion"
 
@@ -508,7 +520,7 @@ msgstr "Basculer la navigation"
 #: ckanofworms/templates/datasets/admin-delete.mako:38
 #: ckanofworms/templates/datasets/admin-edit.mako:37
 #: ckanofworms/templates/datasets/admin-index.mako:55
-#: ckanofworms/templates/datasets/admin-index.mako:351
+#: ckanofworms/templates/datasets/admin-index.mako:365
 #: ckanofworms/templates/datasets/admin-stats.mako:40
 #: ckanofworms/templates/datasets/admin-view.mako:58
 #: ckanofworms/templates/groups/admin-view.mako:49
@@ -547,10 +559,6 @@ msgstr "Administration"
 #: ckanofworms/templates/accounts/admin-view.mako:40
 msgid "Accounts"
 msgstr "Comptes"
-
-#: ckanofworms/templates/site.mako:262
-msgid "Sign in with Persona"
-msgstr "Connexion avec Persona"
 
 #: ckanofworms/templates/site.mako:262
 msgid "Sign in"
@@ -732,7 +740,7 @@ msgid "Term"
 msgstr "Terme"
 
 #: ckanofworms/templates/accounts/admin-index.mako:128
-#: ckanofworms/templates/datasets/admin-index.mako:336
+#: ckanofworms/templates/datasets/admin-index.mako:350
 #: ckanofworms/templates/groups/admin-index.mako:108
 #: ckanofworms/templates/organizations/admin-index.mako:108
 msgid "Search"
@@ -789,7 +797,7 @@ msgid "Are you sure that you want to delete this dataset?"
 msgstr "Êtes-vous sûr de vouloir supprimer ce jeu de données ?"
 
 #: ckanofworms/templates/datasets/admin-index.mako:40
-#: ckanofworms/templates/datasets/admin-index.mako:301
+#: ckanofworms/templates/datasets/admin-index.mako:315
 #: ckanofworms/templates/datasets/admin-view.mako:43
 msgid "Critical"
 msgstr "Critique"
@@ -914,39 +922,43 @@ msgstr "Groupe"
 msgid "Supplier"
 msgstr "Fournisseur"
 
-#: ckanofworms/templates/datasets/admin-index.mako:297
+#: ckanofworms/templates/datasets/admin-index.mako:299
+msgid "Related Owner (User)"
+msgstr ""
+
+#: ckanofworms/templates/datasets/admin-index.mako:311
 msgid "All"
 msgstr "Tous"
 
-#: ckanofworms/templates/datasets/admin-index.mako:298
+#: ckanofworms/templates/datasets/admin-index.mako:312
 msgid "Info or above"
 msgstr "Info ou supérieur"
 
-#: ckanofworms/templates/datasets/admin-index.mako:299
+#: ckanofworms/templates/datasets/admin-index.mako:313
 msgid "Warning or above"
 msgstr "Avertissement ou supérieur"
 
-#: ckanofworms/templates/datasets/admin-index.mako:300
+#: ckanofworms/templates/datasets/admin-index.mako:314
 msgid "Error or above"
 msgstr "Erreur ou supérieur"
 
-#: ckanofworms/templates/datasets/admin-index.mako:307
+#: ckanofworms/templates/datasets/admin-index.mako:321
 msgid "Alert Level"
 msgstr "Niveau d'alerte"
 
-#: ckanofworms/templates/datasets/admin-index.mako:328
+#: ckanofworms/templates/datasets/admin-index.mako:342
 msgid "Related only"
 msgstr "Liens connexes uniquement"
 
-#: ckanofworms/templates/datasets/admin-index.mako:338
+#: ckanofworms/templates/datasets/admin-index.mako:352
 msgid "News Feed"
 msgstr "Fil d'actualité"
 
-#: ckanofworms/templates/datasets/admin-index.mako:341
+#: ckanofworms/templates/datasets/admin-index.mako:355
 msgid "Simplified Search"
 msgstr "Recherche simplifiée"
 
-#: ckanofworms/templates/datasets/admin-index.mako:344
+#: ckanofworms/templates/datasets/admin-index.mako:358
 msgid "Advanced Search"
 msgstr "Recherche avancée"
 
@@ -984,7 +996,9 @@ msgstr "Classement de recherche faible :"
 
 #: ckanofworms/templates/datasets/admin-view.mako:123
 msgid "Please look at the alerts below and repair this dataset now."
-msgstr "Veuillez consulter les alertes ci-dessous et réparer maintenant ce jeu de données."
+msgstr ""
+"Veuillez consulter les alertes ci-dessous et réparer maintenant ce jeu de"
+" données."
 
 #: ckanofworms/templates/datasets/admin-view.mako:145
 msgid "Notes"
@@ -1224,3 +1238,4 @@ msgstr "Date d'expiration"
 #: ckanofworms/templates/sessions/admin-view.mako:66
 msgid "User ID"
 msgstr "Identifiant utilisateur"
+
