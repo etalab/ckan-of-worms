@@ -38,7 +38,7 @@ from weberror.errormiddleware import ErrorMiddleware
 from . import conf, contexts, controllers, environment, model, urls
 
 
-lang_re = re.compile('^/(?P<lang>en|fr)(?=/|$)')
+lang_re = re.compile('^/(?P<lang>de|en|fr)(?=/|$)')
 log = logging.getLogger(__name__)
 percent_encoding_re = re.compile('%[\dA-Fa-f]{2}')
 
@@ -68,7 +68,11 @@ def language_detector(app):
         match = lang_re.match(req.path_info)
         if match is None:
             ctx.lang = [
-                req.accept_language.best_match([('en-US', 1), ('en', 1), ('fr-FR', 1), ('fr', 1)],
+                req.accept_language.best_match(
+                    [
+                        ('de-DE', 1), ('de', 1)],
+                        ('en-US', 1), ('en', 1),
+                        ('fr-FR', 1), ('fr', 1)],
                     default_match = 'en').split('-', 1)[0],
                 ]
         else:
