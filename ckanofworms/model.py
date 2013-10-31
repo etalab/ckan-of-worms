@@ -32,6 +32,7 @@ import datetime
 import re
 import urlparse
 
+from biryani1 import strings
 import fedmsg
 
 from . import conf, objects, urls, weights, wsgihelpers
@@ -46,6 +47,8 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     api_key = None
     collection_name = 'accounts'
     email = None
+    slug = None
+    words = None
 
     # CKAN attributes
     about = None
@@ -79,6 +82,26 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             value['id'] = unicode(id)
         return value, None
 
+    def compute_slug_and_words(self):
+        self.slug = strings.slugify(u'-'.join(
+            fragment
+            for fragment in (
+                self.fullname,
+                self.email,
+                )
+            if fragment is not None
+            ))
+        self.words = sorted(set(strings.slugify(u'-'.join(
+            fragment
+            for fragment in (
+                self._id,
+                self.email,
+                self.fullname,
+                self.name,
+                )
+            if fragment is not None
+            )).split(u'-')))
+
     @classmethod
     def get_admin_class_full_url(cls, ctx, *path, **query):
         return urls.get_full_url(ctx, 'admin', 'accounts', *path, **query)
@@ -107,24 +130,6 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return self.fullname or self.name or self.email or self._id
 
     @classmethod
-    def make_fullname_to_instance(cls):
-        def fullname_to_instance(value, state = None):
-            if value is None:
-                return value, None
-            if state is None:
-                state = conv.default_state
-            self = cls.find_one(
-                dict(
-                    fullname = value,
-                    ),
-                as_class = collections.OrderedDict,
-                )
-            if self is None:
-                return value, state._(u"No account with full name {0}").format(value)
-            return self, None
-        return fullname_to_instance
-
-    @classmethod
     def make_id_or_name_to_instance(cls):
         def id_or_name_to_instance(value, state = None):
             if value is None:
@@ -142,6 +147,24 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
                     return value, state._(u"No account with ID {0}").format(value)
             return self, None
         return id_or_name_to_instance
+
+    @classmethod
+    def make_slug_to_instance(cls):
+        def slug_to_instance(value, state = None):
+            if value is None:
+                return value, None
+            if state is None:
+                state = conv.default_state
+            self = cls.find_one(
+                dict(
+                    slug = value,
+                    ),
+                as_class = collections.OrderedDict,
+                )
+            if self is None:
+                return value, state._(u"No account with slug {0}").format(value)
+            return self, None
+        return slug_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
@@ -722,6 +745,8 @@ def setup():
     Account.ensure_index('api_key', sparse = True, unique = True)
     Account.ensure_index('email')
     Account.ensure_index('name', unique = True)
+    Account.ensure_index('slug', unique = True)
+    Account.ensure_index('words')
 
     Dataset.ensure_index('name', unique = True)
     Dataset.ensure_index('related.id')

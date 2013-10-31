@@ -160,8 +160,8 @@ def admin_index(req):
                     ),
                 related = conv.guess_bool,
                 related_owner = conv.pipe(
-                    conv.cleanup_line,
-                    model.Account.make_fullname_to_instance(),
+                    conv.input_to_slug,
+                    model.Account.make_slug_to_instance(),
                     ),
                 sort = conv.pipe(
                     conv.cleanup_line,

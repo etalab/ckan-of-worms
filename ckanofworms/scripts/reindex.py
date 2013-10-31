@@ -66,6 +66,12 @@ def main():
             if dataset.save(ctx, safe = False):
                 log.info(u'Updated dataset: {}'.format(dataset.name))
 
+    if args.all or args.user:
+        for account in model.Account.find():
+            account.compute_slug_and_words()
+            if account.save(ctx, safe = False):
+                log.info(u'Updated account: {} - {} <{}>'.format(account.name, account.fullname, account.email))
+
     return 0
 
 
