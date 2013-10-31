@@ -9,6 +9,7 @@ site-js:
     contents:
         - bower/jquery/jquery.js
         - bower/bootstrap/dist/js/bootstrap.js
+        - bower/hogan/web/builds/2.0.0/hogan-2.0.0.js
         - bower/typeahead.js/dist/typeahead.js
         - js/site.js
     filters: uglifyjs

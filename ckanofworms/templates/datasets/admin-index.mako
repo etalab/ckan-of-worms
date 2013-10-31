@@ -256,7 +256,8 @@ title_by_alert_level = dict(
     % if data['advanced_search'] or error or input_value:
             <div class="form-group${' has-error' if error else ''}">
                 <label for="group">${_("Group")}</label>
-                <input class="form-control typeahead" id="group" name="group" type="text" value="${input_value or ''}">
+                <input class="form-control typeahead" id="group" name="group" placeholder="${
+                        _(u"Enter a group name...")}" type="text" value="${input_value or ''}">
         % if error:
                 <span class="help-block">${error}</span>
         % endif
@@ -269,8 +270,8 @@ title_by_alert_level = dict(
     % if data['advanced_search'] or error or input_value:
             <div class="form-group${' has-error' if error else ''}">
                 <label for="organization">${_("Organization")}</label>
-                <input class="form-control typeahead" id="organization" name="organization" type="text" value="${
-                        input_value or ''}">
+                <input class="form-control typeahead" id="organization" name="organization" placeholder="${
+                        _(u"Enter an organization name...")}" type="text" value="${input_value or ''}">
         % if error:
                 <span class="help-block">${error}</span>
         % endif
@@ -283,8 +284,8 @@ title_by_alert_level = dict(
     % if data['advanced_search'] or error or input_value:
             <div class="form-group${' has-error' if error else ''}">
                 <label for="supplier">${_("Supplier")}</label>
-                <input class="form-control typeahead" id="supplier" name="supplier" type="text" value="${
-                        input_value or ''}">
+                <input class="form-control typeahead" id="supplier" name="supplier"placeholder="${
+                        _(u"Enter an organization name...")}"  type="text" value="${input_value or ''}">
         % if error:
                 <span class="help-block">${error}</span>
         % endif
@@ -296,9 +297,9 @@ title_by_alert_level = dict(
 %>\
     % if data['advanced_search'] or error or input_value:
             <div class="form-group${' has-error' if error else ''}">
-                <label for="related_owner">${_("Related Owner (User)")}</label>
-                <input class="form-control typeahead" id="related_owner" name="related_owner" type="text" value="${
-                        input_value or ''}">
+                <label for="related_owner">${_("Related Owner")}</label>
+                <input class="form-control typeahead" id="related_owner" name="related_owner" placeholder="${
+                        _(u"Enter an account name...")}" type="text" value="${input_value or ''}">
         % if error:
                 <span class="help-block">${error}</span>
         % endif

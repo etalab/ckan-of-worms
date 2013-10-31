@@ -24,20 +24,40 @@
 
 $(function() {
     $('.typeahead#group').typeahead({
+        engine: Hogan,
         name: 'group',
-        remote: '/api/1/groups/typeahead?q=%QUERY'
+        remote: '/api/1/groups/typeahead?q=%QUERY',
+        template: [
+            '<p><strong>{{title}}</strong></p>',
+            '<p>{{name}}</p>',
+        ].join('')
     });
     $('.typeahead#organization').typeahead({
+        engine: Hogan,
         name: 'organization',
-        remote: '/api/1/organizations/typeahead?q=%QUERY'
+        remote: '/api/1/organizations/typeahead?q=%QUERY',
+        template: [
+            '<p><strong>{{title}}</strong></p>',
+            '<p>{{name}}</p>',
+        ].join('')
     });
     $('.typeahead#related_owner').typeahead({
+        engine: Hogan,
         name: 'related_owner',
-        remote: '/api/1/accounts/typeahead?q=%QUERY'
+        remote: '/api/1/accounts/typeahead?q=%QUERY',
+        template: [
+            '<p><strong>{{fullname}}</strong> <code>&lt;{{email}}&gt;</code></p>',
+            '<p>{{name}}</p>',
+        ].join('')
     });
     $('.typeahead#supplier').typeahead({
+        engine: Hogan,
         name: 'supplier',
-        remote: '/api/1/organizations/typeahead?q=%QUERY'
+        remote: '/api/1/organizations/typeahead?q=%QUERY',
+        template: [
+            '<p><strong>{{title}}</strong></p>',
+            '<p>{{name}}</p>',
+        ].join('')
     });
     $('.typeahead#tag').typeahead({
         name: 'tag',

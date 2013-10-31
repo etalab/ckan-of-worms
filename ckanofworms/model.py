@@ -29,13 +29,14 @@
 import collections
 import conv
 import datetime
+import itertools
 import re
 import urlparse
 
 from biryani1 import strings
 import fedmsg
 
-from . import conf, objects, urls, weights, wsgihelpers
+from . import conf, objects, texthelpers, urls, weights, wsgihelpers
 
 
 uuid_re = re.compile(ur'[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$')
@@ -47,7 +48,6 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     api_key = None
     collection_name = 'accounts'
     email = None
-    slug = None
     words = None
 
     # CKAN attributes
@@ -82,15 +82,7 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             value['id'] = unicode(id)
         return value, None
 
-    def compute_slug_and_words(self):
-        self.slug = strings.slugify(u'-'.join(
-            fragment
-            for fragment in (
-                self.fullname,
-                self.email,
-                )
-            if fragment is not None
-            ))
+    def compute_words(self):
         self.words = sorted(set(strings.slugify(u'-'.join(
             fragment
             for fragment in (
@@ -100,7 +92,7 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
                 self.name,
                 )
             if fragment is not None
-            )).split(u'-')))
+            )).split(u'-'))) or None
 
     @classmethod
     def get_admin_class_full_url(cls, ctx, *path, **query):
@@ -148,24 +140,6 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             return self, None
         return id_or_name_to_instance
 
-    @classmethod
-    def make_slug_to_instance(cls):
-        def slug_to_instance(value, state = None):
-            if value is None:
-                return value, None
-            if state is None:
-                state = conv.default_state
-            self = cls.find_one(
-                dict(
-                    slug = value,
-                    ),
-                as_class = collections.OrderedDict,
-                )
-            if self is None:
-                return value, state._(u"No account with slug {0}").format(value)
-            return self, None
-        return slug_to_instance
-
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
         if error is not None:
@@ -182,6 +156,7 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
     collection_name = u'datasets'
     timestamp = None
     weight = None
+    words = None
 
     # CKAN attributes
     author = None
@@ -273,6 +248,38 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         if id is not None:
             value['id'] = unicode(id)
         return value, None
+
+    def compute_words(self):
+        self.words = sorted(set(strings.slugify(u'-'.join(
+            fragment
+            for fragment in itertools.chain(
+                (
+                    self._id,
+                    texthelpers.textify_markdown(self.notes),
+                    self.title,
+                    ),
+                itertools.chain(*(
+                    [
+                        texthelpers.textify_markdown(related_link.get('description')),
+                        related_link.get('title'),
+                        ]
+                    for related_link in (self.related or [])
+                    )),
+                itertools.chain(*(
+                    [
+                        texthelpers.textify_markdown(resource.get('description')),
+                        resource.get('format'),
+                        resource.get('name'),
+                        ]
+                    for resource in (self.resources or [])
+                    )),
+                (
+                    tag['name']
+                    for tag in (self.tags or [])
+                    ),
+                )
+            if fragment is not None
+            )).split(u'-'))) or None
 
     def compute_timestamp(self):
         timestamp = self.revision_timestamp
@@ -367,6 +374,7 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
 class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
     alerts = None
     collection_name = u'groups'
+    words = None
 
     # CKAN attributes
     created = None
@@ -399,6 +407,17 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
         if id is not None:
             value['id'] = unicode(id)
         return value, None
+
+    def compute_words(self):
+        self.words = sorted(set(strings.slugify(u'-'.join(
+            fragment
+            for fragment in (
+                self._id,
+                texthelpers.textify_markdown(self.description),
+                self.title,
+                )
+            if fragment is not None
+            )).split(u'-'))) or None
 
     @classmethod
     def get_admin_class_full_url(cls, ctx, *path, **query):
@@ -458,24 +477,6 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
             return self, None
         return id_to_instance
 
-    @classmethod
-    def make_title_to_instance(cls):
-        def title_to_instance(value, state = None):
-            if value is None:
-                return value, None
-            if state is None:
-                state = conv.default_state
-            self = cls.find_one(
-                dict(
-                    title = value,
-                    ),
-                as_class = collections.OrderedDict,
-                )
-            if self is None:
-                return value, state._(u"No group with title {0}").format(value)
-            return self, None
-        return title_to_instance
-
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
         if error is not None:
@@ -489,6 +490,7 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
 class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objects.SmartWrapper):
     alerts = None
     collection_name = u'organizations'
+    words = None
 
     # CKAN attributes
     created = None
@@ -521,6 +523,17 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
         if id is not None:
             value['id'] = unicode(id)
         return value, None
+
+    def compute_words(self):
+        self.words = sorted(set(strings.slugify(u'-'.join(
+            fragment
+            for fragment in (
+                self._id,
+                texthelpers.textify_markdown(self.description),
+                self.title,
+                )
+            if fragment is not None
+            )).split(u'-'))) or None
 
     @classmethod
     def get_admin_class_full_url(cls, ctx, *path, **query):
@@ -579,24 +592,6 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
                     return value, state._(u"No organization with ID {0}").format(value)
             return self, None
         return id_to_instance
-
-    @classmethod
-    def make_title_to_instance(cls):
-        def title_to_instance(value, state = None):
-            if value is None:
-                return value, None
-            if state is None:
-                state = conv.default_state
-            self = cls.find_one(
-                dict(
-                    title = value,
-                    ),
-                as_class = collections.OrderedDict,
-                )
-            if self is None:
-                return value, state._(u"No organization with title {0}").format(value)
-            return self, None
-        return title_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
@@ -745,19 +740,21 @@ def setup():
     Account.ensure_index('api_key', sparse = True, unique = True)
     Account.ensure_index('email')
     Account.ensure_index('name', unique = True)
-    Account.ensure_index('slug', unique = True)
     Account.ensure_index('words')
 
     Dataset.ensure_index('name', unique = True)
     Dataset.ensure_index('related.id')
     Dataset.ensure_index('related.owner_id')
     Dataset.ensure_index('timestamp')
+    Dataset.ensure_index('words')
 
     Group.ensure_index('name', unique = True)
     Group.ensure_index('users.id')
+    Group.ensure_index('words')
 
     Organization.ensure_index('name', unique = True)
     Organization.ensure_index('users.id')
+    Organization.ensure_index('words')
 
     Session.ensure_index('expiration')
     Session.ensure_index('token', unique = True)

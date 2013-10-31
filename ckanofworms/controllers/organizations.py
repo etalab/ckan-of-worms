@@ -107,6 +107,7 @@ def admin_edit(req):
             if organization.errors:
                 del organization.errors
             organization.set_attributes(**data)
+            organization.compute_words()
             organization.save(ctx, safe = True)
 
             # View organization.
@@ -349,6 +350,8 @@ def api1_alert(req):
         organization.alerts = alerts
     elif organization.alerts is not None:
         del organization.alerts
+    # Don't update slug & words, because they don't depend from alerts.
+    # organization.compute_words()
     organization.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -859,6 +862,7 @@ def api1_set_ckan(req):
 
     organization_attributes = data['value']
     organization = model.Organization(**organization_attributes)
+    organization.compute_words()
     organization.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -886,7 +890,10 @@ def api1_typeahead(req):
         )
     data, errors = conv.struct(
         dict(
-            q = conv.cleanup_line,
+            q = conv.pipe(
+                conv.input_to_slug,
+                conv.function(lambda words: sorted(set(words.split(u'-')))),
+                ),
             ),
         )(inputs, state = ctx)
     if errors is not None:
@@ -894,11 +901,18 @@ def api1_typeahead(req):
 
     criteria = {}
     if data['q'] is not None:
-        criteria['title'] = re.compile(re.escape(data['q']))
-    cursor = model.Organization.get_collection().find(criteria, ['title'])
+        criteria['words'] = {'$all': [
+            re.compile(u'^{}'.format(re.escape(word)))
+            for word in data['q']
+            ]}
+    cursor = model.Organization.get_collection().find(criteria, ['name', 'title'])
     return wsgihelpers.respond_json(ctx,
         [
-            organization_attributes['title']
+            dict(
+                name = organization_attributes['name'],
+                title = organization_attributes['title'],
+                value = organization_attributes['name'],
+                )
             for organization_attributes in cursor.limit(10)
             ],
         headers = headers,

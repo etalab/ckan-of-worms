@@ -109,6 +109,7 @@ def admin_edit(req):
                 del dataset.alerts
             dataset.set_attributes(**data)
             dataset.compute_weight()
+            dataset.compute_words()
             dataset.compute_timestamp()
             dataset.save(ctx, safe = True)
 
@@ -146,12 +147,12 @@ def admin_index(req):
                     conv.test_in(['critical', 'debug', 'error', 'info', 'warning']),
                     ),
                 group = conv.pipe(
-                    conv.cleanup_line,
-                    model.Group.make_title_to_instance(),
+                    conv.input_to_ckan_name,
+                    model.Group.make_id_or_name_to_instance(),
                     ),
                 organization = conv.pipe(
-                    conv.cleanup_line,
-                    model.Organization.make_title_to_instance(),
+                    conv.input_to_ckan_name,
+                    model.Organization.make_id_or_name_to_instance(),
                     ),
                 page = conv.pipe(
                     conv.input_to_int,
@@ -160,16 +161,16 @@ def admin_index(req):
                     ),
                 related = conv.guess_bool,
                 related_owner = conv.pipe(
-                    conv.input_to_slug,
-                    model.Account.make_slug_to_instance(),
+                    conv.input_to_ckan_name,
+                    model.Account.make_id_or_name_to_instance(),
                     ),
                 sort = conv.pipe(
                     conv.cleanup_line,
                     conv.test_in(['metadata_created', 'name', 'timestamp']),
                     ),
                 supplier = conv.pipe(
-                    conv.cleanup_line,
-                    model.Organization.make_title_to_instance(),
+                    conv.input_to_ckan_name,
+                    model.Organization.make_id_or_name_to_instance(),
                     ),
                 tag = conv.input_to_ckan_tag_name,
                 term = conv.input_to_ckan_name,
@@ -441,6 +442,8 @@ def api1_alert(req):
         del dataset.alerts
     # Don't update weight, because it doesn't depend from alerts (yet).
     # dataset.compute_weight()
+    # Don't update slug & words, because they don't depend from alerts.
+    # dataset.compute_words()
     # Don't update timestamp, because it doesn't depend from alerts.
     # dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
@@ -713,6 +716,7 @@ def api1_delete_related(req):
     if dataset.alerts:
         del dataset.alerts
     dataset.compute_weight()
+    dataset.compute_words()
     dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 
@@ -1305,6 +1309,7 @@ def api1_related(req):
 #    if dataset.alerts:
 #        del dataset.alerts
 #    dataset.compute_weight()
+#    dataset.compute_words()
 #    dataset.compute_timestamp()
 #    dataset.save(ctx, safe = True)
 
@@ -1444,6 +1449,7 @@ def api1_set_ckan(req):
         # Keep existing attributes that are not part of this CKAN object.
         dataset.related = existing_dataset.related
     dataset.compute_weight()
+    dataset.compute_words()
     dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 
@@ -1610,6 +1616,7 @@ def api1_set_ckan_related(req):
     if dataset.alerts:
         del dataset.alerts
     dataset.compute_weight()
+    dataset.compute_words()
     dataset.compute_timestamp()
     dataset.save(ctx, safe = True)
 
@@ -1623,6 +1630,47 @@ def api1_set_ckan_related(req):
             url = req.url.decode('utf-8'),
             value = related,
             ).iteritems())),
+        headers = headers,
+        )
+
+
+@wsgihelpers.wsgify
+def api1_typeahead(req):
+    ctx = contexts.Ctx(req)
+    headers = wsgihelpers.handle_cross_origin_resource_sharing(ctx)
+
+    assert req.method == 'GET'
+    params = req.GET
+    inputs = dict(
+        q = params.get('q'),
+        )
+    data, errors = conv.struct(
+        dict(
+            q = conv.pipe(
+                conv.input_to_slug,
+                conv.function(lambda words: sorted(set(words.split(u'-')))),
+                ),
+            ),
+        )(inputs, state = ctx)
+    if errors is not None:
+        return wsgihelpers.not_found(ctx, explanation = ctx._('Dataset search error: {}').format(errors))
+
+    criteria = {}
+    if data['q'] is not None:
+        criteria['words'] = {'$all': [
+            re.compile(u'^{}'.format(re.escape(word)))
+            for word in data['q']
+            ]}
+    cursor = model.Dataset.get_collection().find(criteria, ['name', 'title'])
+    return wsgihelpers.respond_json(ctx,
+        [
+            dict(
+                name = dataset_attributes['name'],
+                title = dataset_attributes['title'],
+                value = dataset_attributes['name'],
+                )
+            for dataset_attributes in cursor.limit(10)
+            ],
         headers = headers,
         )
 
@@ -1711,6 +1759,7 @@ def route_api1_class(environ, start_response):
         ('POST', '^/ckan/related/?$', api1_set_ckan_related),
         ('GET', '^/related/?$', api1_related),
         ('DELETE', '^/related/(?P<id>[^/]+)/?$', api1_delete_related),
+        ('GET', '^/typeahead/?$', api1_typeahead),
 #        ('POST', '^/upsert?$', api1_set),
         (None, '^/(?P<id_or_name>[^/]+)(?=/|$)', route_api1),
         )

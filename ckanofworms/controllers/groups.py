@@ -107,6 +107,7 @@ def admin_edit(req):
             if group.errors:
                 del group.errors
             group.set_attributes(**data)
+            group.compute_words()
             group.save(ctx, safe = True)
 
             # View group.
@@ -348,6 +349,8 @@ def api1_alert(req):
         group.alerts = alerts
     elif group.alerts is not None:
         del group.alerts
+    # Don't update slug & words, because they don't depend from alerts.
+    # group.compute_words()
     group.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -721,6 +724,7 @@ def api1_set_ckan(req):
 
     group_attributes = data['value']
     group = model.Group(**group_attributes)
+    group.compute_words()
     group.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -748,7 +752,10 @@ def api1_typeahead(req):
         )
     data, errors = conv.struct(
         dict(
-            q = conv.cleanup_line,
+            q = conv.pipe(
+                conv.input_to_slug,
+                conv.function(lambda words: sorted(set(words.split(u'-')))),
+                ),
             ),
         )(inputs, state = ctx)
     if errors is not None:
@@ -756,11 +763,18 @@ def api1_typeahead(req):
 
     criteria = {}
     if data['q'] is not None:
-        criteria['title'] = re.compile(re.escape(data['q']))
-    cursor = model.Group.get_collection().find(criteria, ['title'])
+        criteria['words'] = {'$all': [
+            re.compile(u'^{}'.format(re.escape(word)))
+            for word in data['q']
+            ]}
+    cursor = model.Group.get_collection().find(criteria, ['name', 'title'])
     return wsgihelpers.respond_json(ctx,
         [
-            group_attributes['title']
+            dict(
+                name = group_attributes['name'],
+                title = group_attributes['title'],
+                value = group_attributes['name'],
+                )
             for group_attributes in cursor.limit(10)
             ],
         headers = headers,

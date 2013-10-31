@@ -110,7 +110,7 @@ def admin_edit(req):
             if account.errors:
                 del account.errors
             account.set_attributes(**data)
-            account.compute_slug_and_words()
+            account.compute_words()
             account.save(ctx, safe = True)
 
             # View account.
@@ -353,7 +353,7 @@ def api1_alert(req):
     elif account.alerts is not None:
         del account.alerts
     # Don't update slug & words, because they don't depend from alerts.
-    # account.compute_slug_and_words()
+    # account.compute_words()
     account.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -734,7 +734,7 @@ def api1_set_ckan(req):
             account.admin = existing_account.admin
         if existing_account.api_key:
             account.api_key = existing_account.api_key
-    account.compute_slug_and_words()
+    account.compute_words()
     account.save(ctx, safe = True)
 
     return wsgihelpers.respond_json(ctx,
@@ -777,18 +777,15 @@ def api1_typeahead(req):
             re.compile(u'^{}'.format(re.escape(word)))
             for word in data['q']
             ]}
-    cursor = model.Account.get_collection().find(criteria, ['email', 'fullname'])
+    cursor = model.Account.get_collection().find(criteria, ['email', 'fullname', 'name'])
     return wsgihelpers.respond_json(ctx,
         [
-            u' '.join(
-                    fragment
-                    for fragment in (
-                        account_attributes.get('fullname'),
-                        u'[{}]'.format(account_attributes['email']) if account_attributes.get('email') is not None
-                            else None,
-                        )
-                    if fragment is not None
-                    )
+            dict(
+                email = account_attributes.get('email'),
+                fullname = account_attributes.get('fullname'),
+                name = account_attributes['name'],
+                value = account_attributes['name'],
+                )
             for account_attributes in cursor.limit(10)
             ],
         headers = headers,
@@ -856,7 +853,7 @@ def login(req):
         user._id = unicode(uuid.uuid4())
         user.api_key = unicode(uuid.uuid4())
         user.email = verification_data['email']
-        user.compute_slug_and_words()
+        user.compute_words()
         user.save(ctx, safe = True)
     ctx.user = user
 

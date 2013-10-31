@@ -62,15 +62,28 @@ def main():
     if args.all or args.dataset:
         for dataset in model.Dataset.find():
             dataset.compute_weight()
+            dataset.compute_words()
             dataset.compute_timestamp()
             if dataset.save(ctx, safe = False):
                 log.info(u'Updated dataset: {}'.format(dataset.name))
 
+    if args.all or args.group:
+        for group in model.Group.find():
+            group.compute_words()
+            if group.save(ctx, safe = False):
+                log.info(u'Updated group: {}'.format(group.name))
+
     if args.all or args.user:
         for account in model.Account.find():
-            account.compute_slug_and_words()
+            account.compute_words()
             if account.save(ctx, safe = False):
                 log.info(u'Updated account: {} - {} <{}>'.format(account.name, account.fullname, account.email))
+
+    if args.all or args.organization:
+        for organization in model.Organization.find():
+            organization.compute_words()
+            if organization.save(ctx, safe = False):
+                log.info(u'Updated organization: {}'.format(organization.name))
 
     return 0
 
