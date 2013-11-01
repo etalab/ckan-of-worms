@@ -173,7 +173,7 @@ def admin_index(req):
                     model.Organization.make_id_or_name_or_words_to_instance(),
                     ),
                 tag = conv.input_to_ckan_tag_name,
-                term = conv.input_to_ckan_name,
+                term = conv.input_to_words,
                 ),
             ),
         conv.rename_item('page', 'page_number'),
@@ -217,7 +217,10 @@ def admin_index(req):
     if data['tag'] is not None:
         criteria['tags.name'] = re.compile(re.escape(data['tag']))
     if data['term'] is not None:
-        criteria['name'] = re.compile(re.escape(data['term']))
+        criteria['words'] = {'$all': [
+            re.compile(u'^{}'.format(re.escape(word)))
+            for word in data['term']
+            ]}
     cursor = model.Dataset.find(criteria, as_class = collections.OrderedDict)
     pager = paginations.Pager(item_count = cursor.count(), page_number = data['page_number'])
     if data['sort'] == 'name':
@@ -858,7 +861,7 @@ def api1_index(req):
             ),
         term = conv.pipe(
             conv.test_isinstance(basestring),
-            conv.cleanup_line,
+            conv.input_to_words,
             ),
         )
 
@@ -983,7 +986,10 @@ def api1_index(req):
     if data['tag'] is not None:
         criteria['tags.name'] = re.compile(re.escape(data['tag']))
     if data['term'] is not None:
-        criteria['name'] = re.compile(re.escape(data['term']))
+        criteria['words'] = {'$all': [
+            re.compile(u'^{}'.format(re.escape(word)))
+            for word in data['term']
+            ]}
 
     if data['format'] is None:
         # Return full list of dataset ids, ignoring page number and sort criteria.

@@ -142,7 +142,7 @@ def admin_index(req):
                     conv.cleanup_line,
                     conv.test_in(['created', 'name']),
                     ),
-                term = conv.input_to_ckan_name,
+                term = conv.input_to_words,
                 ),
             ),
         conv.rename_item('page', 'page_number'),
@@ -152,7 +152,10 @@ def admin_index(req):
 
     criteria = {}
     if data['term'] is not None:
-        criteria['name'] = re.compile(re.escape(data['term']))
+        criteria['words'] = {'$all': [
+            re.compile(u'^{}'.format(re.escape(word)))
+            for word in data['term']
+            ]}
     cursor = model.Account.find(criteria, as_class = collections.OrderedDict)
     pager = paginations.Pager(item_count = cursor.count(), page_number = data['page_number'])
     if data['sort'] == 'name':

@@ -91,6 +91,13 @@ ckan_user_to_account_attributes = pipe(
 input_to_token = cleanup_line
 
 
+input_to_words = pipe(
+    input_to_slug,
+    function(lambda slug: sorted(set(slug.split(u'-')))),
+    empty_to_none,
+    )
+
+
 json_to_dataset_attributes = pipe(
     test_isinstance(dict),
     struct(

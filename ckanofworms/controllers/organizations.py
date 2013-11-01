@@ -140,7 +140,7 @@ def admin_index(req):
                     conv.cleanup_line,
                     conv.test_in(['created', 'name']),
                     ),
-                term = conv.input_to_ckan_name,
+                term = conv.input_to_words,
                 ),
             ),
         conv.rename_item('page', 'page_number'),
@@ -150,7 +150,10 @@ def admin_index(req):
 
     criteria = {}
     if data['term'] is not None:
-        criteria['name'] = re.compile(re.escape(data['term']))
+        criteria['words'] = {'$all': [
+            re.compile(u'^{}'.format(re.escape(word)))
+            for word in data['term']
+            ]}
     cursor = model.Organization.find(criteria, as_class = collections.OrderedDict)
     pager = paginations.Pager(item_count = cursor.count(), page_number = data['page_number'])
     if data['sort'] == 'name':
@@ -584,7 +587,7 @@ def api1_index(req):
             ),
         term = conv.pipe(
             conv.test_isinstance(basestring),
-            conv.cleanup_line,
+            conv.input_to_words,
             ),
         )
 
@@ -697,7 +700,10 @@ def api1_index(req):
     elif data['alerts'] == 'critical':
         criteria['alerts.critical'] = {'$exists': True}
     if data['term'] is not None:
-        criteria['name'] = re.compile(re.escape(data['term']))
+        criteria['words'] = {'$all': [
+            re.compile(u'^{}'.format(re.escape(word)))
+            for word in data['term']
+            ]}
 
     if data['format'] is None:
         # Return full list of organization ids, ignoring page number and sort criteria.
