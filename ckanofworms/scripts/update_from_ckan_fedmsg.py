@@ -490,7 +490,7 @@ def main():
             else:
                 log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
         else:
-            log.warning(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
+            log.debug(u'TODO: Handle {}, {} for {}'.format(kind, action, message))
 
     return 0
 
