@@ -797,7 +797,7 @@ def route_admin(environ, start_response):
     group, error = conv.pipe(
         conv.input_to_ckan_name,
         conv.not_none,
-        model.Group.make_id_or_name_to_instance(),
+        model.Group.make_id_or_name_or_words_to_instance(),
         )(req.urlvars.get('id_or_name'), state = ctx)
     if error is not None:
         return wsgihelpers.not_found(ctx, explanation = ctx._('Group Error: {}').format(error))(
@@ -828,7 +828,7 @@ def route_api1(environ, start_response):
     group, error = conv.pipe(
         conv.input_to_ckan_name,
         conv.not_none,
-        model.Group.make_id_or_name_to_instance(),
+        model.Group.make_id_or_name_or_words_to_instance(),
         )(req.urlvars.get('id_or_name'), state = ctx)
     if error is not None:
         params = req.GET

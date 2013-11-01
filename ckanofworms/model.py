@@ -122,8 +122,8 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return self.fullname or self.name or self.email or self._id
 
     @classmethod
-    def make_id_or_name_to_instance(cls):
-        def id_or_name_to_instance(value, state = None):
+    def make_id_or_name_or_words_to_instance(cls):
+        def id_or_name_or_words_to_instance(value, state = None):
             if value is None:
                 return value, None
             if state is None:
@@ -131,14 +131,27 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             match = uuid_re.match(value)
             if match is None:
                 self = cls.find_one(dict(name = value), as_class = collections.OrderedDict)
-                if self is None:
-                    return value, state._(u"No account with name {0}").format(value)
             else:
                 self = cls.find_one(value, as_class = collections.OrderedDict)
-                if self is None:
-                    return value, state._(u"No account with ID {0}").format(value)
+            if self is None:
+                slug = strings.slugify(value)
+                words = sorted(set(slug.split(u'-')))
+                instances = list(cls.find(
+                    dict(
+                        words = {'$all': [
+                            re.compile(u'^{}'.format(re.escape(word)))
+                            for word in words
+                            ]},
+                        ),
+                    as_class = collections.OrderedDict,
+                    ).limit(2))
+                if not instances:
+                    return value, state._(u"No organization with ID, name or words: {0}").format(value)
+                if len(instances) > 1:
+                    return value, state._(u"Too much organizations with words: {0}").format(u' '.join(words))
+                self = instances[0]
             return self, None
-        return id_or_name_to_instance
+        return id_or_name_or_words_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
@@ -343,8 +356,8 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         return self.title or self.name or self._id
 
     @classmethod
-    def make_id_or_name_to_instance(cls):
-        def id_to_instance(value, state = None):
+    def make_id_or_name_or_words_to_instance(cls):
+        def id_or_name_or_words_to_instance(value, state = None):
             if value is None:
                 return value, None
             if state is None:
@@ -352,14 +365,27 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             match = uuid_re.match(value)
             if match is None:
                 self = cls.find_one(dict(name = value), as_class = collections.OrderedDict)
-                if self is None:
-                    return value, state._(u"No dataset with name {0}").format(value)
             else:
                 self = cls.find_one(value, as_class = collections.OrderedDict)
-                if self is None:
-                    return value, state._(u"No dataset with ID {0}").format(value)
+            if self is None:
+                slug = strings.slugify(value)
+                words = sorted(set(slug.split(u'-')))
+                instances = list(cls.find(
+                    dict(
+                        words = {'$all': [
+                            re.compile(u'^{}'.format(re.escape(word)))
+                            for word in words
+                            ]},
+                        ),
+                    as_class = collections.OrderedDict,
+                    ).limit(2))
+                if not instances:
+                    return value, state._(u"No dataset with ID, name or words: {0}").format(value)
+                if len(instances) > 1:
+                    return value, state._(u"Too much datasets with words: {0}").format(u' '.join(words))
+                self = instances[0]
             return self, None
-        return id_to_instance
+        return id_or_name_or_words_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
@@ -459,8 +485,8 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
         return self.title or self.name or self._id
 
     @classmethod
-    def make_id_or_name_to_instance(cls):
-        def id_to_instance(value, state = None):
+    def make_id_or_name_or_words_to_instance(cls):
+        def id_or_name_or_words_to_instance(value, state = None):
             if value is None:
                 return value, None
             if state is None:
@@ -468,14 +494,27 @@ class Group(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, objec
             match = uuid_re.match(value)
             if match is None:
                 self = cls.find_one(dict(name = value), as_class = collections.OrderedDict)
-                if self is None:
-                    return value, state._(u"No group with name {0}").format(value)
             else:
                 self = cls.find_one(value, as_class = collections.OrderedDict)
-                if self is None:
-                    return value, state._(u"No group with ID {0}").format(value)
+            if self is None:
+                slug = strings.slugify(value)
+                words = sorted(set(slug.split(u'-')))
+                instances = list(cls.find(
+                    dict(
+                        words = {'$all': [
+                            re.compile(u'^{}'.format(re.escape(word)))
+                            for word in words
+                            ]},
+                        ),
+                    as_class = collections.OrderedDict,
+                    ).limit(2))
+                if not instances:
+                    return value, state._(u"No group with ID, name or words: {0}").format(value)
+                if len(instances) > 1:
+                    return value, state._(u"Too much groups with words: {0}").format(u' '.join(words))
+                self = instances[0]
             return self, None
-        return id_to_instance
+        return id_or_name_or_words_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)
@@ -575,8 +614,8 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
         return self.title or self.name or self._id
 
     @classmethod
-    def make_id_or_name_to_instance(cls):
-        def id_to_instance(value, state = None):
+    def make_id_or_name_or_words_to_instance(cls):
+        def id_or_name_or_words_to_instance(value, state = None):
             if value is None:
                 return value, None
             if state is None:
@@ -584,14 +623,27 @@ class Organization(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper
             match = uuid_re.match(value)
             if match is None:
                 self = cls.find_one(dict(name = value), as_class = collections.OrderedDict)
-                if self is None:
-                    return value, state._(u"No organization with name {0}").format(value)
             else:
                 self = cls.find_one(value, as_class = collections.OrderedDict)
-                if self is None:
-                    return value, state._(u"No organization with ID {0}").format(value)
+            if self is None:
+                slug = strings.slugify(value)
+                words = sorted(set(slug.split(u'-')))
+                instances = list(cls.find(
+                    dict(
+                        words = {'$all': [
+                            re.compile(u'^{}'.format(re.escape(word)))
+                            for word in words
+                            ]},
+                        ),
+                    as_class = collections.OrderedDict,
+                    ).limit(2))
+                if not instances:
+                    return value, state._(u"No account with ID, name or words: {0}").format(value)
+                if len(instances) > 1:
+                    return value, state._(u"Too much accounts with words: {0}").format(u' '.join(words))
+                self = instances[0]
             return self, None
-        return id_to_instance
+        return id_or_name_or_words_to_instance
 
     def turn_to_json_attributes(self, state):
         value, error = conv.object_to_clean_dict(self, state = state)

@@ -148,11 +148,11 @@ def admin_index(req):
                     ),
                 group = conv.pipe(
                     conv.input_to_ckan_name,
-                    model.Group.make_id_or_name_to_instance(),
+                    model.Group.make_id_or_name_or_words_to_instance(),
                     ),
                 organization = conv.pipe(
                     conv.input_to_ckan_name,
-                    model.Organization.make_id_or_name_to_instance(),
+                    model.Organization.make_id_or_name_or_words_to_instance(),
                     ),
                 page = conv.pipe(
                     conv.input_to_int,
@@ -162,7 +162,7 @@ def admin_index(req):
                 related = conv.guess_bool,
                 related_owner = conv.pipe(
                     conv.input_to_ckan_name,
-                    model.Account.make_id_or_name_to_instance(),
+                    model.Account.make_id_or_name_or_words_to_instance(),
                     ),
                 sort = conv.pipe(
                     conv.cleanup_line,
@@ -170,7 +170,7 @@ def admin_index(req):
                     ),
                 supplier = conv.pipe(
                     conv.input_to_ckan_name,
-                    model.Organization.make_id_or_name_to_instance(),
+                    model.Organization.make_id_or_name_or_words_to_instance(),
                     ),
                 tag = conv.input_to_ckan_tag_name,
                 term = conv.input_to_ckan_name,
@@ -819,12 +819,12 @@ def api1_index(req):
         group = conv.pipe(
             conv.test_isinstance(basestring),
             conv.input_to_ckan_name,
-            model.Group.make_id_or_name_to_instance(),
+            model.Group.make_id_or_name_or_words_to_instance(),
             ),
         organization = conv.pipe(
             conv.test_isinstance(basestring),
             conv.input_to_ckan_name,
-            model.Organization.make_id_or_name_to_instance(),
+            model.Organization.make_id_or_name_or_words_to_instance(),
             ),
         page = conv.pipe(
             conv.anything_to_int,
@@ -835,7 +835,7 @@ def api1_index(req):
         related_owner = conv.pipe(
             conv.test_isinstance(basestring),
             conv.input_to_ckan_name,
-            model.Account.make_id_or_name_to_instance(),
+            model.Account.make_id_or_name_or_words_to_instance(),
             ),
         sort = conv.pipe(
             conv.test_isinstance(basestring),
@@ -845,7 +845,7 @@ def api1_index(req):
         supplier = conv.pipe(
             conv.test_isinstance(basestring),
             conv.input_to_ckan_name,
-            model.Organization.make_id_or_name_to_instance(),
+            model.Organization.make_id_or_name_or_words_to_instance(),
             ),
         tag = conv.pipe(
             conv.test_isinstance(basestring),
@@ -1585,7 +1585,7 @@ def api1_set_ckan_related(req):
     dataset, error = conv.pipe(
         conv.input_to_ckan_name,
         conv.not_none,
-        model.Dataset.make_id_or_name_to_instance(),
+        model.Dataset.make_id_or_name_or_words_to_instance(),
         )(related.get('dataset_id'), state = ctx)
     if error is not None:
         return wsgihelpers.respond_json(ctx,
@@ -1691,7 +1691,7 @@ def route_admin(environ, start_response):
     dataset, error = conv.pipe(
         conv.input_to_ckan_name,
         conv.not_none,
-        model.Dataset.make_id_or_name_to_instance(),
+        model.Dataset.make_id_or_name_or_words_to_instance(),
         )(req.urlvars.get('id_or_name'), state = ctx)
     if error is not None:
         return wsgihelpers.not_found(ctx, explanation = ctx._('Dataset Error: {}').format(error))(
@@ -1724,7 +1724,7 @@ def route_api1(environ, start_response):
     dataset, error = conv.pipe(
         conv.input_to_ckan_name,
         conv.not_none,
-        model.Dataset.make_id_or_name_to_instance(),
+        model.Dataset.make_id_or_name_or_words_to_instance(),
         )(req.urlvars.get('id_or_name'), state = ctx)
     if error is not None:
         params = req.GET
