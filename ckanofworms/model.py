@@ -219,6 +219,7 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
             )
 
         # Publish changes in related links.
+        account_json_by_id = dict()
         old_related_link_by_id = dict(
             (related_link['id'], related_link)
             for related_link in ((old_bson or {}).get('related') or [])
@@ -230,31 +231,47 @@ class Dataset(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         for related_link in related_link_by_id.itervalues():
             old_related_link = old_related_link_by_id.get(related_link['id'])
             if related_link != old_related_link:
-                related_link_json = related_link.copy()
-                related_link_json['dataset'] = json
                 owner_id = related_link.get('owner_id')
-                if owner_id is not None:
-                    owner = Account.find_one(owner_id)
-                    if owner is not None:
-                        related_link_json['owner'] = conv.check(conv.method('turn_to_json'))(owner, state = ctx)
+                if owner_id is None:
+                    owner_json = None
+                else:
+                    owner_json = account_json_by_id.get(owner_id, UnboundLocalError)
+                    if owner_json is UnboundLocalError:
+                        owner = Account.find_one(owner_id)
+                        account_json_by_id[owner_id] = owner_json = conv.check(conv.method('turn_to_json'))(
+                            owner, state = ctx) if owner is not None else None
+                activity = dict(
+                    actor = owner_json,
+                    object = related_link,
+                    target = json,
+                    verb = 'create' if old_related_link is None else 'update',
+                    )
                 fedmsg.publish(
                     modname = conf['fedmsg.modname'],
-                    msg = related_link_json,
-                    topic = 'related.{}'.format('create' if old_related_link is None else 'update'),
+                    msg = activity,
+                    topic = 'related.{}'.format(activity['verb']),
                     )
         for old_related_link in old_related_link_by_id.itervalues():
             if old_related_link['id'] not in related_link_by_id:
-                old_related_link_json = old_related_link.copy()
-                old_related_link_json['dataset'] = json
                 owner_id = old_related_link.get('owner_id')
-                if owner_id is not None:
-                    owner = Account.find_one(owner_id)
-                    if owner is not None:
-                        old_related_link_json['owner'] = conv.check(conv.method('turn_to_json'))(owner, state = ctx)
+                if owner_id is None:
+                    owner_json = None
+                else:
+                    owner_json = account_json_by_id.get(owner_id, UnboundLocalError)
+                    if owner_json is UnboundLocalError:
+                        owner = Account.find_one(owner_id)
+                        account_json_by_id[owner_id] = owner_json = conv.check(conv.method('turn_to_json'))(
+                            owner, state = ctx) if owner is not None else None
+                activity = dict(
+                    actor = owner_json,
+                    object = old_related_link,
+                    target = json,
+                    verb = 'delete',
+                    )
                 fedmsg.publish(
                     modname = conf['fedmsg.modname'],
-                    msg = old_related_link_json,
-                    topic = 'related.delete',
+                    msg = activity,
+                    topic = 'related.{}'.format(activity['verb']),
                     )
 
     @classmethod
