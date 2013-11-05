@@ -107,8 +107,8 @@ def admin_edit(req):
                     ).count() > 0:
                 errors = dict(email = ctx._('An account with the same email already exists.'))
         if errors is None:
-            if account.errors:
-                del account.errors
+            if account.alerts:
+                del account.alerts
             account.set_attributes(**data)
             account.compute_words()
             account.save(ctx, safe = True)

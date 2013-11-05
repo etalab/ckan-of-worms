@@ -104,8 +104,8 @@ def admin_edit(req):
                     ).count() > 0:
                 errors = dict(email = ctx._('A group with the same email already exists.'))
         if errors is None:
-            if group.errors:
-                del group.errors
+            if group.alerts:
+                del group.alerts
             group.set_attributes(**data)
             group.compute_words()
             group.save(ctx, safe = True)

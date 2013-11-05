@@ -104,8 +104,8 @@ def admin_edit(req):
                     ).count() > 0:
                 errors = dict(email = ctx._('An organization with the same email already exists.'))
         if errors is None:
-            if organization.errors:
-                del organization.errors
+            if organization.alerts:
+                del organization.alerts
             organization.set_attributes(**data)
             organization.compute_words()
             organization.save(ctx, safe = True)
