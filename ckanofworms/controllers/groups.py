@@ -755,10 +755,7 @@ def api1_typeahead(req):
         )
     data, errors = conv.struct(
         dict(
-            q = conv.pipe(
-                conv.input_to_slug,
-                conv.function(lambda words: sorted(set(words.split(u'-')))),
-                ),
+            q = conv.input_to_words,
             ),
         )(inputs, state = ctx)
     if errors is not None:
