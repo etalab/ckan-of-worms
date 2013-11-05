@@ -70,7 +70,7 @@ def language_detector(app):
             ctx.lang = [
                 req.accept_language.best_match(
                     [
-                        ('de-DE', 1), ('de', 1),
+                        ('de-DE', 0.5), ('de', 0.5),
                         ('en-US', 1), ('en', 1),
                         ('fr-FR', 1), ('fr', 1),
                         ],
