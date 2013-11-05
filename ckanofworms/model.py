@@ -52,6 +52,7 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
 
     # CKAN attributes
     about = None
+    apikey = None
     created = None
     email_hash = None
     fullname = None
@@ -80,6 +81,8 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         id = value.pop('_id', None)
         if id is not None:
             value['id'] = unicode(id)
+        value.pop('api_key', None)
+        value.pop('apikey', None)
         return value, None
 
     def compute_words(self):
@@ -160,6 +163,8 @@ class Account(objects.Initable, objects.JsonMonoClassMapper, objects.Mapper, obj
         id = value.pop('_id', None)
         if id is not None:
             value['id'] = id
+        value.pop('api_key', None)
+        value.pop('apikey', None)
         return value, None
 
 
