@@ -55,7 +55,7 @@ from ckanofworms import conf, model, texthelpers, urls
         for organization in organizations
         )
 %>\
-    <updated>${created}Z</updated>
+    <updated>${created}</updated>
     % for organization in organizations:
     <entry>
         <title>${organization.title}</title>
@@ -63,7 +63,7 @@ from ckanofworms import conf, model, texthelpers, urls
         <link href="${organization.get_admin_full_url(ctx) if data['target'] is None \
                 else organization.get_back_url(ctx) if data['target'] == 'back' \
                 else organization.get_front_url(ctx)}"/>
-        <updated>${organization.created}Z</updated>
+        <updated>${organization.created}</updated>
         % if organization.description:
         <summary type="html">
             ${texthelpers.htmlify_markdown(organization.description)}

@@ -55,7 +55,7 @@ from ckanofworms import conf, model, texthelpers, urls
         for dataset in datasets
         )
 %>\
-    <updated>${timestamp.replace(u' ', u'Z')}</updated>
+    <updated>${timestamp.replace(u' ', u'T')}</updated>
     % for dataset in datasets:
     <entry>
         <title>${dataset.title}</title>
@@ -77,7 +77,7 @@ from ckanofworms import conf, model, texthelpers, urls
         % for tag in (dataset.tags or []):
         <category term="${tag['name']}"/>
         % endfor
-        <updated>${dataset.timestamp.replace(u' ', u'Z')}</updated>
+        <updated>${dataset.timestamp.replace(u' ', u'T')}</updated>
         % if dataset.notes:
         <summary type="html">
             ${texthelpers.htmlify_markdown(dataset.notes)}
