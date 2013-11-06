@@ -64,6 +64,7 @@ from ckanofworms import model, urls
                     <th><a href="${model.Group.get_admin_class_url(ctx, **urls.relative_query(inputs, page = None,
                             sort = 'name'))}">${_(u"Title")}</a></th>
             % endif
+                    <th>${_(u"Datasets")}</th>
             % if data['sort'] == 'created':
                     <th>${_(u"Creation")} <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></th>
             % else:
@@ -77,6 +78,7 @@ from ckanofworms import model, urls
         % for group in groups:
                 <tr>
                     <td><a href="${group.get_admin_url(ctx)}">${group.title or ''}</a></td>
+                    <td>${model.Dataset.find({'groups.id': group._id}).count() or u''}</td>
                     <td>${group.created or ''}</td>
                     <td>
             % if group.image_url is not None:

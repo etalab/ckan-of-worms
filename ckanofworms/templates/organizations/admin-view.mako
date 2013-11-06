@@ -46,8 +46,14 @@ from ckanofworms import model, texthelpers, urls
         <h2>${organization.get_title(ctx)}</h2>
         <%self:view_fields/>
         <div class="btn-toolbar">
-            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, organization = organization.title)}">${_(u'Produced Datasets')}</a>
-            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, supplier = organization.title)}">${_(u'Supplied Datasets')}</a>
+<%
+    produced_dataset_count = model.Dataset.find({'owner_org': organization._id}).count()
+    supplied_dataset_count = model.Dataset.find({'supplier_id': organization._id}).count()
+%>\
+            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, organization = organization.title)}">${ngettext(
+                u'{} Produced Dataset', u'{} Produced Datasets', produced_dataset_count).format(produced_dataset_count)}</a>
+            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, supplier = organization.title)}">${ngettext(
+                u'{} Supplied Dataset', u'{} Supplied Datasets', supplied_dataset_count).format(supplied_dataset_count)}</a>
 ##            <a class="btn btn-default" href="${organization.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
             <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'organizations', organization.name)}">${_(u'JSON')}</a>
 ##            <a class="btn btn-default" href="${organization.get_admin_url(ctx, 'edit')}">${_(u'Edit')}</a>

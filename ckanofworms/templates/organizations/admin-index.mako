@@ -64,6 +64,9 @@ from ckanofworms import model, urls
                     <th><a href="${model.Organization.get_admin_class_url(ctx, **urls.relative_query(inputs,
                             page = None, sort = 'name'))}">${_(u"Title")}</a></th>
         % endif
+                    <th>${_(u"Produced Datasets")}</th>
+                    <th>${_(u"Supplied Datasets")}</th>
+                    <th>${_(u"Datasets")}</th>
         % if data['sort'] == 'created':
                     <th>${_(u"Creation")} <span class="glyphicon glyphicon-sort-by-attributes-alt"></span></th>
         % else:
@@ -77,6 +80,8 @@ from ckanofworms import model, urls
         % for organization in organizations:
                 <tr>
                     <td><a href="${organization.get_admin_url(ctx)}">${organization.title or ''}</a></td>
+                    <td>${model.Dataset.find({'owner_org': organization._id}).count() or u''}</td>
+                    <td>${model.Dataset.find({'supplier_id': organization._id}).count() or u''}</td>
                     <td>${organization.created or ''}</td>
                     <td>
             % if organization.image_url is not None:

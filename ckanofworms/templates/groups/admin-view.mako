@@ -46,7 +46,11 @@ from ckanofworms import model, texthelpers, urls
         <h2>${group.get_title(ctx)}</h2>
         <%self:view_fields/>
         <div class="btn-toolbar">
-            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, group = group.title)}">${_(u'Datasets')}</a>
+<%
+    dataset_count = model.Dataset.find({'groups.id': group._id}).count()
+%>\
+            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, group = group.title)}">${ngettext(
+                u'{} Dataset', u'{} Datasets', dataset_count).format(dataset_count)}</a>
 ##            <a class="btn btn-default" href="${group.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
             <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'groups', group.name)}">${_(u'JSON')}</a>
 ##            <a class="btn btn-default" href="${group.get_admin_url(ctx, 'edit')}">${_(u'Edit')}</a>
