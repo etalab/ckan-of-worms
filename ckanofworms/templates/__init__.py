@@ -96,6 +96,7 @@ def render(ctx, template_path, custom_name = None, **kw):
         js = js,
         markupsafe = markupsafe,
         N_ = lambda message: message,
+        ngettext = ctx.translator.ngettext,
         qp = qp,
         req = ctx.req,
         **kw).strip()
@@ -109,6 +110,7 @@ def render_def(ctx, template_path, def_name, custom_name = None, **kw):
         js = js,
         markupsafe = markupsafe,
         N_ = lambda message: message,
+        ngettext = ctx.translator.ngettext,
         qp = qp,
         req = ctx.req,
         **kw).strip()
