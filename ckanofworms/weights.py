@@ -102,7 +102,7 @@ def compute_territorial_granularity_weight(dataset):
             'epci': 'IntercommunalityOfFrance',
             'department': 'DepartmentOfFrance',
             'region': 'RegionOfFrance',
-            'france': 'Country',
+            'pays': 'Country',
             }.get(territorial_coverage_granularity, territorial_coverage_granularity)
         territorial_granularity_weight = dict(
             ArrondissementOfCommuneOfFrance = 36700.0,
