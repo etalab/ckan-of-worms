@@ -46,9 +46,15 @@ def compute_dataset_weight(dataset):
 #    certified_weight = 2.0 if certified_public_service is not None else 0.5
     certified_weight = 1.0
 
+    # Compute followers weight.
+# TODO once we have a wey to know the number of followers.
+#    followers_weight = count(followers)
+#    followers_weight = normalize_bonus_weight(followers_weight)
+    followers_weight = 1.0
+
     # Compute related weight.
-    related_weight = 1.0 + len(dataset.related or [])
-    related_weight = normalize_weight(related_weight)
+    related_weight = len(dataset.related or [])
+    related_weight = normalize_bonus_weight(related_weight)
 
     # Compute temporal weight.
     if dataset.frequency == u'temps réel':
@@ -84,6 +90,7 @@ def compute_dataset_weight(dataset):
     # Compute a weight between 0 and 1.
     dataset.weight = (
         certified_weight
+        * followers_weight
         * related_weight ** 2
         * temporal_weight
         * compute_territorial_weight(dataset) ** 2
@@ -194,6 +201,12 @@ def compute_territorial_weight(dataset, *local_kinds):
         territorial_weight *= 1.5
         territorial_weight += 0.5
     return territorial_weight
+
+
+def normalize_bonus_weight(weight):
+    # Convert a weight between 0 and infinite to a number between 1 and 2.
+    # cf http://en.wikipedia.org/wiki/Inverse_trigonometric_functions
+    return math.atan(weight) * 2 / math.pi + 1.0
 
 
 def normalize_weight(weight):
