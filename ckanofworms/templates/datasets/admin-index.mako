@@ -159,12 +159,22 @@ title_by_alert_level = dict(
                             </li>
                 % endif
                 % if dataset.territorial_coverage is not None:
+<%
+                    territorial_coverage = u', '.join(
+                        territory_kind_code_name.rsplit(u'/', 1)[-1]
+                        for territory_kind_code_name in (
+                            fragment.strip()
+                            for fragment in dataset.territorial_coverage.split(u',')
+                            )
+                        if territory_kind_code_name
+                        )
+%>\
                             <li>
                                 <a href class="btn btn-default btn-xs" data-placement="left" data-toggle="tooltip" title="${
                                         _(u"Territorial coverage")}">
                                     <span class="glyphicon glyphicon-globe"></span>
                                 </a>
-                                ${dataset.territorial_coverage}
+                                ${territorial_coverage}
                             </li>
                 % endif
                 % if dataset.territorial_coverage_granularity is not None:

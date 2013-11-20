@@ -446,7 +446,14 @@ ${dataset.get_title(ctx)} - ${parent.title_content()}
         % endif
 <%
         alerts = self.attr.extract_item_alerts(dataset_alerts, 'territorial_coverage')
-        value = dataset.territorial_coverage
+        value = u', '.join(
+            territory_kind_code_name.rsplit(u'/', 1)[-1]
+            for territory_kind_code_name in (
+                fragment.strip()
+                for fragment in dataset.territorial_coverage.split(u',')
+                )
+            if territory_kind_code_name
+            ) if dataset.territorial_coverage is not None else None
 %>\
         % if value is not None or alerts:
         <div class="row">
