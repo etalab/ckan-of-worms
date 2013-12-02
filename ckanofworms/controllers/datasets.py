@@ -1137,7 +1137,7 @@ def api1_related(req):
                 page = conv.pipe(
                     conv.anything_to_int,
                     conv.test_greater_or_equal(1),
-                    # conv.default(1),  # Set below.
+                    conv.default(1),  # Set below.
                     ),
                 territory = conv.uniform_sequence(
                     conv.pipe(
