@@ -1194,7 +1194,7 @@ def api1_related(req):
         dataset_json['related'] = [
             related_link
             for related_link in dataset_json['related']
-            if related_link['image_url'] is not None
+            if related_link.get('image_url') is not None
             ]
         dataset_json.pop('resources', None)
         dataset_json.pop('tags', None)
