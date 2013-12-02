@@ -1175,13 +1175,31 @@ def api1_related(req):
             )
     data['page_number'] = data.pop('page')
 
-    criteria = dict(
-        related = {'$exists': True},
-        )
+    criteria = {
+        'related.image_url': {'$exists': True},
+        }
     if data['territory']:
         criteria['territorial_coverage'] = {'$in': data['territory']}
     cursor = model.Dataset.find(criteria, as_class = collections.OrderedDict).sort([('timestamp', pymongo.DESCENDING)])
     cursor.skip((data['page_number'] - 1) * 15).limit(15)
+
+    # Reduce size of exported datasets and remove related without images.
+    datasets_json = [
+        conv.check(conv.method('turn_to_json'))(dataset, state = ctx)
+        for dataset in cursor
+        ]
+    for dataset_json in datasets_json:
+        dataset_json.pop('alerts', None)
+        dataset_json.pop('extras', None)
+        dataset_json['related'] = [
+            related_link
+            for related_link in dataset_json['related']
+            if related_link['image_url'] is not None
+            ]
+        dataset_json.pop('resources', None)
+        dataset_json.pop('tags', None)
+        dataset_json.pop('words', None)
+
     return wsgihelpers.respond_json(ctx,
         collections.OrderedDict(sorted(dict(
             apiVersion = '1.0',
@@ -1189,10 +1207,7 @@ def api1_related(req):
             method = req.script_name,
             params = inputs,
             url = req.url.decode('utf-8'),
-            value = [
-                conv.check(conv.method('turn_to_json'))(dataset, state = ctx)
-                for dataset in cursor
-                ],
+            value = datasets_json,
             ).iteritems())),
         headers = headers,
         jsonp = data['callback'],

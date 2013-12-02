@@ -818,6 +818,7 @@ def setup():
 
     Dataset.ensure_index('name', unique = True)
     Dataset.ensure_index('related.id')
+    Dataset.ensure_index('related.image_url')
     Dataset.ensure_index('related.owner_id')
     Dataset.ensure_index('timestamp')
     Dataset.ensure_index('words')
