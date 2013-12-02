@@ -1123,6 +1123,7 @@ def api1_related(req):
     inputs = dict(
         callback = params.get('callback'),
         context = params.get('context'),
+        page = params.get('page'),
         territory = params.getall('territory')
         )
     data, errors = conv.pipe(
@@ -1133,6 +1134,11 @@ def api1_related(req):
                     conv.cleanup_line,
                     ),
                 context = conv.test_isinstance(basestring),
+                page = conv.pipe(
+                    conv.anything_to_int,
+                    conv.test_greater_or_equal(1),
+                    # conv.default(1),  # Set below.
+                    ),
                 territory = conv.uniform_sequence(
                     conv.pipe(
                         conv.test_isinstance(basestring),
@@ -1167,6 +1173,7 @@ def api1_related(req):
             headers = headers,
             jsonp = inputs['callback'],
             )
+    data['page_number'] = data.pop('page')
 
     criteria = dict(
         related = {'$exists': True},
@@ -1174,6 +1181,7 @@ def api1_related(req):
     if data['territory']:
         criteria['territorial_coverage'] = {'$in': data['territory']}
     cursor = model.Dataset.find(criteria, as_class = collections.OrderedDict).sort([('timestamp', pymongo.DESCENDING)])
+    cursor.skip((data['page_number'] - 1) * 15).limit(15)
     return wsgihelpers.respond_json(ctx,
         collections.OrderedDict(sorted(dict(
             apiVersion = '1.0',
