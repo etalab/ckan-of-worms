@@ -1180,7 +1180,7 @@ def api1_related(req):
         }
     if data['territory']:
         criteria['territorial_coverage'] = {'$in': data['territory']}
-    cursor = model.Dataset.find(criteria, as_class = collections.OrderedDict).sort([('timestamp', pymongo.DESCENDING)])
+    cursor = model.Dataset.find(criteria, as_class = collections.OrderedDict).sort([('weight', pymongo.DESCENDING)])
     cursor.skip((data['page_number'] - 1) * 15).limit(15)
 
     # Reduce size of exported datasets and remove related without images.
