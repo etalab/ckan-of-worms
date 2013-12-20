@@ -54,7 +54,7 @@ title_by_alert_level = dict(
 
 <%def name="breadcrumb_content()" filter="trim">
             <%parent:breadcrumb_content/>
-            <li><a href="${urls.get_url(ctx, 'admin')}">${_(u"Admin")}</a></li>
+##            <li><a href="${urls.get_url(ctx, 'admin')}">${_(u"Admin")}</a></li>
             <li><a href="${model.Dataset.get_admin_class_url(ctx)}">${_(u"Datasets")}</a></li>
             <li class="active">${dataset.get_title(ctx)}</li>
 </%def>

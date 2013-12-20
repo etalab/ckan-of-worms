@@ -33,7 +33,7 @@ from ckanofworms import model, urls
 
 <%def name="breadcrumb_content()" filter="trim">
             <%parent:breadcrumb_content/>
-            <li><a href="${urls.get_url(ctx, 'admin')}">${_(u"Admin")}</a></li>
+##            <li><a href="${urls.get_url(ctx, 'admin')}">${_(u"Admin")}</a></li>
             <li class="active">${_(u'Groups')}</li>
 </%def>
 

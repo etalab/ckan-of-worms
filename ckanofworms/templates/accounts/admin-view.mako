@@ -36,7 +36,7 @@ from ckanofworms import model, texthelpers, urls
 
 <%def name="breadcrumb_content()" filter="trim">
             <%parent:breadcrumb_content/>
-            <li><a href="${urls.get_url(ctx, 'admin')}">${_(u"Admin")}</a></li>
+##            <li><a href="${urls.get_url(ctx, 'admin')}">${_(u"Admin")}</a></li>
             <li><a href="${model.Account.get_admin_class_url(ctx)}">${_(u"Accounts")}</a></li>
             <li class="active">${account.get_title(ctx)}</li>
 </%def>
