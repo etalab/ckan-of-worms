@@ -28,9 +28,11 @@
 
 import logging
 import math
+import re
 
 
 log = logging.getLogger(__name__)
+year_or_month_or_day_re = re.compile(ur'[0-2]\d{3}(-(0[1-9]|1[0-2])(-([0-2]\d|3[0-1]))?)?$')
 
 
 def compute_dataset_weight(dataset):
@@ -61,9 +63,19 @@ def compute_dataset_weight(dataset):
         temporal_weight = 2.0
     else:
         temporal_coverage_from = dataset.temporal_coverage_from
-        year_from = temporal_coverage_from.split('-', 1)[0] if temporal_coverage_from is not None else None
+        year_from = None
+        if temporal_coverage_from is not None:
+            match = year_or_month_or_day_re.match(temporal_coverage_from)
+            if match is not None:
+                year_from = temporal_coverage_from.split('-', 1)[0]
+
         temporal_coverage_to = dataset.temporal_coverage_to
-        year_to = temporal_coverage_to.split('-', 1)[0] if temporal_coverage_to is not None else None
+        year_to = None
+        if temporal_coverage_to is not None:
+            match = year_or_month_or_day_re.match(temporal_coverage_to)
+            if match is not None:
+                year_to = temporal_coverage_to.split('-', 1)[0]
+
         if not year_from:
             if year_to:
                 covered_years = [year_to]
