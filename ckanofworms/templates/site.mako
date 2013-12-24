@@ -36,11 +36,13 @@ from ckanofworms import conf, model, urls
 
 
 <%def name="body_content()" filter="trim">
-    <div class="container"><div class="row">
-        <%self:breadcrumb/>
-        <%self:container_content/>
-        <%self:footer/>
-    </div></div>
+    <%self:breadcrumb/>
+    <section class="default">
+        <div class="container">
+            <%self:container_content/>
+        </div>
+    </section>
+    <%self:footer/>
 </%def>
 
 
@@ -50,14 +52,22 @@ ${conf['realm']}
 
 
 <%def name="breadcrumb()" filter="trim">
-        <ul class="breadcrumb">
-            <%self:breadcrumb_content/>
-        </ul>
+    <section class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <%self:breadcrumb_content/>
+            </ul>
+        </div>
+    </section>
 </%def>
 
 
 <%def name="breadcrumb_content()" filter="trim">
-            <li><a href="${urls.get_url(ctx)}">${_('Home')}</a></li>
+    <li>
+        <a href="${urls.get_url(ctx)}" title="${_('Home')}">
+            <span class="glyphicon glyphicon-home"></span>
+        </a>
+    </li>
 </%def>
 
 
@@ -102,18 +112,67 @@ ${conf['realm']}
 
 
 <%def name="footer()" filter="trim">
-        <footer class="footer">
-            <%self:footer_service/>
-            <p>
-                ${_('{0}:').format(_('Software'))}
-                <a href="http://github.com/etalab/ckan-of-worms" rel="external">CKAN-of-Worms</a>
-                &mdash;
-                <span>Copyright © 2013 Etalab</span>
-                &mdash;
-                <a href="http://www.gnu.org/licenses/agpl.html" rel="external">${_(
-                    'GNU Affero General Public License')}</a>
-            </p>
+<section class="footer">
+    <div class="container">
+        <footer class="row">
+
+            <section class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                <h5>${_('The Open Data')}</h5>
+                <ul>
+                    <li><a href="http://wiki.etalab2.fr/wiki/FAQ">${_('How it works ?')}</a></li>
+                    <li><a href="{{ url(lang, 'organization') }}">${_('Publishers')}</a></li>
+                    <li>
+                        <a href="http://www.etalab.gouv.fr/pages/licence-ouverte-open-licence-5899923.html">
+                            ${_('Open license')}
+                        </a>
+                    </li>
+                    <li><a href="http://www.etalab.gouv.fr/">Etalab</a></li>
+                    <li><a href="http://wiki.etalab2.fr/wiki/Cr%C3%A9dits">${_('Credits')}</a></li>
+                </ul>
+            </section>
+            <section class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                <h5>${_('Topics')}</h5>
+                <ul>
+                    <!-- {% for topic in main_topics %}
+                    <li>
+                        <a href="{{ topic.url.format(lang=lang) }}">
+                        {{ topic.title }}
+                        </a>
+                    </li>
+                    {% endfor %} -->
+                </ul>
+            </section>
+
+            <section class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
+                <h5>${_('Network')}</h5>
+                <ul>
+                    <li><a href="http://www.gouvernement.fr/">Gouvernement.fr </a></li>
+                    <li><a href="http://www.france.fr/">France.fr</a></li>
+                    <li><a href="http://www.legifrance.gouv.fr/">Legifrance.gouv.fr </a></li>
+                    <li><a href="http://www.service-public.fr/">Service-public.fr</a></li>
+                    <li><a href="http://opendatafrance.net/">Opendata France</a></li>
+                </ul>
+            </section>
+
+            <section class="col-xs-6 col-sm-3 col-md-4 col-lg-4">
+                <h5>${_('Contact')}</h5>
+                <ul>
+                    <li><a href="https://twitter.com/Etalab">Twitter</a></li>
+                    <li><a href="https://github.com/etalab">GitHub</a></li>
+                    <li><a href="mailto:info@data.gouv.fr">info@data.gouv.fr</a></li>
+                </ul>
+            </section>
+
+            <section class="col-xs-9 col-xs-offset-3 col-sm-offset-0 col-sm-2 col-md-2 col-lg-2">
+                <img class="logo" src="${urls.static('img/etalab-logo.png')}"></img>
+                <p>&copy; 2013 ETALAB, Inc.</p>
+            </section>
+
+            <p class="bottom-right"><a href="#">${_('Back to top')}</a></p>
+
         </footer>
+    </div>
+</section>
 </%def>
 
 
@@ -204,51 +263,63 @@ $(function () {
 </%def>
 
 
-<%def name="scripts_bootstrap()" filter="trim">
-    <script src="${urlparse.urljoin(conf['bootstrap'], 'js/bootstrap.min.js')}"></script>
-</%def>
-
-
 <%def name="title_content()" filter="trim">
 <%self:brand/>
 </%def>
 
 
 <%def name="topbar()" filter="trim">
-    <nav class="navbar navbar-default navbar-fixed-default navbar-inverse" role="navigation">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-topbar-collapse">
-            <span class="sr-only">${_(u'Toggle navigation')}</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="/"><%self:brand/> <span class="label label-warning">pre-alpha</span></a>
-        </div>
-        <div class="collapse navbar-collapse navbar-topbar-collapse">
-            <ul class="nav navbar-nav">
-                <%self:topbar_dropdown_admin/>
+<section class="header">
+    <div class="container">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <header class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse"
+                        data-target=".navbar-collapse, .subnav-collapse, .sidebg-collapse">
+                    <span class="sr-only">${_('Toggle navigation')}</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/"><%self:brand/> <span class="label label-warning">pre-alpha</span></a>
+                <p class="navbar-text pull-right">${_('Open platform for french public data')}</p>
+            </header>
+        </nav>
+    </div>
+</section>
+
+<section class="topmenu collapse navbar-collapse">
+    <div class="container">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <ul class="nav navbar-nav links">
+                <li><a href="/" title="${_('Home')}"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li><a href="${model.Dataset.get_admin_class_url(ctx)}">${_('Datasets')}</a></li>
                 <li><a href="${model.Group.get_admin_class_url(ctx)}">${_('Groups')}</a></li>
                 <li><a href="${model.Organization.get_admin_class_url(ctx)}">${_('Organizations')}</a></li>
+                <li><a href="http://www.etalab.gouv.fr/">Etalab</a></li>
             </ul>
-            <%self:topbar_user/>
-        </div>
-    </nav>
+
+            <ul class="nav navbar-nav navbar-right">
+                <%self:topbar_dropdown_admin/>
+                <%self:topbar_user/>
+                <%self:topbar_lang/>
+            </ul>
+        </nav>
+    </div>
+</section>
 </%def>
 
 
 <%def name="topbar_dropdown_admin()" filter="trim">
     % if model.is_admin(ctx):
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">${_('Administration')} <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="${model.Account.get_admin_class_url(ctx)}">${_('Accounts')}</a></li>
-                        <li><a href="${model.Dataset.get_admin_class_url(ctx)}">${_('Datasets')}</a></li>
-                        <li><a href="${model.Group.get_admin_class_url(ctx)}">${_('Groups')}</a></li>
-                        <li><a href="${model.Organization.get_admin_class_url(ctx)}">${_('Organizations')}</a></li>
-                    </ul>
-                </li>
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">${_('Administration')} <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a href="${model.Account.get_admin_class_url(ctx)}">${_('Accounts')}</a></li>
+                <li><a href="${model.Dataset.get_admin_class_url(ctx)}">${_('Datasets')}</a></li>
+                <li><a href="${model.Group.get_admin_class_url(ctx)}">${_('Groups')}</a></li>
+                <li><a href="${model.Organization.get_admin_class_url(ctx)}">${_('Organizations')}</a></li>
+            </ul>
+        </li>
     % endif
 </%def>
 
@@ -270,6 +341,91 @@ $(function () {
 </%def>
 
 
+<%def name="topbar_lang()" filter="trim">
+    <li class="dropdown language">
+        <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+            <img src="/img/flags/.png" alt="${_('Current locale flag')}" />
+        </button>
+        <ul class="dropdown-menu">
+            <!-- {% for code, name in languages.items() %}
+            <li>
+                <a href="{{ url(code) }}{{ current_base_location|safe }}">
+                    <img src="/img/flags/{{code}}.png" alt="{{name}} flag" />
+                    {{name}}
+                </a>
+            </li>
+            {% endfor %} -->
+        </ul>
+    </li>
+</%def>
+
+<%def name="subnav()" filter="trim">
+<nav class="navbar navbar-static-top navbar-subnav">
+    <div class="container">
+        <div class="cover-marianne"></div>
+        <div class="search_bar">
+            <form class="navbar-form">
+                <div class="form-group col-sm-4 col-md-4 col-lg-3 col-xs-12">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button class="btn" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                        <input id="search-input" name="q" type="search" class="form-control"
+                        autocomplete="off" placeholder="Search">
+                    </div>
+                </div>
+
+                <div class="form-group col-sm-3 col-md-2 col-lg-3 col-xs-12 collapse subnav-collapse">
+                    <div id="where-group" class="input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-globe"></span>
+                        </span>
+                        <input id="where-input" type="search" class="form-control"
+                        autocomplete="off" placeholder="Where">
+                        <input id="ext_territory" name="ext_territory" type="hidden" />
+                    </div>
+                </div>
+            </form>
+
+
+            <div class="form-group col-sm-3 col-md-2 col-lg-3 col-xs-12">
+                <button class="dropdown-toggle btn-block btn-light" data-toggle="dropdown">
+                    Thematiques
+                    <span class="glyphicon glyphicon-chevron-down pull-right hidden-sm"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="topics">
+                    {% for topic in main_topics %}
+                    <li role="presentation">
+                        <a role="menuitem" tabindex="-1" href="topic.html">
+                        {{ topic.title }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="col-sm-2 col-md-4 col-lg-3 col-xs-12 collapse subnav-collapse">
+                <a class="btn btn-primary btn-dark btn-block hidden-sm"
+                    title="Publish a dataset !"
+                    href>
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Publiez une serie de données !
+                </a>
+                <a class="btn btn-primary btn-dark btn-block hidden-xs hidden-md hidden-lg"
+                    title="Publish a dataset !"
+                    href>
+                    <span class="glyphicon glyphicon-plus"></span>
+                    Publiez !
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</nav>
+</%def>
+
+
 <%def name="trackers()" filter="trim">
 </%def>
 
@@ -285,6 +441,7 @@ $(function () {
 </head>
 <body>
     <%self:topbar/>
+    <%self:subnav/>
     <%self:body_content/>
     <%self:scripts/>
     <%self:trackers/>

@@ -1,7 +1,7 @@
 site-ie-js:
     contents:
         - bower/html5shiv/src/html5shiv.js
-        - bower/respond/respond.src.js
+        - bower/respond/dest/respond.src.js
     filters: uglifyjs
     output: js/site-ie-less-9.min.js
 
@@ -16,16 +16,20 @@ site-js:
     output: js/site.min.js
 
 site-css:
+    # contents:
     contents:
-        - site-less-css
+        - less/site.less
+        # - site-less-css
         - css/typeahead.css
-    filters: cssrewrite,cssmin
+    depends:
+        - less/*.less
+    filters: less,cssrewrite,cssmin
     output: css/site.min.css
 
 site-less-css:
     contents: less/site.less
     depends:
-        - bower/bootstrap/less/bootstrap.less
+        # - bower/bootstrap/less/*.less
         - less/*.less
-    filters: less
+    filters: less,cssrewrite
     output: css/site-less.css

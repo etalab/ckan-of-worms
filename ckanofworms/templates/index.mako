@@ -49,14 +49,12 @@ from ckanofworms import model, urls
 <%
     user = model.get_user(ctx)
 %>\
-        <div class="jumbotron">
-            <div class="container">
-                <h2>${_(u"Welcome to CKAN-of-Worms")}</h2>
-                <p>${_(u"A logger for errors found in CKAN datasets")}</p>
+    <div class="jumbotron card">
+        <h2>${_(u"Welcome to CKAN-of-Worms")}</h2>
+        <p>${_(u"A logger for errors found in CKAN datasets")}</p>
     % if user is None:
-                <a class="btn btn-large btn-primary sign-in" href="#" title="${_(u'Sign in with Persona')}">${
-                    _('Sign In')}</a>
+        <a class="btn btn-large btn-primary sign-in" href="#"
+            title="${_(u'Sign in with Persona')}">${_('Sign In')}</a>
     % endif
-            </div>
-        </div>
+    </div>
 </%def>

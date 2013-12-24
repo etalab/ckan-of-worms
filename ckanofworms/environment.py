@@ -51,6 +51,10 @@ def configure_assets(debug = False, static_dir = None):
     assets = webassets.Environment(static_dir, '/')
     assets.auto_build = debug
     assets.debug = debug
+    assets.config['less_paths'] = (
+        'bower/bootstrap/less',
+        'bower/etalab-assets/less',
+    )
 
     # Load bundle from yaml file.
     assets_loader = webassets.loaders.YAMLLoader(pkg_resources.resource_stream(__name__, 'assets.yaml'))

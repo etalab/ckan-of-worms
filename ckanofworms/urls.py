@@ -105,6 +105,11 @@ def iter_full_urls(ctx, *path, **query):
                 ('?' + urllib.urlencode(query, doseq = True)) if query else '')
 
 
+def static(*args, **kwargs):
+    '''Get a static asset path'''
+    return get_url(None, *args, **kwargs)
+
+
 # To use in Python 3:
 # def make_router(*routings, error_format = None):
 def make_router(*routings, **kwargs):
