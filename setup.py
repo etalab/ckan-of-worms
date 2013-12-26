@@ -84,6 +84,9 @@ setup(
         'WebError >= 0.10',
         'WebOb >= 1.1',
         ],
+    extras_require = {
+        'sentry': ['raven'],
+    },
     message_extractors = {'ckanofworms': [
         ('**.py', 'python', None),
         ('templates/**.mako', 'mako', {'input_encoding': 'utf-8'}),

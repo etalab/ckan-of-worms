@@ -114,7 +114,17 @@ def make_app(global_conf, **app_conf):
 
     # Handle Python exceptions
     if not conf['debug']:
-        app = ErrorMiddleware(app, global_conf, **conf['errorware'])
+        if conf['sentry.dsn']:
+            from raven import Client
+            from raven.middleware import Sentry
+
+            client = Client(
+                dsn=conf.get('sentry.dsn'),
+                site=conf.get('sentry.site'),
+            )
+            app = Sentry(app, client=client)
+        else:
+            app = ErrorMiddleware(app, global_conf, **conf['errorware'])
 
     if conf['static_files']:
         # Serve static files

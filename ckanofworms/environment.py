@@ -124,6 +124,7 @@ def load_environment(global_conf, app_conf):
             # Whether this application serves its own static files.
             'static_files': conv.pipe(conv.guess_bool, conv.default(True)),
             'static_files_dir': conv.default(os.path.join(app_dir, 'static')),
+            'sentry.dsn': conv.default(False),
             'weckan_url': conv.pipe(
                 conv.make_input_to_url(full = True, error_if_fragment = True, error_if_path = True,
                     error_if_query = True),
@@ -138,7 +139,7 @@ def load_environment(global_conf, app_conf):
 
     errorware = conf.setdefault('errorware', {})
     errorware['debug'] = conf['debug']
-    if not errorware['debug']:
+    if not errorware['debug'] and not conf['sentry.dsn']:
         errorware['error_email'] = conf['email_to']
         errorware['error_log'] = conf.get('error_log', None)
         errorware['error_message'] = conf.get('error_message', 'An internal server error occurred')
