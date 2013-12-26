@@ -105,9 +105,15 @@ def iter_full_urls(ctx, *path, **query):
                 ('?' + urllib.urlencode(query, doseq = True)) if query else '')
 
 
-def static(*args, **kwargs):
+def static(*path, **query):
     '''Get a static asset path'''
-    return get_url(None, *args, **kwargs)
+    return get_url(None, *path, **query)
+
+
+def ckan_url(ctx, *path, **query):
+    '''Get a CKAN/WeCKAN URL'''
+    lang = ctx.lang[0][:2]
+    return urlparse.urljoin(conf['weckan_url'], get_url(ctx, lang, *path, **query))
 
 
 # To use in Python 3:

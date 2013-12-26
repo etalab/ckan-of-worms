@@ -71,9 +71,9 @@ title_by_alert_level = dict(
                     <span class="glyphicon glyphicon-wrench"></span>
                     ${_(u'Repair')}
                 </a>
-                <a class="btn btn-default" href="${dataset.get_front_url(ctx)}" target="_blank">
+                <a class="btn btn-default" href="${dataset.get_front_url(ctx)}">
                     <span class="glyphicon glyphicon-globe"></span>
-                    ${_(u'View in Front')}
+                    ${_(u'View')}
                 </a>
                 <a class="btn btn-default" href="${dataset.get_admin_url(ctx, 'stats')}">
                     <span class="glyphicon glyphicon-stats"></span>

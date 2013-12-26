@@ -30,6 +30,8 @@ import email.header
 import json
 import os
 
+from os.path import join, dirname, abspath
+
 import mako.lookup
 import markupsafe
 
@@ -40,6 +42,25 @@ custom_lookups = {}  # custom TemplateLookups, inited by function load_environme
 default_lookup = None  # default TemplateLookup, inited by function load_environment
 dirs = None  # Sequence of templates directories, inited by function load_environment
 js = lambda x: json.dumps(x, encoding = 'utf-8', ensure_ascii = False)
+
+DEFAULT_STATIC = abspath(join(dirname(__file__), '..', 'static'))
+MAIN_TOPICS = None
+
+
+def format_topic(topic):
+    home_url = conf['weckan_url'].replace('http://', '//')
+    topic['url'] = '{0}/{{lang}}/groups/{1}'.format(home_url, topic['name'])
+    return topic
+
+
+def main_topics():
+    global MAIN_TOPICS
+    if not MAIN_TOPICS:
+        static_root = conf.get('static_files_dir', DEFAULT_STATIC)
+        topics_file = join(static_root, 'bower', 'etalab-assets', 'data', 'main_topics.json')
+        with open(topics_file) as f:
+            MAIN_TOPICS = map(format_topic, json.load(f))
+    return MAIN_TOPICS
 
 
 def get_default_lookup():
@@ -99,6 +120,8 @@ def render(ctx, template_path, custom_name = None, **kw):
         ngettext = ctx.translator.ngettext,
         qp = qp,
         req = ctx.req,
+        lang = ctx.lang[0][:2],
+        main_topics = main_topics(),
         **kw).strip()
 
 
@@ -113,4 +136,6 @@ def render_def(ctx, template_path, def_name, custom_name = None, **kw):
         ngettext = ctx.translator.ngettext,
         qp = qp,
         req = ctx.req,
+        lang = ctx.lang[0][:2],
+        main_topics = main_topics(),
         **kw).strip()

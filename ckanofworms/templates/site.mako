@@ -119,27 +119,28 @@ ${conf['realm']}
             <section class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
                 <h5>${_('The Open Data')}</h5>
                 <ul>
-                    <li><a href="http://wiki.etalab2.fr/wiki/FAQ">${_('How it works ?')}</a></li>
-                    <li><a href="{{ url(lang, 'organization') }}">${_('Publishers')}</a></li>
+                    <li><a href="//wiki.data.gouv.fr/wiki/FAQ">${_('How it works ?')}</a></li>
+                    <li><a href="${urls.ckan_url(ctx, 'organization')}">${_('Publishers')}</a></li>
                     <li>
-                        <a href="http://www.etalab.gouv.fr/pages/licence-ouverte-open-licence-5899923.html">
-                            ${_('Open license')}
+                        <a href="//wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">
+                            ${_('Open Licence')}
                         </a>
                     </li>
+                    <li><a href="${urls.ckan_url(ctx, 'metrics')}">${_('Metrics')}</a></li>
                     <li><a href="http://www.etalab.gouv.fr/">Etalab</a></li>
-                    <li><a href="http://wiki.etalab2.fr/wiki/Cr%C3%A9dits">${_('Credits')}</a></li>
+                    <li><a href="//wiki.data.gouv.fr/wiki/Cr%C3%A9dits">${_('Credits')}</a></li>
                 </ul>
             </section>
             <section class="col-xs-6 col-sm-3 col-md-2 col-lg-2">
                 <h5>${_('Topics')}</h5>
                 <ul>
-                    <!-- {% for topic in main_topics %}
+                    % for topic in main_topics:
                     <li>
-                        <a href="{{ topic.url.format(lang=lang) }}">
-                        {{ topic.title }}
+                        <a href="${ topic['url'].format(lang=lang) }">
+                        ${ topic['title'] }
                         </a>
                     </li>
-                    {% endfor %} -->
+                    % endfor
                 </ul>
             </section>
 
@@ -284,7 +285,10 @@ $(function () {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/"><%self:brand/> <span class="label label-warning">pre-alpha</span></a>
+                <a class="navbar-brand" href="${urls.ckan_url(ctx)}">
+                    <%self:brand/>
+                    <span class="label label-warning">pre-alpha</span>
+                </a>
                 <p class="navbar-text pull-right">${_('Open platform for french public data')}</p>
             </header>
         </nav>
@@ -295,10 +299,19 @@ $(function () {
     <div class="container">
         <nav class="navbar navbar-default navbar-static-top" role="navigation">
             <ul class="nav navbar-nav links">
-                <li><a href="/" title="${_('Home')}"><span class="glyphicon glyphicon-home"></span></a></li>
-                <li><a href="${model.Dataset.get_admin_class_url(ctx)}">${_('Datasets')}</a></li>
-                <li><a href="${model.Group.get_admin_class_url(ctx)}">${_('Groups')}</a></li>
-                <li><a href="${model.Organization.get_admin_class_url(ctx)}">${_('Organizations')}</a></li>
+                <li>
+                    <a href="${urls.ckan_url(ctx)}" title="${_('Home')}">
+                        <span class="glyphicon glyphicon-home"></span>
+                    </a>
+                </li>
+                <li><a href="//wiki.data.gouv.fr/wiki/FAQ">${_('How it works ?')}</a></li>
+                <li><a href="${urls.ckan_url(ctx, 'organization')}">${_('Publishers')}</a></li>
+                <li>
+                    <a href="//wiki.data.gouv.fr/wiki/Licence_Ouverte_/_Open_Licence">
+                        ${_('Open Licence')}
+                    </a>
+                </li>
+                <li><a href="${urls.ckan_url(ctx, 'metrics')}">${_('Metrics')}</a></li>
                 <li><a href="http://www.etalab.gouv.fr/">Etalab</a></li>
             </ul>
 
@@ -348,9 +361,9 @@ $(function () {
 <%def name="topbar_lang()" filter="trim">
     <li class="dropdown language">
         <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-            <img src="/img/flags/.png" alt="${_('Current locale flag')}" />
+            <img src="${urls.static('img/flags', '{0}.png'.format(lang))}" alt="${_('Current locale flag')}" />
         </button>
-        <ul class="dropdown-menu">
+        <!-- <ul class="dropdown-menu"> -->
             <!-- {% for code, name in languages.items() %}
             <li>
                 <a href="{{ url(code) }}{{ current_base_location|safe }}">
@@ -359,7 +372,7 @@ $(function () {
                 </a>
             </li>
             {% endfor %} -->
-        </ul>
+        <!-- </ul> -->
     </li>
 </%def>
 
@@ -368,14 +381,15 @@ $(function () {
     <div class="container">
         <div class="cover-marianne"></div>
         <div class="search_bar">
-            <form class="navbar-form">
+
+            <form class="navbar-form" role="search" action="${urls.ckan_url(ctx, 'search')}">
                 <div class="form-group col-sm-4 col-md-4 col-lg-3 col-xs-12">
                     <div class="input-group">
                         <div class="input-group-btn">
                             <button class="btn" type="submit"><i class="glyphicon glyphicon-search"></i></button>
                         </div>
                         <input id="search-input" name="q" type="search" class="form-control"
-                        autocomplete="off" placeholder="Search">
+                            autocomplete="off" placeholder="${_('Search')}">
                     </div>
                 </div>
 
@@ -385,7 +399,7 @@ $(function () {
                             <span class="glyphicon glyphicon-globe"></span>
                         </span>
                         <input id="where-input" type="search" class="form-control"
-                        autocomplete="off" placeholder="Where">
+                            autocomplete="off" placeholder="${_('Where')}">
                         <input id="ext_territory" name="ext_territory" type="hidden" />
                     </div>
                 </div>
@@ -394,38 +408,37 @@ $(function () {
 
             <div class="form-group col-sm-3 col-md-2 col-lg-3 col-xs-12">
                 <button class="dropdown-toggle btn-block btn-light" data-toggle="dropdown">
-                    Thematiques
+                    ${_('Topics')}
                     <span class="glyphicon glyphicon-chevron-down pull-right hidden-sm"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="topics">
-                    {% for topic in main_topics %}
+                    % for topic in main_topics:
                     <li role="presentation">
-                        <a role="menuitem" tabindex="-1" href="topic.html">
-                        {{ topic.title }}
+                        <a role="menuitem" tabindex="-1" href="${ topic['url'].format(lang=lang) }">
+                        ${ topic['title'] }
                         </a>
                     </li>
-                    {% endfor %}
+                    % endfor
                 </ul>
             </div>
 
             <div class="col-sm-2 col-md-4 col-lg-3 col-xs-12 collapse subnav-collapse">
-                <a class="btn btn-primary btn-dark btn-block hidden-sm"
-                    title="Publish a dataset !"
-                    href>
+                <a class="btn btn-primary btn-dark btn-block hidden-sm btn-md icon-left"
+                    title="${('Publish a dataset !')}"
+                    href="${urls.ckan_url(ctx, 'dataset/new')}">
                     <span class="glyphicon glyphicon-plus"></span>
-                    Publiez une serie de données !
+                    ${('Publish a dataset !')}
                 </a>
                 <a class="btn btn-primary btn-dark btn-block hidden-xs hidden-md hidden-lg"
-                    title="Publish a dataset !"
-                    href>
+                    title="${('Publish a dataset !')}"
+                    href="${urls.ckan_url(ctx, 'dataset/new')}">
                     <span class="glyphicon glyphicon-plus"></span>
-                    Publiez !
+                    ${('Publish !')}
                 </a>
             </div>
+
         </div>
-
     </div>
-
 </nav>
 </%def>
 
@@ -435,7 +448,7 @@ $(function () {
 
 
 <!DOCTYPE html>
-<html lang="${ctx.lang[0][:2]}">
+<html lang="${lang}">
 <head>
     <%self:metas/>
     <title>${self.title_content()}</title>
