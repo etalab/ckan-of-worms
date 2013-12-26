@@ -55,8 +55,7 @@ def extract_item_alerts(container_alerts, key):
 %>\
         % for author, author_alerts in sorted(level_alerts.iteritems()):
             % if author_alerts['error']:
-        <div class="row">
-            <div class="alert alert-${level_class_suffix} col-sm-offset-2 col-sm-10">
+            <div class="alert alert-${level_class_suffix}">
                 % if level == 'critical':
                 <span class="glyphicon glyphicon-warning-sign"></span>
                 % endif
@@ -66,7 +65,6 @@ def extract_item_alerts(container_alerts, key):
                     author_alerts['timestamp'].split(' ')[0])
                 }</small>
             </div>
-        </div>
             % endif
         % endfor
     % endfor

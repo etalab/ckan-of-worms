@@ -73,7 +73,7 @@ title_by_alert_level = dict(
         <h2>${_(u"{} datasets").format(pager.item_count)}</h2>
         % endif
         <%self:pagination object_class="${model.Dataset}" pager="${pager}"/>
-        <table class="table table-bordered table-condensed table-striped">
+        <table class="table table-condensed table-striped">
             <thead>
                 <tr>
                     <th>${_(u"Organization")}</th>
@@ -101,7 +101,7 @@ title_by_alert_level = dict(
             <tbody>
         % for dataset in datasets:
                 <tr>
-                    <td>
+                    <td class="image">
 <%
             organization = dataset.get_organization(ctx)
 %>\
