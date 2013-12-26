@@ -37,7 +37,8 @@ from ckanofworms import conf, model, urls
 
 <%def name="body_content()" filter="trim">
     <%self:breadcrumb/>
-    <section class="default">
+    <section class="${ self.section_class() }">
+        <%self:before_container/>
         <div class="container">
             <%self:container_content/>
         </div>
@@ -45,6 +46,8 @@ from ckanofworms import conf, model, urls
     <%self:footer/>
 </%def>
 
+<%def name="before_container()" filter="trim"></%def>
+<%def name="section_class()" filter="trim">default</%def>
 
 <%def name="brand()" filter="trim">
 ${conf['realm']}
@@ -203,6 +206,7 @@ ${conf['realm']}
     <link rel="home" href="${conf['weckan_url']}" />
     <link rel="wiki" href="${conf['wiki_url']}" />
     <link rel="wiki-api" href="${conf['wiki_api_url']}" />
+    <link rel="animation-root" href="${ urls.static('/bower/etalab-assets/js/animation') }" />
 </%def>
 
 

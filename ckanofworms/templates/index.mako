@@ -26,12 +26,17 @@
 <%!
 import collections
 
-from ckanofworms import model, urls
+from ckanofworms import model, urls, conf
 %>
 
 
 <%inherit file="site.mako"/>
 
+
+<%def name="section_class()" filter="trim">animated</%def>
+<%def name="before_container()" filter="trim">
+<div class="animation"></div>
+</%def>
 
 <%def name="breadcrumb()" filter="trim">
 </%def>
@@ -49,7 +54,7 @@ from ckanofworms import model, urls
 <%
     user = model.get_user(ctx)
 %>\
-    <div class="jumbotron card">
+    <div class="jumbotron">
         <h2>${_(u"Welcome to CKAN-of-Worms")}</h2>
         <p>${_(u"A logger for errors found in CKAN datasets")}</p>
     % if user is None:
@@ -57,4 +62,11 @@ from ckanofworms import model, urls
             title="${_(u'Sign in with Persona')}">${_('Sign In')}</a>
     % endif
     </div>
+</%def>
+
+<%def name="scripts()" filter="trim">
+${parent.scripts()}
+ % for url in conf['assets']['animation-js'].urls():
+ <script src="${url}"></script>
+ % endfor
 </%def>

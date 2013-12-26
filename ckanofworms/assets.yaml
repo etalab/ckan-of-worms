@@ -19,6 +19,14 @@ site-js:
     filters: uglifyjs
     output: js/site.min.js
 
+animation-js:
+    filters: uglifyjs
+    output: js/animation.min.js
+    contents:
+        - bower/jquery.easing/js/jquery.easing.js
+        - bower/etalab-assets/js/animation/edge.1.0.0.min.js
+        - bower/etalab-assets/js/animation/animation.preload.js
+
 site-css:
     contents: less/site.less
     depends: less/*.less
