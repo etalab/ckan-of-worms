@@ -428,16 +428,16 @@ $(function () {
 
             <div class="col-sm-2 col-md-4 col-lg-3 col-xs-12 collapse subnav-collapse">
                 <a class="btn btn-primary btn-dark btn-block hidden-sm btn-md icon-left"
-                    title="${('Publish a dataset !')}"
+                    title="${_('Publish a dataset !')}"
                     href="${urls.ckan_url(ctx, 'dataset/new')}">
                     <span class="glyphicon glyphicon-plus"></span>
-                    ${('Publish a dataset !')}
+                    ${_('Publish a dataset !')}
                 </a>
                 <a class="btn btn-primary btn-dark btn-block hidden-xs hidden-md hidden-lg"
-                    title="${('Publish a dataset !')}"
+                    title="${_('Publish a dataset !')}"
                     href="${urls.ckan_url(ctx, 'dataset/new')}">
                     <span class="glyphicon glyphicon-plus"></span>
-                    ${('Publish !')}
+                    ${_('Publish !')}
                 </a>
             </div>
 

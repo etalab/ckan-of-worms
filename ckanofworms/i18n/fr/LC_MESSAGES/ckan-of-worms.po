@@ -6,12 +6,13 @@
 # noirbizarre, 2013
 # Emmanuel <emmanuel@raviart.com>, 2013
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2013
+# noirbizarre, 2013
 msgid ""
 msgstr ""
 "Project-Id-Version: CKAN-of-Worms\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2013-12-26 18:13+0100\n"
-"PO-Revision-Date: 2013-12-26 17:24+0000\n"
+"POT-Creation-Date: 2013-12-26 18:33+0100\n"
+"PO-Revision-Date: 2013-12-26 17:34+0000\n"
 "Last-Translator: noirbizarre\n"
 "Language-Team: French (http://www.transifex.com/projects/p/ckan-of-worms/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -77,15 +78,15 @@ msgstr "Vous devez être un administrateur pour accéder à cette page."
 msgid "Expected a dictionary. Got {0}"
 msgstr "Reçu {0} au lieu d'un dictionnaire"
 
-#: ckanofworms/urls.py:129
+#: ckanofworms/urls.py:140
 msgid "Invalid path: {0}"
 msgstr "Chemin incorrect : {0}"
 
-#: ckanofworms/urls.py:150
+#: ckanofworms/urls.py:161
 msgid "Path not found: {0}"
 msgstr "Chemin non trouvé : {0}"
 
-#: ckanofworms/urls.py:156
+#: ckanofworms/urls.py:167
 msgid "Page not found: {0}"
 msgstr "Page non trouvée : {0}"
 
@@ -357,153 +358,116 @@ msgstr "Erreur de session : {}"
 msgid "Tag search error: {}"
 msgstr "Erreur dans la recherche de mots-clés : {}"
 
-#: ckanofworms/templates/index.mako:54
+#: ckanofworms/templates/index.mako:58
 msgid "Welcome to CKAN-of-Worms"
 msgstr "Bienvenue sur CKAN-of-Worms"
 
-#: ckanofworms/templates/index.mako:55
+#: ckanofworms/templates/index.mako:59
 msgid "A logger for errors found in CKAN datasets"
 msgstr "Un journal des erreurs trouvées dans les jeux de données CKAN"
 
-#: ckanofworms/templates/index.mako:57 ckanofworms/templates/site.mako:262
+#: ckanofworms/templates/index.mako:62 ckanofworms/templates/site.mako:354
 msgid "Sign in with Persona"
 msgstr "Connexion avec Persona"
 
-#: ckanofworms/templates/index.mako:58
+#: ckanofworms/templates/index.mako:62
 msgid "Sign In"
 msgstr "Connexion"
 
-#: ckanofworms/templates/object-admin-view.mako:65
+#: ckanofworms/templates/object-admin-view.mako:64
 msgid "(signaled by <em>{0}</em>, {1})"
 msgstr "(signalé par <em>{0}</em>, {1})"
 
-#: ckanofworms/templates/site.mako:60
+#: ckanofworms/templates/site.mako:70 ckanofworms/templates/site.mako:307
 msgid "Home"
 msgstr "Accueil"
 
-#: ckanofworms/templates/site.mako:78
+#: ckanofworms/templates/site.mako:91
 msgid "Error!"
 msgstr "Erreur !"
 
-#: ckanofworms/templates/site.mako:89
+#: ckanofworms/templates/site.mako:102
 msgid "Please, correct the informations below."
 msgstr "Veuillez corriger les informations ci-dessous."
 
-#: ckanofworms/templates/site.mako:98
+#: ckanofworms/templates/site.mako:111
 msgid "{} - Datasets Atom feed"
 msgstr "{} - Fil Atom des jeux de données"
 
-#: ckanofworms/templates/site.mako:100
+#: ckanofworms/templates/site.mako:113
 msgid "{} - Organizations Atom feed"
 msgstr "{} - Fil Atom des organisations"
 
-#: ckanofworms/templates/site.mako:108
-#: ckanofworms/templates/accounts/admin-view.mako:72
-#: ckanofworms/templates/accounts/admin-view.mako:83
-#: ckanofworms/templates/accounts/admin-view.mako:94
-#: ckanofworms/templates/accounts/admin-view.mako:105
-#: ckanofworms/templates/accounts/admin-view.mako:116
-#: ckanofworms/templates/accounts/admin-view.mako:142
-#: ckanofworms/templates/accounts/admin-view.mako:153
-#: ckanofworms/templates/accounts/admin-view.mako:164
-#: ckanofworms/templates/accounts/admin-view.mako:175
-#: ckanofworms/templates/accounts/admin-view.mako:181
-#: ckanofworms/templates/accounts/admin-view.mako:193
-#: ckanofworms/templates/datasets/admin-view.mako:130
-#: ckanofworms/templates/datasets/admin-view.mako:135
-#: ckanofworms/templates/datasets/admin-view.mako:145
-#: ckanofworms/templates/datasets/admin-view.mako:170
-#: ckanofworms/templates/datasets/admin-view.mako:183
-#: ckanofworms/templates/datasets/admin-view.mako:194
-#: ckanofworms/templates/datasets/admin-view.mako:205
-#: ckanofworms/templates/datasets/admin-view.mako:216
-#: ckanofworms/templates/datasets/admin-view.mako:227
-#: ckanofworms/templates/datasets/admin-view.mako:238
-#: ckanofworms/templates/datasets/admin-view.mako:251
-#: ckanofworms/templates/datasets/admin-view.mako:268
-#: ckanofworms/templates/datasets/admin-view.mako:281
-#: ckanofworms/templates/datasets/admin-view.mako:292
-#: ckanofworms/templates/datasets/admin-view.mako:305
-#: ckanofworms/templates/datasets/admin-view.mako:323
-#: ckanofworms/templates/datasets/admin-view.mako:337
-#: ckanofworms/templates/datasets/admin-view.mako:356
-#: ckanofworms/templates/datasets/admin-view.mako:374
-#: ckanofworms/templates/datasets/admin-view.mako:387
-#: ckanofworms/templates/datasets/admin-view.mako:402
-#: ckanofworms/templates/datasets/admin-view.mako:420
-#: ckanofworms/templates/datasets/admin-view.mako:431
-#: ckanofworms/templates/datasets/admin-view.mako:442
-#: ckanofworms/templates/datasets/admin-view.mako:460
-#: ckanofworms/templates/datasets/admin-view.mako:471
-#: ckanofworms/templates/datasets/admin-view.mako:483
-#: ckanofworms/templates/datasets/admin-view.mako:500
-#: ckanofworms/templates/datasets/admin-view.mako:511
-#: ckanofworms/templates/datasets/admin-view.mako:522
-#: ckanofworms/templates/datasets/admin-view.mako:533
-#: ckanofworms/templates/datasets/admin-view.mako:545
-#: ckanofworms/templates/datasets/admin-view.mako:562
-#: ckanofworms/templates/datasets/admin-view.mako:573
-#: ckanofworms/templates/datasets/admin-view.mako:584
-#: ckanofworms/templates/datasets/admin-view.mako:595
-#: ckanofworms/templates/datasets/admin-view.mako:606
-#: ckanofworms/templates/datasets/admin-view.mako:617
-#: ckanofworms/templates/datasets/admin-view.mako:628
-#: ckanofworms/templates/datasets/admin-view.mako:639
-#: ckanofworms/templates/datasets/admin-view.mako:645
-#: ckanofworms/templates/datasets/admin-view.mako:660
-#: ckanofworms/templates/datasets/admin-view.mako:669
-#: ckanofworms/templates/datasets/admin-view.mako:682
-#: ckanofworms/templates/datasets/admin-view.mako:693
-#: ckanofworms/templates/datasets/admin-view.mako:704
-#: ckanofworms/templates/datasets/admin-view.mako:715
-#: ckanofworms/templates/datasets/admin-view.mako:726
-#: ckanofworms/templates/datasets/admin-view.mako:738
-#: ckanofworms/templates/datasets/admin-view.mako:755
-#: ckanofworms/templates/datasets/admin-view.mako:768
-#: ckanofworms/templates/groups/admin-view.mako:72
-#: ckanofworms/templates/groups/admin-view.mako:77
-#: ckanofworms/templates/groups/admin-view.mako:87
-#: ckanofworms/templates/groups/admin-view.mako:113
-#: ckanofworms/templates/groups/admin-view.mako:124
-#: ckanofworms/templates/groups/admin-view.mako:135
-#: ckanofworms/templates/groups/admin-view.mako:141
-#: ckanofworms/templates/groups/admin-view.mako:153
-#: ckanofworms/templates/organizations/admin-view.mako:75
-#: ckanofworms/templates/organizations/admin-view.mako:80
-#: ckanofworms/templates/organizations/admin-view.mako:90
-#: ckanofworms/templates/organizations/admin-view.mako:116
-#: ckanofworms/templates/organizations/admin-view.mako:127
-#: ckanofworms/templates/organizations/admin-view.mako:138
-#: ckanofworms/templates/organizations/admin-view.mako:144
-#: ckanofworms/templates/organizations/admin-view.mako:156
-#: ckanofworms/templates/sessions/admin-view.mako:58
-#: ckanofworms/templates/sessions/admin-view.mako:66
-#: ckanofworms/templates/sessions/admin-view.mako:71
-#: ckanofworms/templates/sessions/admin-view.mako:76
-msgid "{0}:"
-msgstr "{0} :"
+#: ckanofworms/templates/site.mako:123
+msgid "The Open Data"
+msgstr "L'Open Data"
 
-#: ckanofworms/templates/site.mako:108
-msgid "Software"
-msgstr "Logiciel"
+#: ckanofworms/templates/site.mako:125 ckanofworms/templates/site.mako:311
+msgid "How it works ?"
+msgstr "Comment ça marche ?"
 
-#: ckanofworms/templates/site.mako:113
-msgid "GNU Affero General Public License"
-msgstr "Licence publique générale GNU Affero"
+#: ckanofworms/templates/site.mako:126 ckanofworms/templates/site.mako:312
+msgid "Publishers"
+msgstr "Producteurs"
 
-#: ckanofworms/templates/site.mako:173
+#: ckanofworms/templates/site.mako:129 ckanofworms/templates/site.mako:315
+msgid "Open Licence"
+msgstr "Licence Ouverte"
+
+#: ckanofworms/templates/site.mako:132 ckanofworms/templates/site.mako:318
+msgid "Metrics"
+msgstr "Métriques"
+
+#: ckanofworms/templates/site.mako:134
+msgid "Credits"
+msgstr "Crédits"
+
+#: ckanofworms/templates/site.mako:138 ckanofworms/templates/site.mako:415
+msgid "Topics"
+msgstr "Thématiques"
+
+#: ckanofworms/templates/site.mako:151
+msgid "Network"
+msgstr "Réseau"
+
+#: ckanofworms/templates/site.mako:162
+msgid "Contact"
+msgstr "Contact"
+
+#: ckanofworms/templates/site.mako:175
+msgid "Back to top"
+msgstr "Haut de page"
+
+#: ckanofworms/templates/site.mako:241
 msgid "Login failure: "
 msgstr "Erreur d'identification :"
 
-#: ckanofworms/templates/site.mako:185
+#: ckanofworms/templates/site.mako:253
 msgid "Logout failure: "
 msgstr "Erreur de déconnexion :"
 
-#: ckanofworms/templates/site.mako:221
+#: ckanofworms/templates/site.mako:287
 msgid "Toggle navigation"
 msgstr "Basculer la navigation"
 
-#: ckanofworms/templates/site.mako:231 ckanofworms/templates/site.mako:247
+#: ckanofworms/templates/site.mako:296
+msgid "Open platform for french public data"
+msgstr "Plateforme ouverte des données publiques françaises"
+
+#: ckanofworms/templates/site.mako:336
+msgid "Administration"
+msgstr "Administration"
+
+#: ckanofworms/templates/site.mako:338
+#: ckanofworms/templates/accounts/admin-delete.mako:38
+#: ckanofworms/templates/accounts/admin-edit.mako:37
+#: ckanofworms/templates/accounts/admin-index.mako:37
+#: ckanofworms/templates/accounts/admin-index.mako:134
+#: ckanofworms/templates/accounts/admin-view.mako:40
+msgid "Accounts"
+msgstr "Comptes"
+
+#: ckanofworms/templates/site.mako:339
 #: ckanofworms/templates/datasets/admin-delete.mako:38
 #: ckanofworms/templates/datasets/admin-edit.mako:37
 #: ckanofworms/templates/datasets/admin-index.mako:55
@@ -515,8 +479,8 @@ msgstr "Basculer la navigation"
 msgid "Datasets"
 msgstr "Jeux de données"
 
-#: ckanofworms/templates/site.mako:232 ckanofworms/templates/site.mako:248
-#: ckanofworms/templates/datasets/admin-view.mako:323
+#: ckanofworms/templates/site.mako:340
+#: ckanofworms/templates/datasets/admin-view.mako:392
 #: ckanofworms/templates/groups/admin-delete.mako:38
 #: ckanofworms/templates/groups/admin-edit.mako:37
 #: ckanofworms/templates/groups/admin-index.mako:37
@@ -525,7 +489,7 @@ msgstr "Jeux de données"
 msgid "Groups"
 msgstr "Groupes"
 
-#: ckanofworms/templates/site.mako:233 ckanofworms/templates/site.mako:249
+#: ckanofworms/templates/site.mako:341
 #: ckanofworms/templates/accounts/admin-index.mako:77
 #: ckanofworms/templates/organizations/admin-delete.mako:38
 #: ckanofworms/templates/organizations/admin-edit.mako:37
@@ -535,30 +499,42 @@ msgstr "Groupes"
 msgid "Organizations"
 msgstr "Organisations"
 
-#: ckanofworms/templates/site.mako:244
-msgid "Administration"
-msgstr "Administration"
-
-#: ckanofworms/templates/site.mako:246
-#: ckanofworms/templates/accounts/admin-delete.mako:38
-#: ckanofworms/templates/accounts/admin-edit.mako:37
-#: ckanofworms/templates/accounts/admin-index.mako:37
-#: ckanofworms/templates/accounts/admin-index.mako:134
-#: ckanofworms/templates/accounts/admin-view.mako:40
-msgid "Accounts"
-msgstr "Comptes"
-
-#: ckanofworms/templates/site.mako:262
+#: ckanofworms/templates/site.mako:354
 msgid "Sign in"
 msgstr "Connexion"
 
-#: ckanofworms/templates/site.mako:267
+#: ckanofworms/templates/site.mako:359
 msgid "Sign out from Persona"
 msgstr "Déconnexion de Persona"
 
-#: ckanofworms/templates/site.mako:267
+#: ckanofworms/templates/site.mako:359
 msgid "Sign out"
 msgstr "Déconnexion"
+
+#: ckanofworms/templates/site.mako:368
+msgid "Current locale flag"
+msgstr "Drapeau de la locale actuelle"
+
+#: ckanofworms/templates/site.mako:396
+#: ckanofworms/templates/accounts/admin-index.mako:128
+#: ckanofworms/templates/datasets/admin-index.mako:361
+#: ckanofworms/templates/groups/admin-index.mako:110
+#: ckanofworms/templates/organizations/admin-index.mako:113
+msgid "Search"
+msgstr "Rechercher"
+
+#: ckanofworms/templates/site.mako:406
+msgid "Where"
+msgstr "Où"
+
+#: ckanofworms/templates/site.mako:431 ckanofworms/templates/site.mako:434
+#: ckanofworms/templates/site.mako:437
+msgid "Publish a dataset !"
+msgstr "Publiez un jeu de données !"
+
+#: ckanofworms/templates/site.mako:440
+msgid "Publish !"
+msgstr "Publiez !"
 
 #: ckanofworms/templates/accounts/admin-delete.mako:37
 #: ckanofworms/templates/accounts/admin-edit.mako:36
@@ -674,8 +650,8 @@ msgstr "{} comptes"
 
 #: ckanofworms/templates/accounts/admin-index.mako:61
 #: ckanofworms/templates/accounts/admin-view.mako:181
-#: ckanofworms/templates/datasets/admin-view.mako:337
-#: ckanofworms/templates/datasets/admin-view.mako:645
+#: ckanofworms/templates/datasets/admin-view.mako:408
+#: ckanofworms/templates/datasets/admin-view.mako:768
 #: ckanofworms/templates/groups/admin-view.mako:141
 #: ckanofworms/templates/organizations/admin-view.mako:144
 msgid "ID"
@@ -689,9 +665,9 @@ msgstr "Nom complet"
 #: ckanofworms/templates/accounts/admin-index.mako:65
 #: ckanofworms/templates/accounts/admin-index.mako:68
 #: ckanofworms/templates/accounts/admin-view.mako:83
-#: ckanofworms/templates/datasets/admin-view.mako:130
-#: ckanofworms/templates/datasets/admin-view.mako:183
-#: ckanofworms/templates/datasets/admin-view.mako:387
+#: ckanofworms/templates/datasets/admin-view.mako:159
+#: ckanofworms/templates/datasets/admin-view.mako:222
+#: ckanofworms/templates/datasets/admin-view.mako:466
 #: ckanofworms/templates/groups/admin-view.mako:72
 #: ckanofworms/templates/organizations/admin-view.mako:75
 msgid "Name"
@@ -719,19 +695,46 @@ msgstr "Création"
 msgid "Term"
 msgstr "Terme"
 
-#: ckanofworms/templates/accounts/admin-index.mako:128
-#: ckanofworms/templates/datasets/admin-index.mako:361
-#: ckanofworms/templates/groups/admin-index.mako:110
-#: ckanofworms/templates/organizations/admin-index.mako:113
-msgid "Search"
-msgstr "Rechercher"
-
 #: ckanofworms/templates/accounts/admin-view.mako:50
-#: ckanofworms/templates/datasets/admin-view.mako:70
+#: ckanofworms/templates/datasets/admin-view.mako:84
 #: ckanofworms/templates/groups/admin-view.mako:55
 #: ckanofworms/templates/organizations/admin-view.mako:58
 msgid "JSON"
 msgstr "JSON"
+
+#: ckanofworms/templates/accounts/admin-view.mako:72
+#: ckanofworms/templates/accounts/admin-view.mako:83
+#: ckanofworms/templates/accounts/admin-view.mako:94
+#: ckanofworms/templates/accounts/admin-view.mako:105
+#: ckanofworms/templates/accounts/admin-view.mako:116
+#: ckanofworms/templates/accounts/admin-view.mako:142
+#: ckanofworms/templates/accounts/admin-view.mako:153
+#: ckanofworms/templates/accounts/admin-view.mako:164
+#: ckanofworms/templates/accounts/admin-view.mako:175
+#: ckanofworms/templates/accounts/admin-view.mako:181
+#: ckanofworms/templates/accounts/admin-view.mako:193
+#: ckanofworms/templates/groups/admin-view.mako:72
+#: ckanofworms/templates/groups/admin-view.mako:77
+#: ckanofworms/templates/groups/admin-view.mako:87
+#: ckanofworms/templates/groups/admin-view.mako:113
+#: ckanofworms/templates/groups/admin-view.mako:124
+#: ckanofworms/templates/groups/admin-view.mako:135
+#: ckanofworms/templates/groups/admin-view.mako:141
+#: ckanofworms/templates/groups/admin-view.mako:153
+#: ckanofworms/templates/organizations/admin-view.mako:75
+#: ckanofworms/templates/organizations/admin-view.mako:80
+#: ckanofworms/templates/organizations/admin-view.mako:90
+#: ckanofworms/templates/organizations/admin-view.mako:116
+#: ckanofworms/templates/organizations/admin-view.mako:127
+#: ckanofworms/templates/organizations/admin-view.mako:138
+#: ckanofworms/templates/organizations/admin-view.mako:144
+#: ckanofworms/templates/organizations/admin-view.mako:156
+#: ckanofworms/templates/sessions/admin-view.mako:58
+#: ckanofworms/templates/sessions/admin-view.mako:66
+#: ckanofworms/templates/sessions/admin-view.mako:71
+#: ckanofworms/templates/sessions/admin-view.mako:76
+msgid "{0}:"
+msgstr "{0} :"
 
 #: ckanofworms/templates/accounts/admin-view.mako:105
 msgid "Email Hash"
@@ -743,14 +746,15 @@ msgstr "À propos"
 
 #: ckanofworms/templates/accounts/admin-view.mako:120
 #: ckanofworms/templates/datasets/admin-stats.mako:50
-#: ckanofworms/templates/datasets/admin-view.mako:149
+#: ckanofworms/templates/datasets/admin-view.mako:76
+#: ckanofworms/templates/datasets/admin-view.mako:185
 #: ckanofworms/templates/groups/admin-view.mako:91
 #: ckanofworms/templates/organizations/admin-view.mako:94
 msgid "View"
 msgstr "Vue"
 
 #: ckanofworms/templates/accounts/admin-view.mako:121
-#: ckanofworms/templates/datasets/admin-view.mako:150
+#: ckanofworms/templates/datasets/admin-view.mako:186
 #: ckanofworms/templates/groups/admin-view.mako:92
 #: ckanofworms/templates/organizations/admin-view.mako:95
 msgid "Source"
@@ -765,8 +769,8 @@ msgid "API Key"
 msgstr "Clé d'API"
 
 #: ckanofworms/templates/accounts/admin-view.mako:175
-#: ckanofworms/templates/datasets/admin-view.mako:238
-#: ckanofworms/templates/datasets/admin-view.mako:755
+#: ckanofworms/templates/datasets/admin-view.mako:289
+#: ckanofworms/templates/datasets/admin-view.mako:903
 #: ckanofworms/templates/groups/admin-view.mako:124
 #: ckanofworms/templates/organizations/admin-view.mako:127
 msgid "Created"
@@ -824,14 +828,14 @@ msgstr "{} jeux de données"
 
 #: ckanofworms/templates/datasets/admin-index.mako:79
 #: ckanofworms/templates/datasets/admin-index.mako:282
-#: ckanofworms/templates/datasets/admin-view.mako:483
+#: ckanofworms/templates/datasets/admin-view.mako:578
 msgid "Organization"
 msgstr "Organisation"
 
 #: ckanofworms/templates/datasets/admin-index.mako:81
 #: ckanofworms/templates/datasets/admin-index.mako:84
-#: ckanofworms/templates/datasets/admin-view.mako:135
-#: ckanofworms/templates/datasets/admin-view.mako:682
+#: ckanofworms/templates/datasets/admin-view.mako:168
+#: ckanofworms/templates/datasets/admin-view.mako:814
 #: ckanofworms/templates/groups/admin-index.mako:62
 #: ckanofworms/templates/groups/admin-index.mako:65
 #: ckanofworms/templates/groups/admin-view.mako:77
@@ -855,8 +859,7 @@ msgid "Search ranking"
 msgstr "Classement de recherche"
 
 #: ckanofworms/templates/datasets/admin-index.mako:139
-#: ckanofworms/templates/datasets/admin-view.mako:119
-#: ckanofworms/templates/datasets/admin-view.mako:585
+#: ckanofworms/templates/datasets/admin-view.mako:143
 msgid "{:3.2f}"
 msgstr "{:3.2f}"
 
@@ -874,6 +877,7 @@ msgid "…"
 msgstr "..."
 
 #: ckanofworms/templates/datasets/admin-index.mako:155
+#: ckanofworms/templates/datasets/admin-view.mako:531
 msgid "Update frequency"
 msgstr "Fréquence de mise à jour"
 
@@ -907,7 +911,7 @@ msgid "Enter an organization name..."
 msgstr "Saisissez un nom d'organisation..."
 
 #: ckanofworms/templates/datasets/admin-index.mako:296
-#: ckanofworms/templates/datasets/admin-view.mako:545
+#: ckanofworms/templates/datasets/admin-view.mako:650
 msgid "Supplier"
 msgstr "Fournisseur"
 
@@ -958,168 +962,161 @@ msgstr "Recherche avancée"
 #: ckanofworms/templates/datasets/admin-stats.mako:42
 #: ckanofworms/templates/datasets/admin-stats.mako:47
 #: ckanofworms/templates/datasets/admin-stats.mako:88
-#: ckanofworms/templates/datasets/admin-view.mako:69
+#: ckanofworms/templates/datasets/admin-view.mako:80
 msgid "Statistics"
 msgstr "Statistiques"
 
-#: ckanofworms/templates/datasets/admin-view.mako:67
-#: ckanofworms/templates/datasets/admin-view.mako:125
+#: ckanofworms/templates/datasets/admin-view.mako:72
+#: ckanofworms/templates/datasets/admin-view.mako:117
 msgid "Repair"
 msgstr "Réparer"
 
-#: ckanofworms/templates/datasets/admin-view.mako:68
-msgid "View in Front"
-msgstr "Voir dans le front"
-
-#: ckanofworms/templates/datasets/admin-view.mako:71
+#: ckanofworms/templates/datasets/admin-view.mako:88
 msgid "Publish"
 msgstr "Publier"
 
-#: ckanofworms/templates/datasets/admin-view.mako:98
+#: ckanofworms/templates/datasets/admin-view.mako:119
 msgid "This dataset has some defects"
 msgstr "Ce jeu de données a certains défauts"
 
-#: ckanofworms/templates/datasets/admin-view.mako:108
+#: ckanofworms/templates/datasets/admin-view.mako:131
 msgid "{}:"
 msgstr "{} :"
 
-#: ckanofworms/templates/datasets/admin-view.mako:118
+#: ckanofworms/templates/datasets/admin-view.mako:142
 msgid "Low search rank:"
 msgstr "Classement de recherche faible :"
 
-#: ckanofworms/templates/datasets/admin-view.mako:123
+#: ckanofworms/templates/datasets/admin-view.mako:147
 msgid "Please look at the alerts below and repair this dataset now."
 msgstr "Veuillez consulter les alertes ci-dessous et réparer maintenant ce jeu de données."
 
-#: ckanofworms/templates/datasets/admin-view.mako:145
+#: ckanofworms/templates/datasets/admin-view.mako:181
 msgid "Notes"
 msgstr "Notes"
 
-#: ckanofworms/templates/datasets/admin-view.mako:170
+#: ckanofworms/templates/datasets/admin-view.mako:206
 msgid "Resources"
 msgstr "Ressources"
 
-#: ckanofworms/templates/datasets/admin-view.mako:194
-#: ckanofworms/templates/datasets/admin-view.mako:693
+#: ckanofworms/templates/datasets/admin-view.mako:235
+#: ckanofworms/templates/datasets/admin-view.mako:827
 #: ckanofworms/templates/groups/admin-view.mako:87
 #: ckanofworms/templates/organizations/admin-view.mako:90
 msgid "Description"
 msgstr "Description"
 
-#: ckanofworms/templates/datasets/admin-view.mako:205
-#: ckanofworms/templates/datasets/admin-view.mako:704
+#: ckanofworms/templates/datasets/admin-view.mako:248
+#: ckanofworms/templates/datasets/admin-view.mako:840
 msgid "URL"
 msgstr "URL"
 
-#: ckanofworms/templates/datasets/admin-view.mako:216
+#: ckanofworms/templates/datasets/admin-view.mako:263
 msgid "Format"
 msgstr "Format"
 
-#: ckanofworms/templates/datasets/admin-view.mako:227
-msgid "Last Modified"
+#: ckanofworms/templates/datasets/admin-view.mako:276
+msgid "Last modified"
 msgstr "Dernière modification"
 
-#: ckanofworms/templates/datasets/admin-view.mako:268
+#: ckanofworms/templates/datasets/admin-view.mako:326
 msgid "Extras"
 msgstr "Extras"
 
-#: ckanofworms/templates/datasets/admin-view.mako:281
+#: ckanofworms/templates/datasets/admin-view.mako:342
 msgid "Key"
 msgstr "Clé"
 
-#: ckanofworms/templates/datasets/admin-view.mako:292
+#: ckanofworms/templates/datasets/admin-view.mako:355
 msgid "Value"
 msgstr "Valeur"
 
-#: ckanofworms/templates/datasets/admin-view.mako:374
+#: ckanofworms/templates/datasets/admin-view.mako:451
 msgid "Tags"
 msgstr "Mots-clés"
 
-#: ckanofworms/templates/datasets/admin-view.mako:420
+#: ckanofworms/templates/datasets/admin-view.mako:505
 msgid "Temporal Coverage From"
 msgstr "Début de la couverture temporelle"
 
-#: ckanofworms/templates/datasets/admin-view.mako:431
+#: ckanofworms/templates/datasets/admin-view.mako:518
 msgid "Temporal Coverage To"
 msgstr "Fin de la couverture temporelle"
 
-#: ckanofworms/templates/datasets/admin-view.mako:442
-msgid "Update Frequency"
-msgstr "Fréquence de mise à jour"
-
-#: ckanofworms/templates/datasets/admin-view.mako:460
+#: ckanofworms/templates/datasets/admin-view.mako:551
 msgid "Territorial Coverage"
 msgstr "Couverture territoriale"
 
-#: ckanofworms/templates/datasets/admin-view.mako:471
+#: ckanofworms/templates/datasets/admin-view.mako:564
 msgid "Territorial Coverage Granularity"
 msgstr "Granularité de couverture territoriale"
 
-#: ckanofworms/templates/datasets/admin-view.mako:500
+#: ckanofworms/templates/datasets/admin-view.mako:597
 msgid "Office, Department or Service"
 msgstr "Bureau, département ou service"
 
-#: ckanofworms/templates/datasets/admin-view.mako:511
+#: ckanofworms/templates/datasets/admin-view.mako:610
 msgid "Contact Email"
 msgstr "Courriel de contact"
 
-#: ckanofworms/templates/datasets/admin-view.mako:522
+#: ckanofworms/templates/datasets/admin-view.mako:623
 msgid "Maintainer"
 msgstr "Mainteneur"
 
-#: ckanofworms/templates/datasets/admin-view.mako:533
+#: ckanofworms/templates/datasets/admin-view.mako:636
 msgid "Maintainer Email"
 msgstr "Courriel du mainteneur"
 
-#: ckanofworms/templates/datasets/admin-view.mako:562
+#: ckanofworms/templates/datasets/admin-view.mako:669
 msgid "URL (in supplier site)"
 msgstr "URL (dans le site fournisseur)"
 
-#: ckanofworms/templates/datasets/admin-view.mako:573
+#: ckanofworms/templates/datasets/admin-view.mako:682
 msgid "License"
 msgstr "Licence"
 
-#: ckanofworms/templates/datasets/admin-view.mako:584
+#: ckanofworms/templates/datasets/admin-view.mako:695
 msgid "Weight"
 msgstr "Poids"
 
-#: ckanofworms/templates/datasets/admin-view.mako:595
+#: ckanofworms/templates/datasets/admin-view.mako:708
 msgid "Metadata Modified"
 msgstr "Modification des méta-données"
 
-#: ckanofworms/templates/datasets/admin-view.mako:606
+#: ckanofworms/templates/datasets/admin-view.mako:721
 msgid "Metadata Created"
 msgstr "Création des méta-données"
 
-#: ckanofworms/templates/datasets/admin-view.mako:617
+#: ckanofworms/templates/datasets/admin-view.mako:734
 msgid "Revision Timestamp"
 msgstr "Horodatage de la révision"
 
-#: ckanofworms/templates/datasets/admin-view.mako:628
+#: ckanofworms/templates/datasets/admin-view.mako:747
 msgid "Timestamp"
 msgstr "Horodatage"
 
-#: ckanofworms/templates/datasets/admin-view.mako:639
+#: ckanofworms/templates/datasets/admin-view.mako:760
 #: ckanofworms/templates/groups/admin-view.mako:135
 #: ckanofworms/templates/organizations/admin-view.mako:138
 msgid "Revision ID"
 msgstr "Identifiant de la révision"
 
-#: ckanofworms/templates/datasets/admin-view.mako:669
+#: ckanofworms/templates/datasets/admin-view.mako:800
 msgid "Related"
 msgstr "Lien connexe"
 
-#: ckanofworms/templates/datasets/admin-view.mako:715
+#: ckanofworms/templates/datasets/admin-view.mako:855
 #: ckanofworms/templates/groups/admin-view.mako:113
 #: ckanofworms/templates/organizations/admin-view.mako:116
 msgid "Image"
 msgstr "Image"
 
-#: ckanofworms/templates/datasets/admin-view.mako:726
+#: ckanofworms/templates/datasets/admin-view.mako:870
+#: ckanofworms/templates/datasets/admin-view.mako:918
 msgid "Type"
 msgstr "Type"
 
-#: ckanofworms/templates/datasets/admin-view.mako:738
+#: ckanofworms/templates/datasets/admin-view.mako:884
 msgid "Owner"
 msgstr "Possesseur"
 
