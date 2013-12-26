@@ -136,7 +136,7 @@ def load_environment(global_conf, app_conf):
                 conv.not_none,
                 ),
             'wiki_url': conv.pipe(
-                conv.make_input_to_url(full = True, error_if_fragment = True, error_if_query = True),
+                conv.make_input_to_url(error_if_fragment = True, error_if_query = True),
                 conv.not_none,
                 ),
             'wiki_api_url': conv.pipe(
