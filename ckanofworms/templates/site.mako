@@ -198,6 +198,10 @@ ${conf['realm']}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     ## Make sure Internet Explorer can't use Compatibility Mode, as this will break Persona.
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta name="domain" content="${conf['domain']}" />
+    <link rel="home" href="${conf['weckan_url']}" />
+    <link rel="wiki" href="${conf['wiki_url']}" />
+    <link rel="wiki-api" href="${conf['wiki_api_url']}" />
 </%def>
 
 

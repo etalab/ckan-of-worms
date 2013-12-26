@@ -87,6 +87,7 @@ def load_environment(global_conf, app_conf):
             'cookie': conv.default('ckan-of-worms'),
             'database': conv.default('ckan_of_worms'),
             'debug': conv.pipe(conv.guess_bool, conv.default(False)),
+            'domain': conv.default('data.gouv.fr'),
             'fedmsg.environment': conv.pipe(
                 conv.empty_to_none,
                 conv.test_in(['dev', 'prod', 'stg']),
@@ -132,6 +133,14 @@ def load_environment(global_conf, app_conf):
             'weckan_url': conv.pipe(
                 conv.make_input_to_url(full = True, error_if_fragment = True, error_if_path = True,
                     error_if_query = True),
+                conv.not_none,
+                ),
+            'wiki_url': conv.pipe(
+                conv.make_input_to_url(full = True, error_if_fragment = True, error_if_query = True),
+                conv.not_none,
+                ),
+            'wiki_api_url': conv.pipe(
+                conv.make_input_to_url(full = True, error_if_fragment = True, error_if_query = True),
                 conv.not_none,
                 ),
             },

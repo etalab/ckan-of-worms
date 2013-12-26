@@ -9,27 +9,18 @@ site-js:
     contents:
         - bower/jquery/jquery.js
         - bower/bootstrap/dist/js/bootstrap.js
+        - bower/jquery.cookie/jquery.cookie.js
+        - bower/jquery.dotdotdot/src/js/jquery.dotdotdot.js
+        - bower/swig/index.js
         - bower/hogan/web/builds/2.0.0/hogan-2.0.0.js
         - bower/typeahead.js/dist/typeahead.js
+        - bower/etalab-assets/js/etalab-site.js
         - js/site.js
     filters: uglifyjs
     output: js/site.min.js
 
 site-css:
-    # contents:
-    contents:
-        - less/site.less
-        # - site-less-css
-        - css/typeahead.css
-    depends:
-        - less/*.less
+    contents: less/site.less
+    depends: less/*.less
     filters: less,cssrewrite,cssmin
     output: css/site.min.css
-
-site-less-css:
-    contents: less/site.less
-    depends:
-        # - bower/bootstrap/less/*.less
-        - less/*.less
-    filters: less,cssrewrite
-    output: css/site-less.css
