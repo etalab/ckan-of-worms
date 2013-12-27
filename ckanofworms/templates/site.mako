@@ -169,7 +169,7 @@ ${conf['realm']}
 
             <section class="col-xs-9 col-xs-offset-3 col-sm-offset-0 col-sm-2 col-md-2 col-lg-2">
                 <img class="logo" src="${urls.static('img/etalab-logo.png')}"></img>
-                <p>&copy; 2013 ETALAB, Inc.</p>
+                <p>2013 ETALAB</p>
             </section>
 
             <p class="bottom-right"><a href="#">${_('Back to top')}</a></p>
