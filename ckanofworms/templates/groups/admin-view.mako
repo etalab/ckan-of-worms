@@ -49,7 +49,7 @@ from ckanofworms import model, texthelpers, urls
 <%
     dataset_count = model.Dataset.find({'groups.id': group._id}).count()
 %>\
-            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, group = group.title)}">${ngettext(
+            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, group = group.title)}">${ungettext(
                 u'{} Dataset', u'{} Datasets', dataset_count).format(dataset_count)}</a>
 ##            <a class="btn btn-default" href="${group.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
             <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'groups', group.name)}">${_(u'JSON')}</a>

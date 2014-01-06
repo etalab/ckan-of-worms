@@ -50,9 +50,9 @@ from ckanofworms import model, texthelpers, urls
     produced_dataset_count = model.Dataset.find({'owner_org': organization._id}).count()
     supplied_dataset_count = model.Dataset.find({'supplier_id': organization._id}).count()
 %>\
-            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, organization = organization.title)}">${ngettext(
+            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, organization = organization.title)}">${ungettext(
                 u'{} Produced Dataset', u'{} Produced Datasets', produced_dataset_count).format(produced_dataset_count)}</a>
-            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, supplier = organization.title)}">${ngettext(
+            <a class="btn btn-default" href="${model.Dataset.get_admin_class_url(ctx, supplier = organization.title)}">${ungettext(
                 u'{} Supplied Dataset', u'{} Supplied Datasets', supplied_dataset_count).format(supplied_dataset_count)}</a>
 ##            <a class="btn btn-default" href="${organization.get_admin_url(ctx, 'stats')}">${_(u'Statistics')}</a>
             <a class="btn btn-default" href="${urls.get_url(ctx, 'api', 1, 'organizations', organization.name)}">${_(u'JSON')}</a>
