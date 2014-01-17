@@ -456,7 +456,7 @@ $(function () {
   var _paq = _paq || [];
   % if piwik.get('domain'):
   _paq.push(["setCookieDomain", "*.${ piwik['domain'] }"]);
-  _paq.push(["setDomain", "*.${ piwik['domain'] }"]);
+  _paq.push(["setDomains", "*.${ piwik['domain'] }"]);
   % endif
   _paq.push(["trackPageView"]);
   _paq.push(["enableLinkTracking"]);
