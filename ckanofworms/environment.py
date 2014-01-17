@@ -122,9 +122,10 @@ def load_environment(global_conf, app_conf):
                 conv.function(lambda log_level: getattr(logging, log_level.upper())),
                 ),
             'package_name': conv.default('ckan-of-worms'),
-            'piwik.site_id': conv.input_to_int,
-            'piwik.url': conv.make_input_to_url(full = True, error_if_fragment = True, error_if_path = True,
-                error_if_query = True),
+            'piwik.site_id': conv.pipe(conv.input_to_int, conv.default(0)),
+            'piwik.url': conv.make_input_to_url(error_if_fragment=True, error_if_query = True),
+            'piwik.domain': conv.default(False),
+            'piwik.debug': conv.pipe(conv.guess_bool, conv.default(False)),
             'realm': conv.default(u'CKAN-of-Worms'),
             # Whether this application serves its own static files.
             'static_files': conv.pipe(conv.guess_bool, conv.default(True)),

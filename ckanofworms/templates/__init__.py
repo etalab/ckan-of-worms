@@ -77,6 +77,24 @@ def get_default_lookup():
     return default_lookup
 
 
+def get_piwik_context():
+    if conf['debug'] and not conf.get('piwik.debug'):
+        return {
+            'error': 'Piwik is disable in DEBUG mode unless PIWIK_IN_DEBUG is set',
+        }
+    elif not conf.get('piwik.url') or not conf.get('piwik.site_id'):
+        return {
+            'error': 'Piwik is missing configuration',
+        }
+    else:
+        return {
+            'url': conf['piwik.url'].replace('http://', '').replace('https://', '').rstrip('/'),
+            'site_id': conf['piwik.site_id'],
+            'domain': conf.get('piwik.domain'),
+        }
+    return {}
+
+
 def get_lookup(custom_name):
     if custom_name is None or conf['customs_dir'] is None:
         return get_default_lookup()
@@ -121,6 +139,7 @@ def render(ctx, template_path, custom_name = None, **kw):
         qp = qp,
         req = ctx.req,
         lang = ctx.lang[0][:2],
+        piwik = get_piwik_context(),
         main_topics = main_topics(),
         **kw).strip()
 
