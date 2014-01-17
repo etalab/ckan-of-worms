@@ -83,6 +83,7 @@ setup(
         'webassets >= 0.8',
         'WebError >= 0.10',
         'WebOb >= 1.1',
+        'isodate',
         ],
     extras_require = {
         'sentry': ['raven'],
